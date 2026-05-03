@@ -306,7 +306,7 @@
   "@context": "https://schema.org",
   "@type": "FAQPage",
   "mainEntity": [
-    {"@type":"Question","name":"How does LeadsPlease Data API pricing work?","acceptedAnswer":{"@type":"Answer","text":"Two tiers, two-part pricing. Tiers: Standard $199/mo (full production access, all features, 99.9% SLA) or Enterprise (custom) for white-label, OEM, and high-volume with negotiated below-retail rates. Both tiers cover API access, support, and rate limits only — records bill separately at the standard LeadsPlease retail per-unit rate from the LP affiliate XML, identical to the public LeadsPlease.com checkout. Key difference: the website enforces a $125–$300 minimum per order; the API does not. A 1-record lookup costs 1.2 cents. Volume discounts auto-apply at 2,500 / 5,000 / 10,000 / 25,000 / 50,000-record breakpoints — identical to retail. 30-day free TEST evaluation available on request."}},
+    {"@type":"Question","name":"How does LeadsPlease Data API pricing work?","acceptedAnswer":{"@type":"Answer","text":"Two tiers, two-part pricing. Tiers: Standard $199/mo (full production access, all features, 99.9% SLA) or Enterprise (custom) for white-label, OEM, and high-volume with negotiated below-standard per-record rates. Both tiers cover API access, support, and rate limits only — records bill separately at the standard LeadsPlease per-record data rates from the LP affiliate XML, the same per-unit prices the public LeadsPlease.com checkout uses. Key difference: the website enforces a $125–$300 minimum per order; the API does not. A 1-record lookup costs 1.2 cents. Volume discounts auto-apply at 2,500 / 5,000 / 10,000 / 25,000 / 50,000-record breakpoints. 30-day free TEST evaluation available on request."}},
     {"@type":"Question","name":"How do Subscriptions work?","acceptedAnswer":{"@type":"Answer","text":"Define your criteria once via POST /search-criteria, then POST /subscriptions wrapping that criteriaId with a name and deliveryChannels (EMAIL today, webhook + S3 on roadmap). A daily background job checks for new matching records loaded since the last delivery; when there are any, a fresh CSV is generated and pushed to your channel. Each delivery is incremental — only records not previously sent. Ideal for time-sensitive segments like New Homeowner (30-day peak-spend window), New Mover (30-day relocation window), T65 / Medicare AEP (birthday eligibility), and daily Intent Data refresh."}},
     {"@type":"Question","name":"What is LeadsPlease Intent Data and why does it matter?","acceptedAnswer":{"@type":"Answer","text":"Intent Data identifies the 2–5% of any audience who are actively in-market for a specific category right now, compiled from search behavior, content engagement, transaction patterns, life-event triggers, connected-TV exposure, and anonymized geo-fence signals. Layered on top of demographic targeting it lifts direct-mail response rates from 0.5–1.5% to 5–12% — a 5–10× improvement. Intent-overlay lists also command 30–60% higher prices. Available via the API as additional demographic codes on the existing Criteria object (e.g. intent_category=auto_in_market_30d). Early-access waitlist open now; general availability Q3 2026."}},
     {"@type":"Question","name":"How do I authenticate to the LeadsPlease Data API?","acceptedAnswer":{"@type":"Answer","text":"POST your username and password to /auth — you receive a JWT access token valid for 20 minutes. Include it as Authorization: Bearer <token> on every authenticated endpoint (Criteria, Count, List, Aggregation, Subscriptions). Tokens auto-rotate on expiry; just call /auth again."}},
@@ -829,7 +829,7 @@ access_token = r.json()[<span class="s">"accessToken"</span>]</pre>
       <details class="faq-item"><summary>What's the rate limit?</summary><div class="a">10 Count requests per minute, per API key. List creation, list status checks, aggregation, and subscription endpoints have no fixed minute-cap but are subject to fair-use review at high volumes &mdash; contact us for higher limits or dedicated infrastructure.</div></details>
       <details class="faq-item"><summary>Do you have an OpenAPI / Swagger spec?</summary><div class="a">Yes &mdash; interactive Swagger UI at <a href="https://api-test.leadsplease.com/swagger-ui/index.html" target="_blank" rel="noopener">api-test.leadsplease.com/swagger-ui</a> (TEST) and <a href="https://api.leadsplease.com/swagger-ui/index.html" target="_blank" rel="noopener">api.leadsplease.com/swagger-ui</a> (LIVE). Full request and response schemas plus inline test runner.</div></details>
       <details class="faq-item"><summary>How fresh is the data?</summary><div class="a">Consumer + business: monthly refresh, USPS CASS-certified for deliverability. New Mover: daily loads, ~1M new records/month. New Homeowner: daily loads, ~750K new records/month. Intent Data (Q3 2026): refreshed every 24&ndash;72 hours depending on signal source. The Subscriptions API guarantees you only ever receive records loaded since your last delivery.</div></details>
-      <details class="faq-item" open><summary>How does pricing work? <span style="font-size: 10px; background: #FF6633; color: #fff; padding: 2px 8px; border-radius: 99px; font-weight: 800; letter-spacing: 1px; margin-left: 8px; vertical-align: middle;">$ TWO-PART</span></summary><div class="a"><strong>Two tiers, two-part pricing.</strong> Tiers: <strong>Standard $199/mo</strong> (production access, all features, 99.9% SLA) or <strong>Enterprise (custom)</strong> for white-label, OEM, and high-volume with negotiated below-retail rates. Both tiers cover API access, support, and rate limits only &mdash; <strong>records bill separately at the standard LeadsPlease retail per-unit rate</strong> from the LP affiliate XML, identical to the public LeadsPlease.com checkout. The key difference: <strong>the website enforces a $125&ndash;$300 minimum per order; the API does not.</strong> A 1-record lookup costs 1.2 cents; a 100-record drop costs $12.50; a 10K-record campaign drops to $500 at the volume tier. Volume discounts kick in at 2,500 / 5,000 / 10,000 / 25,000 / 50,000-record breakpoints &mdash; identical to retail. 30-day free TEST evaluation available on request.</div></details>
+      <details class="faq-item" open><summary>How does pricing work? <span style="font-size: 10px; background: #FF6633; color: #fff; padding: 2px 8px; border-radius: 99px; font-weight: 800; letter-spacing: 1px; margin-left: 8px; vertical-align: middle;">$ TWO-PART</span></summary><div class="a"><strong>Two tiers, two-part pricing.</strong> Tiers: <strong>Standard $199/mo</strong> (production access, all features, 99.9% SLA) or <strong>Enterprise (custom)</strong> for white-label, OEM, and high-volume with negotiated below-standard per-record rates. Both tiers cover API access, support, and rate limits only &mdash; <strong>records bill separately at the standard LeadsPlease per-record data rates</strong> from the LP affiliate XML, the same per-unit prices the public LeadsPlease.com checkout uses. The key difference: <strong>the website enforces a $125&ndash;$300 minimum per order; the API does not.</strong> A 1-record lookup costs 1.2 cents; a 100-record drop costs $12.50; a 10K-record campaign drops to $500 at the volume tier. Volume discounts kick in at 2,500 / 5,000 / 10,000 / 25,000 / 50,000-record breakpoints. 30-day free TEST evaluation available on request.</div></details>
       <details class="faq-item" open><summary>How do Subscriptions work? <span style="font-size: 10px; background: #176B82; color: #fff; padding: 2px 8px; border-radius: 99px; font-weight: 800; letter-spacing: 1px; margin-left: 8px; vertical-align: middle;">⚡ AUTO-PILOT</span></summary><div class="a"><strong>Define your criteria once, set your delivery channel, get fresh matching records pushed to you the moment they load.</strong> The flow is three calls: (1) <code style="font-family:'JetBrains Mono',monospace;">POST /search-criteria</code> with geo + demographics + Intent overlays — returns a criteriaId. (2) <code style="font-family:'JetBrains Mono',monospace;">POST /subscriptions</code> wrapping that criteriaId with a name, deliveryChannels, and metadata — returns a subscriptionId. (3) Done. A daily background job checks whether new data has been loaded that matches your criteria; when there is, a fresh CSV is generated and delivered. <strong>Each delivery is incremental</strong> — only records not previously sent. No double-mailing, no manual workflow, no "remind me to pull a new list next month." Currently delivers via EMAIL; webhook + S3 push channels on the roadmap. Ideal for <strong>New Homeowner (peak-spend 30-day window), New Mover (relocation 30-day window), T65 / Medicare AEP (fixed birthday eligibility), and the daily Intent Data refresh</strong> &mdash; the leads where freshness measurably moves response rates.</div></details>
       <details class="faq-item"><summary>What's Intent Data, and why does it matter? <span style="font-size: 10px; background: #FF6633; color: #fff; padding: 2px 8px; border-radius: 99px; font-weight: 800; letter-spacing: 1px; margin-left: 8px; vertical-align: middle;">⚡ NEW</span></summary><div class="a"><strong>Intent Data identifies the 2&ndash;5% of any audience who are actively researching, comparing, or about to buy in a specific category &mdash; right now.</strong> It's compiled from search-behavior partnerships, content-engagement networks, transaction patterns, life-event triggers, connected-TV exposure, and anonymized geo-fence signals. Layered on top of demographic + geographic targeting, it lifts direct-mail response rates from a typical 0.5&ndash;1.5% to <strong>5&ndash;12%</strong> &mdash; a 5&ndash;10&times; improvement on the same audience size. Intent-overlay lists also command 30&ndash;60% higher list prices, so resellers earn proportionally more on each order. Available via the API as additional demographic codes (e.g. <code style="font-family:'JetBrains Mono',monospace;">intent_category=auto_in_market_30d</code>) on the existing Criteria object &mdash; no new endpoint to learn. Early-access waitlist is open now; general availability targeted Q3 2026. Email <a href="mailto:tech@leadsplease.com?subject=Intent+Data+early-access">tech@leadsplease.com</a> to join.</div></details>
       <details class="faq-item"><summary>What output formats are supported?</summary><div class="a">CSV today &mdash; UTF-8, comma-delimited, RFC 4180 quoted. JSON-line and Parquet on the roadmap (request via <a href="mailto:tech@leadsplease.com">tech@leadsplease.com</a> if that would unblock you). Direct mail + email + phone columns are toggled per-criteria via <code style="font-family:'JetBrains Mono',monospace;">contactDataPoints</code>.</div></details>
@@ -844,20 +844,26 @@ access_token = r.json()[<span class="s">"accessToken"</span>]</pre>
 <section id="install" class="sg-panel" role="tabpanel">
   <div class="in-wrap">
     <h2>Get started</h2>
-    <p class="lede">Two tiers, two-part pricing: a <strong>monthly access fee</strong> for the API itself plus a <strong>per-record data fee</strong> at the standard LeadsPlease retail rate. <span style="color: #C44E15; font-weight: 700;">No minimum per order.</span></p>
+    <p class="lede">Two tiers, two-part pricing: a <strong>monthly access fee</strong> for the API itself plus a <strong>per-record data fee</strong> at the standard LeadsPlease per-record data rates. <span style="color: #C44E15; font-weight: 700;">No minimum per order.</span></p>
 
     <!-- ─── Two-part pricing model callout ─── -->
     <div style="background: linear-gradient(135deg, #fff8f5 0%, #FFE9DB 100%); border: 1.5px solid #FF6633; border-radius: 14px; padding: 24px 28px; margin-bottom: 32px;">
       <div style="font-family: 'DM Sans', sans-serif; font-size: 11px; font-weight: 800; letter-spacing: 1.5px; color: #C44E15; text-transform: uppercase; margin-bottom: 10px;">⚡ How API pricing works</div>
       <h3 style="font-family: 'Fraunces', serif; font-size: 24px; font-weight: 600; color: #1C1410; margin: 0 0 12px; line-height: 1.2;">Monthly access fee <span style="color: #FF6633;">+</span> per-record data fee. <span style="color: #C44E15; font-weight: 700;">No minimum per order.</span></h3>
-      <p style="font-size: 15px; line-height: 1.6; color: #4d4e50; margin: 0 0 8px;">The monthly tier covers <strong>API access, support, SLAs, and rate limits</strong>. Records are billed separately at the standard <strong>LeadsPlease retail per-unit rate</strong> from the LP affiliate XML &mdash; the exact same prices the public LeadsPlease.com checkout uses. The difference: <strong>the website enforces a $125&ndash;$300 minimum per order</strong>; the API does not.</p>
-      <p style="font-size: 15px; line-height: 1.6; color: #4d4e50; margin: 0;">A 50-record order costs $6.25 (50 &times; $0.12495). A 1-record lookup costs <strong>1.2 cents</strong>. Volume discounts kick in at 2,500 / 5,000 / 10,000 / 25,000-record breakpoints &mdash; identical to the retail tiers shown below.</p>
+      <p style="font-size: 15px; line-height: 1.6; color: #4d4e50; margin: 0 0 8px;">The monthly tier covers <strong>API access, support, SLAs, and rate limits</strong>. Records are billed separately at the standard <strong>LeadsPlease per-record data rates</strong> from the LP affiliate XML &mdash; the exact same per-unit prices the public LeadsPlease.com checkout uses. The difference: <strong>the website enforces a $125&ndash;$300 minimum per order</strong>; the API does not.</p>
+      <p style="font-size: 15px; line-height: 1.6; color: #4d4e50; margin: 0;">A 50-record order costs $6.25 (50 &times; $0.12495). A 1-record lookup costs <strong>1.2 cents</strong>. Volume discounts kick in at 2,500 / 5,000 / 10,000 / 25,000-record breakpoints &mdash; the per-record data rates shown in the matrix below.</p>
     </div>
 
-    <!-- Per-record retail rates table (sourced from lp.xml) -->
-    <div style="background: #fff; border: 1px solid #e8e5e0; border-radius: 14px; padding: 28px; margin-bottom: 32px;">
-      <h3 style="font-family: 'DM Sans', sans-serif; font-size: 16px; font-weight: 800; color: #1C1410; margin: 0 0 4px;">Per-record retail rates &mdash; full matrix from LP affiliate XML</h3>
-      <p style="font-size: 13px; color: #5d5e60; margin: 0 0 18px;">Volume discounts auto-apply at the breakpoint your order crosses (1 &middot; 500 &middot; 1,000 &middot; 2,500 &middot; 5,000 &middot; 10,000 &middot; 25,000 &middot; 50,000). <strong style="color: #C44E15;">No order minimum on API.</strong></p>
+    <!-- Per-record data rates table (sourced from lp.xml) — collapsed by default -->
+    <details style="background: #fff; border: 1px solid #e8e5e0; border-radius: 14px; margin-bottom: 32px; overflow: hidden;">
+      <summary style="list-style: none; cursor: pointer; padding: 22px 28px; display: flex; justify-content: space-between; align-items: flex-start; gap: 18px; flex-wrap: wrap;">
+        <div style="flex: 1; min-width: 280px;">
+          <h3 style="font-family: 'DM Sans', sans-serif; font-size: 16px; font-weight: 800; color: #1C1410; margin: 0 0 4px;">Per-record data rates &mdash; full matrix from LP affiliate XML</h3>
+          <p style="font-size: 13.5px; color: #5d5e60; margin: 0; line-height: 1.55;">14 list-type variants &times; 8 volume breakpoints (1 &middot; 500 &middot; 1K &middot; 2.5K &middot; 5K &middot; 10K &middot; 25K &middot; 50K). <strong style="color: #C44E15;">No order minimum on API.</strong> <span style="color:#1C1410; font-weight: 700;">Click to view &rarr;</span></p>
+        </div>
+        <span class="rates-toggle" style="display: inline-flex; align-items: center; justify-content: center; min-width: 38px; height: 38px; border-radius: 999px; background: #FF6633; color: #fff; font-size: 22px; font-weight: 700; line-height: 1; flex-shrink: 0; box-shadow: 0 4px 12px rgba(255,102,51,0.28);">+</span>
+      </summary>
+      <div style="padding: 0 28px 28px;">
       <div style="overflow-x: auto;">
       <table style="width: 100%; border-collapse: collapse; font-family: 'DM Sans', sans-serif; font-size: 13.5px; min-width: 880px;">
         <thead>
@@ -1051,8 +1057,12 @@ access_token = r.json()[<span class="s">"accessToken"</span>]</pre>
       </table>
       </div>
       <p style="font-size: 12.5px; color: #5d5e60; margin: 16px 0 0; line-height: 1.55;">Variant codes are the canonical <code style="font-family:'JetBrains Mono',monospace; font-size:11px;">mailing-list-type-code</code> values from <code style="font-family:'JetBrains Mono',monospace; font-size:11px;">lp.xml</code>. Use them as-is when constructing Criteria. Single-use orders are billed at a 1.5&times; multiplier (per <code style="font-family:'JetBrains Mono',monospace; font-size:11px;">single-use-price-multiplier</code>); multi-use is the default. Intent Data overlay (Q3 2026 GA) adds a per-record uplift &mdash; final pricing at GA. For phone-append, hashed-email, and reseller-discounted rates contact <a href="mailto:tech@leadsplease.com">tech@leadsplease.com</a>.</p>
+      </div>
+    </details>
 
-      <h4 style="font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 800; color: #1C1410; margin: 24px 0 10px;">Examples</h4>
+    <!-- Worked examples — always visible (these give the gut-feel for pricing without forcing the user to expand the full matrix) -->
+    <div style="background: #fff; border: 1px solid #e8e5e0; border-radius: 14px; padding: 24px 28px; margin-bottom: 32px;">
+      <h4 style="font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 800; color: #1C1410; margin: 0 0 14px;">Worked examples &mdash; consumer mail-only</h4>
       <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px;">
         <div style="background: #fff8f5; border: 1px solid #FFE0D0; border-radius: 10px; padding: 14px;">
           <div style="font-size: 11px; font-weight: 800; color: #C44E15; letter-spacing: 1px; text-transform: uppercase;">1-record lookup</div>
@@ -1067,7 +1077,7 @@ access_token = r.json()[<span class="s">"accessToken"</span>]</pre>
         <div style="background: #fff8f5; border: 1px solid #FFE0D0; border-radius: 10px; padding: 14px;">
           <div style="font-size: 11px; font-weight: 800; color: #C44E15; letter-spacing: 1px; text-transform: uppercase;">10K-record campaign</div>
           <div style="font-family: 'Fraunces', serif; font-size: 28px; font-weight: 700; color: #1C1410; line-height: 1; margin: 6px 0;">$500</div>
-          <div style="font-size: 12px; color: #5d5e60;">10,000 &times; $0.05 (volume tier). Identical to retail; saves the per-order overhead.</div>
+          <div style="font-size: 12px; color: #5d5e60;">10,000 &times; $0.05 (volume tier). Same per-record data rate as the website; API saves the per-order overhead.</div>
         </div>
       </div>
     </div>
@@ -1078,7 +1088,7 @@ access_token = r.json()[<span class="s">"accessToken"</span>]</pre>
       <div class="in-tier featured">
         <h3>Standard</h3>
         <div class="price">$199<small>/mo</small></div>
-        <p class="desc">Everything most customers need. TEST + LIVE access from day one. Records bill at retail per-unit rates above.</p>
+        <p class="desc">Everything most customers need. TEST + LIVE access from day one. Records bill at the per-record data rates above.</p>
         <ul>
           <li>Full LIVE + TEST environment access</li>
           <li>50,000 Count calls / month (10/min rate-cap)</li>
@@ -1088,21 +1098,21 @@ access_token = r.json()[<span class="s">"accessToken"</span>]</pre>
           <li>⚡ Intent Data overlay <span style="color:#5d5e60; font-weight: 500;">(Q3 2026 GA · early-access on this tier)</span></li>
           <li>Priority email support &middot; 1 business day</li>
           <li>99.9% uptime SLA</li>
-          <li><strong>Records billed at LP retail rates above &middot; no order minimum</strong></li>
+          <li><strong>Records billed at LP per-record data rates above &middot; no order minimum</strong></li>
         </ul>
         <a class="cta primary" href="mailto:tech@leadsplease.com?subject=API+access+request+%E2%80%94+Standard+tier">Start Standard &rarr;</a>
       </div>
       <div class="in-tier">
         <h3>Enterprise</h3>
         <div class="price">Custom</div>
-        <p class="desc">High-volume, white-label, OEM. Negotiated per-record rates below retail.</p>
+        <p class="desc">High-volume, white-label, OEM. Negotiated below-standard per-record rates.</p>
         <ul>
           <li>Everything in Standard</li>
           <li>Dedicated infrastructure</li>
           <li>White-label / OEM licensing</li>
           <li>Custom data points + filters</li>
           <li>Slack-shared on-call channel</li>
-          <li><strong>Volume-discounted per-record rates below retail</strong></li>
+          <li><strong>Volume-discounted per-record data rates below standard</strong></li>
           <li>Quarterly business reviews + roadmap input</li>
           <li>DPA, SOC 2 + security questionnaire support</li>
         </ul>
@@ -1110,7 +1120,7 @@ access_token = r.json()[<span class="s">"accessToken"</span>]</pre>
       </div>
     </div>
 
-    <p style="font-size: 13px; color: #5d5e60; margin: -16px auto 32px; max-width: 880px; text-align: center;">Want to evaluate before committing? Tell us in your <a href="mailto:tech@leadsplease.com?subject=API+evaluation+keys">access request</a> &mdash; we'll set you up with TEST keys for 30 days at no cost (records still bill at retail). All commercial production usage is on the Standard tier.</p>
+    <p style="font-size: 13px; color: #5d5e60; margin: -16px auto 32px; max-width: 880px; text-align: center;">Want to evaluate before committing? Tell us in your <a href="mailto:tech@leadsplease.com?subject=API+evaluation+keys">access request</a> &mdash; we'll set you up with TEST keys for 30 days at no cost (records still bill at the per-record data rates above). All commercial production usage is on the Standard tier.</p>
 
     <div class="in-section">
       <h3>30-second smoke test (TEST environment)</h3>
