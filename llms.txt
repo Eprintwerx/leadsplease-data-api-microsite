@@ -47,10 +47,20 @@ direct_mail (always included), email, phone — toggle per criteria via contactD
 ## Authentication
 Authorization: Bearer <token>; tokens valid 20 minutes; re-call /auth to refresh
 
-## Pricing
-- Free: TEST access, 1,000 counts/mo, 10 lists/mo, all 4 list types
-- Builder: $199/mo, LIVE access, 50K counts/mo, unlimited lists, Subscriptions, 99.9% SLA
-- Scale: custom (white-label, dedicated infra, Slack on-call)
+## Pricing — two parts: monthly access fee + per-record data fee
+The API uses a two-part pricing model. The monthly tier covers API access, support, SLAs, rate limits. Records are billed separately at standard LeadsPlease retail per-unit rates from the LP affiliate XML — identical to the public LeadsPlease.com checkout. CRITICAL DIFFERENCE: the website enforces a $125–$300 minimum per order; the API does NOT. A 1-record lookup is 1.2¢. Volume discounts at 2,500 / 5,000 / 10,000 / 25,000 record breakpoints.
+
+Monthly tiers:
+- Free: $0/mo — TEST access, 1,000 counts/mo, 10 lists/mo, all 4 list types
+- Builder: $199/mo — LIVE access, 50K counts/mo, unlimited lists, Subscriptions, 99.9% SLA
+- Scale: custom — white-label, dedicated infra, Slack on-call, volume-discounted per-record rates
+
+Per-record retail rates (from LP affiliate XML):
+- Consumer (mail): $0.12495 (1-2.5K) → $0.05 (10K+) → $0.04 (25K+)
+- Consumer + Email: $0.175 (1-2.5K) → $0.10 (5K+)
+- Business (mail): $0.2495 (1-2.5K) → $0.17 (5K+) → $0.11 (10K+)
+- New Homeowner / New Mover: same as Consumer
+- Phone, hashed-email, email-only, Intent Data overlay priced separately
 
 ## Support
 - tech@leadsplease.com (replies within 1 business day on Free, 4 hours on Builder, 1 hour on Scale)
