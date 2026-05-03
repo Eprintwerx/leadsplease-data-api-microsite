@@ -306,6 +306,7 @@
   "@context": "https://schema.org",
   "@type": "FAQPage",
   "mainEntity": [
+    {"@type":"Question","name":"How do Subscriptions work?","acceptedAnswer":{"@type":"Answer","text":"Define your criteria once via POST /search-criteria, then POST /subscriptions wrapping that criteriaId with a name and deliveryChannels (EMAIL today, webhook + S3 on roadmap). A daily background job checks for new matching records loaded since the last delivery; when there are any, a fresh CSV is generated and pushed to your channel. Each delivery is incremental — only records not previously sent. Ideal for time-sensitive segments like New Homeowner (30-day peak-spend window), New Mover (30-day relocation window), T65 / Medicare AEP (birthday eligibility), and daily Intent Data refresh."}},
     {"@type":"Question","name":"What is LeadsPlease Intent Data and why does it matter?","acceptedAnswer":{"@type":"Answer","text":"Intent Data identifies the 2–5% of any audience who are actively in-market for a specific category right now, compiled from search behavior, content engagement, transaction patterns, life-event triggers, connected-TV exposure, and anonymized geo-fence signals. Layered on top of demographic targeting it lifts direct-mail response rates from 0.5–1.5% to 5–12% — a 5–10× improvement. Intent-overlay lists also command 30–60% higher prices. Available via the API as additional demographic codes on the existing Criteria object (e.g. intent_category=auto_in_market_30d). Early-access waitlist open now; general availability Q3 2026."}},
     {"@type":"Question","name":"How do I authenticate to the LeadsPlease Data API?","acceptedAnswer":{"@type":"Answer","text":"POST your username and password to /auth — you receive a JWT access token valid for 20 minutes. Include it as Authorization: Bearer <token> on every authenticated endpoint (Criteria, Count, List, Aggregation, Subscriptions). Tokens auto-rotate on expiry; just call /auth again."}},
     {"@type":"Question","name":"What list types are supported?","acceptedAnswer":{"@type":"Answer","text":"Four: consumer (210M+ U.S. households, 30+ demographics), business (18M+ verified businesses with SIC, NAICS, employee count, sales volume, executive titles), newhomeowner (people who closed on a home in the last 90 days), and newmover (people who relocated in the last 30 days). All four support manual ZIP/city/county/state, radial (lat/lng + miles), and polygon geo selection."}},
@@ -325,7 +326,7 @@
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TXZ6RL" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 <!-- ─── LP top-bar — same chrome as leadsplease.com ───────── -->
-<nav class="topbar" data-astro-cid-lxlojnfr><div class="topbar-inner" data-astro-cid-lxlojnfr><div class="topbar-left" data-astro-cid-lxlojnfr><a href="https://www.leadsplease.com/" class="topbar-logo" data-astro-cid-tvrurpns><img src="https://www.leadsplease.com/affiliates/lp/images/look_feel/logo-lp-1777739221978-2993.png" alt="LeadsPlease" width="248" height="44" /></a><div class="topbar-nav" data-astro-cid-lxlojnfr><div class="nav-dropdown" data-astro-cid-lxlojnfr><a href="https://www.leadsplease.com/mailing-lists" class="nav-dropdown-trigger" data-astro-cid-lxlojnfr>Mailing Lists</a></div><div class="nav-dropdown" data-astro-cid-lxlojnfr><a href="https://www.leadsplease.com/email-lists" class="nav-dropdown-trigger" data-astro-cid-lxlojnfr>Email Lists</a></div><div class="nav-dropdown" data-astro-cid-lxlojnfr><a href="/" class="nav-dropdown-trigger" data-astro-cid-lxlojnfr>Marketing</a><div class="nav-dropdown-menu" data-astro-cid-lxlojnfr><a href="https://sales-garden-microsite-production.up.railway.app/" data-astro-cid-lxlojnfr>Sell LeadsPlease Data</a><a href="https://leadsplease-mcp-microsite-production.up.railway.app/" data-astro-cid-lxlojnfr><strong>MCP Server</strong> &middot; for AI tools</a><a href="/" data-astro-cid-lxlojnfr><strong>Data API</strong> &middot; REST/JSON</a></div></div><div class="nav-dropdown" data-astro-cid-lxlojnfr><a href="https://www.leadsplease.com/contact" class="nav-dropdown-trigger" data-astro-cid-lxlojnfr>Contact</a></div></div></div><div class="topbar-right" data-astro-cid-lxlojnfr><a href="tel:18663068674" class="topbar-phone" data-astro-cid-lxlojnfr>(866) 306-8674</a></div></div></nav>
+<nav class="topbar" data-astro-cid-lxlojnfr><div class="topbar-inner" data-astro-cid-lxlojnfr><div class="topbar-left" data-astro-cid-lxlojnfr><a href="https://www.leadsplease.com/" class="topbar-logo" data-astro-cid-tvrurpns><img src="https://www.leadsplease.com/affiliates/lp/images/look_feel/logo-lp-1777739221978-2993.png" alt="LeadsPlease" width="248" height="44" /></a><div class="topbar-nav" data-astro-cid-lxlojnfr><div class="nav-dropdown" data-astro-cid-lxlojnfr><a href="https://www.leadsplease.com/mailing-lists" class="nav-dropdown-trigger" data-astro-cid-lxlojnfr>Mailing Lists</a></div><div class="nav-dropdown" data-astro-cid-lxlojnfr><a href="https://www.leadsplease.com/email-lists" class="nav-dropdown-trigger" data-astro-cid-lxlojnfr>Email Lists</a></div><div class="nav-dropdown" data-astro-cid-lxlojnfr><a href="/" class="nav-dropdown-trigger" data-astro-cid-lxlojnfr>Marketing</a><div class="nav-dropdown-menu" data-astro-cid-lxlojnfr><a href="https://sales-garden-microsite-production.up.railway.app/" data-astro-cid-lxlojnfr>Sell LeadsPlease Data</a><a href="https://leadsplease-mcp-microsite-production.up.railway.app/" data-astro-cid-lxlojnfr><strong>MCP Server</strong> &middot; for AI tools</a><a href="/" data-astro-cid-lxlojnfr><strong>Data API</strong> &middot; REST endpoints</a></div></div><div class="nav-dropdown" data-astro-cid-lxlojnfr><a href="https://www.leadsplease.com/contact" class="nav-dropdown-trigger" data-astro-cid-lxlojnfr>Contact</a></div></div></div><div class="topbar-right" data-astro-cid-lxlojnfr><a href="tel:18663068674" class="topbar-phone" data-astro-cid-lxlojnfr>(866) 306-8674</a></div></div></nav>
 
 <main data-astro-cid-lxlojnfr>
 
@@ -345,7 +346,7 @@
 <section id="overview" class="sg-panel is-active" role="tabpanel">
   <div class="ov-wrap">
     <span class="ov-eyebrow"><span class="dot"></span>REST API · v1.3.4 · OpenAPI 3.0</span>
-    <h1 class="ov-h1">Build mailing lists into <em>your own product</em>. REST + JSON. Five steps.</h1>
+    <h1 class="ov-h1">Build mailing lists into <em>your own product</em>. <span style="font-family: 'DM Sans', sans-serif; font-weight: 800; font-size: 0.78em; letter-spacing: 0.5px; vertical-align: 0.06em;">REST + JSON</span>. Five steps.</h1>
     <p class="ov-lede">The official LeadsPlease Data API gives your app programmatic access to <strong>210M+ USPS-verified U.S. consumers</strong>, <strong>18M+ verified businesses</strong>, plus <strong>New Homeowner</strong> and <strong>New Mover</strong> feeds. JSON over HTTPS, Bearer-token auth, OpenAPI 3.0 spec, polygon + radial + ZIP geos, 30+ demographics, signed CSV downloads. Same data engine that powers leadsplease.com checkout — exposed as endpoints you can call from any backend.</p>
 
     <div class="ov-cta-row">
@@ -357,11 +358,11 @@
     <div class="ov-pills">
       <span class="mc-pill"><span class="dot"></span>Live in TEST mode now</span>
       <span class="mc-pill" style="background: linear-gradient(135deg, #FFE9DB 0%, #FFD4B8 100%); border: 1px solid #FF6633; color: #C44E15; font-weight: 800;">⚡ Intent Data &mdash; in-market signals</span>
+      <span class="mc-pill" style="background: #E0F2F4; border: 1px solid #176B82; color: #0F4C5C; font-weight: 800;">⚡ Subscriptions &mdash; auto-pilot lead push</span>
       <span class="mc-pill" style="background: #fff8f5; border: 1px solid #FF6633; color: #C44E15; font-weight: 700;">★ Industry-first List Aggregation</span>
       <span class="mc-pill">Bearer-token auth (JWT)</span>
       <span class="mc-pill">USPS CASS-certified</span>
       <span class="mc-pill">SOC 2 · GDPR · CCPA · CAN-SPAM</span>
-      <span class="mc-pill">99.9% uptime SLA on paid tiers</span>
     </div>
 
     <div class="ov-stats">
@@ -429,6 +430,90 @@
         <div style="display: flex; gap: 12px; flex-wrap: wrap;">
           <a href="mailto:tech@leadsplease.com?subject=Intent+Data+early-access+request" style="display: inline-flex; align-items: center; gap: 8px; background: #fff; color: #C44E15; padding: 13px 24px; border-radius: 10px; font-size: 15px; font-weight: 800; text-decoration: none; box-shadow: 0 6px 18px rgba(0,0,0,0.18);">Join the early-access list &rarr;</a>
           <a href="#use-cases" style="display: inline-flex; align-items: center; gap: 8px; border: 1.5px solid rgba(255,255,255,0.40); color: #fff; padding: 13px 24px; border-radius: 10px; font-size: 15px; font-weight: 700; text-decoration: none; background: rgba(255,255,255,0.06);">See what 5&times; conversion looks like</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- ★★★ SUBSCRIPTIONS API — auto-pilot fresh leads ★★★ -->
+    <div style="background: linear-gradient(135deg, #0F4C5C 0%, #176B82 50%, #1B7C95 100%); color: #fff; border-radius: 18px; padding: 44px 48px; margin: 28px 0 28px; position: relative; overflow: hidden; box-shadow: 0 24px 60px rgba(15,76,92,0.32);">
+      <!-- Diagonal stripes decoration -->
+      <div style="position: absolute; top: 0; right: 0; width: 320px; height: 100%; opacity: 0.10; background: repeating-linear-gradient(45deg, transparent 0, transparent 18px, #fff 18px, #fff 19px);"></div>
+      <div style="position: relative; z-index: 1;">
+        <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 18px;">
+          <span style="display: inline-block; background: #fff; color: #0F4C5C; font-size: 11px; font-weight: 800; letter-spacing: 1.6px; padding: 5px 14px; border-radius: 99px; text-transform: uppercase;">⚡ Live Now &middot; Daily Push</span>
+          <span style="display: inline-block; background: rgba(255,255,255,0.18); border: 1px solid rgba(255,255,255,0.32); color: #fff; font-size: 11px; font-weight: 800; letter-spacing: 1.6px; padding: 5px 14px; border-radius: 99px; text-transform: uppercase;">★ Auto-Pilot Lead Delivery</span>
+        </div>
+        <h2 style="font-family: 'Fraunces', serif; font-size: 44px; font-weight: 600; margin: 0 0 16px; line-height: 1.05; max-width: 940px;">Subscriptions API &mdash; <span style="text-decoration: underline; text-decoration-color: rgba(255,255,255,0.40); text-decoration-thickness: 3px; text-underline-offset: 6px;">fresh leads on autopilot.</span> Save criteria once. Get matching new records the moment they're loaded.</h2>
+        <p style="font-size: 18px; line-height: 1.6; color: rgba(255,255,255,0.94); margin: 0 0 18px; max-width: 940px; font-weight: 500;">Stop buying static monthly lists. Define your geo + demographics + Intent overlays once, set a delivery cadence, and every time the LeadsPlease database loads new records that match your criteria, a fresh CSV lands in your inbox or webhook &mdash; <strong style="color: #fff;">incremental, deduplicated, never the same record twice</strong>. The hottest leads reach you while their intent is still hot.</p>
+
+        <div style="background: rgba(0,0,0,0.22); border: 1px solid rgba(255,255,255,0.18); border-radius: 12px; padding: 22px 24px; margin: 22px 0; backdrop-filter: blur(4px);">
+          <div style="font-family: 'DM Sans', sans-serif; font-size: 11px; font-weight: 800; letter-spacing: 1.6px; color: rgba(255,255,255,0.78); margin-bottom: 10px; text-transform: uppercase;">⚡ Why this matters</div>
+          <p style="font-size: 16px; line-height: 1.55; color: #fff; margin: 0 0 10px; font-weight: 500;">A "new homeowner" is most valuable in the <strong>first 30 days</strong> after closing &mdash; the window when they're buying appliances, cable, lawn care, alarm, mortgage refi. Wait until your next monthly list pull and you've already missed half the spend window.</p>
+          <p style="font-size: 16px; line-height: 1.55; color: #fff; margin: 0; font-weight: 500;">Subscriptions push those records to you <strong>the day they enter the database</strong>. Same logic for New Movers (30-day relocation window), people <strong>turning 65</strong> (T65 Medicare AEP outreach has a fixed birthday-window), and everyone newly flagged in the <strong>Intent Data overlay</strong> &mdash; the auto-shopper, the kitchen-remodeler, the CRM-evaluator. Your follow-up arrives while their intent is still measurable.</p>
+        </div>
+
+        <h3 style="font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 800; letter-spacing: 1.4px; text-transform: uppercase; color: #fff; margin: 24px 0 12px;">Five subscription patterns we see daily</h3>
+        <div style="display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; margin-bottom: 22px;">
+          <div style="background: rgba(255,255,255,0.10); border: 1px solid rgba(255,255,255,0.16); border-radius: 10px; padding: 14px;">
+            <div style="font-size: 24px; margin-bottom: 6px;">🏠</div>
+            <div style="font-size: 13px; font-weight: 800; color: #fff; margin-bottom: 4px;">New Homeowner</div>
+            <div style="font-size: 12px; color: rgba(255,255,255,0.85); line-height: 1.5;">~750K/mo. First 30 days = peak spend on appliances, lawn, security, mortgage.</div>
+          </div>
+          <div style="background: rgba(255,255,255,0.10); border: 1px solid rgba(255,255,255,0.16); border-radius: 10px; padding: 14px;">
+            <div style="font-size: 24px; margin-bottom: 6px;">📦</div>
+            <div style="font-size: 13px; font-weight: 800; color: #fff; margin-bottom: 4px;">New Mover</div>
+            <div style="font-size: 12px; color: rgba(255,255,255,0.85); line-height: 1.5;">~1M/mo. Switching utilities, insurance, banks, gyms in 30-day window.</div>
+          </div>
+          <div style="background: rgba(255,255,255,0.10); border: 1px solid rgba(255,255,255,0.16); border-radius: 10px; padding: 14px;">
+            <div style="font-size: 24px; margin-bottom: 6px;">🎂</div>
+            <div style="font-size: 13px; font-weight: 800; color: #fff; margin-bottom: 4px;">T65 / Medicare</div>
+            <div style="font-size: 12px; color: rgba(255,255,255,0.85); line-height: 1.5;">Fixed birthday window. AEP brokers can't afford to miss the 90-day eligibility runway.</div>
+          </div>
+          <div style="background: rgba(255,255,255,0.10); border: 1px solid rgba(255,255,255,0.16); border-radius: 10px; padding: 14px;">
+            <div style="font-size: 24px; margin-bottom: 6px;">⚡</div>
+            <div style="font-size: 13px; font-weight: 800; color: #fff; margin-bottom: 4px;">Intent Data</div>
+            <div style="font-size: 12px; color: rgba(255,255,255,0.85); line-height: 1.5;">Daily refresh. Auto-in-market, kitchen-remodel-in-market, switching-insurance &mdash; reach them while it's hot.</div>
+          </div>
+          <div style="background: rgba(255,255,255,0.10); border: 1px solid rgba(255,255,255,0.16); border-radius: 10px; padding: 14px;">
+            <div style="font-size: 24px; margin-bottom: 6px;">🎯</div>
+            <div style="font-size: 13px; font-weight: 800; color: #fff; margin-bottom: 4px;">Saved Audiences</div>
+            <div style="font-size: 12px; color: rgba(255,255,255,0.85); line-height: 1.5;">Any custom criteria &mdash; demographic + geo + Intent &mdash; pushed on your cadence.</div>
+          </div>
+        </div>
+
+        <h3 style="font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 800; letter-spacing: 1.4px; text-transform: uppercase; color: #fff; margin: 22px 0 12px;">How it works &mdash; three calls</h3>
+        <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin-bottom: 24px;">
+          <div style="background: rgba(0,0,0,0.20); border: 1px solid rgba(255,255,255,0.12); border-radius: 10px; padding: 18px;">
+            <div style="font-family: 'Fraunces', serif; font-size: 30px; font-weight: 700; color: #fff; line-height: 1; margin-bottom: 8px;">1</div>
+            <div style="font-size: 14px; font-weight: 800; color: #fff; margin-bottom: 6px;">Define criteria once</div>
+            <div style="font-size: 12.5px; color: rgba(255,255,255,0.85); line-height: 1.55;"><code style="font-family:'JetBrains Mono',monospace; background: rgba(0,0,0,0.40); color: #fff; padding: 2px 6px; border-radius: 4px;">POST /search-criteria</code> &mdash; geo, demographics, Intent overlays, contact data points. Reuses any criteriaId you've already created.</div>
+          </div>
+          <div style="background: rgba(0,0,0,0.20); border: 1px solid rgba(255,255,255,0.12); border-radius: 10px; padding: 18px;">
+            <div style="font-family: 'Fraunces', serif; font-size: 30px; font-weight: 700; color: #fff; line-height: 1; margin-bottom: 8px;">2</div>
+            <div style="font-size: 14px; font-weight: 800; color: #fff; margin-bottom: 6px;">Create the subscription</div>
+            <div style="font-size: 12.5px; color: rgba(255,255,255,0.85); line-height: 1.55;"><code style="font-family:'JetBrains Mono',monospace; background: rgba(0,0,0,0.40); color: #fff; padding: 2px 6px; border-radius: 4px;">POST /subscriptions</code> with the criteriaId, your delivery channels, and a name. Returns a subscriptionId.</div>
+          </div>
+          <div style="background: rgba(0,0,0,0.20); border: 1px solid rgba(255,255,255,0.12); border-radius: 10px; padding: 18px;">
+            <div style="font-family: 'Fraunces', serif; font-size: 30px; font-weight: 700; color: #fff; line-height: 1; margin-bottom: 8px;">3</div>
+            <div style="font-size: 14px; font-weight: 800; color: #fff; margin-bottom: 6px;">Receive only the new ones</div>
+            <div style="font-size: 12.5px; color: rgba(255,255,255,0.85); line-height: 1.55;">Daily background check. When new records match, a fresh CSV is generated and delivered. Each delivery is incremental &mdash; you never get the same household twice.</div>
+          </div>
+        </div>
+
+<pre style="background: rgba(0,0,0,0.40); border: 1px solid rgba(255,255,255,0.16); color: #e6e6f0; padding: 18px 20px; border-radius: 10px; font-family: 'JetBrains Mono', monospace; font-size: 12.5px; line-height: 1.55; margin: 0 0 24px; overflow-x: auto;"><span style="color:#a0a0b8;">// Example: weekly drop of new homeowners in five Phoenix-metro ZIPs,</span>
+<span style="color:#a0a0b8;">// emailed every Monday at 8am AZ time.</span>
+POST /subscriptions
+{
+  <span style="color:#ffb86c;">"name"</span>: <span style="color:#8ce99a;">"Phoenix New Homeowners — weekly"</span>,
+  <span style="color:#ffb86c;">"searchCriteriaId"</span>: <span style="color:#8ce99a;">"a9bae6d8-17bb-11f1-8fa0-0afff3a94407"</span>,
+  <span style="color:#ffb86c;">"userId"</span>: <span style="color:#8ce99a;">123</span>,
+  <span style="color:#ffb86c;">"deliveryChannels"</span>: [<span style="color:#8ce99a;">"EMAIL"</span>],
+  <span style="color:#ffb86c;">"metadata"</span>: { <span style="color:#ffb86c;">"costCenterId"</span>: <span style="color:#8ce99a;">"C1"</span> }
+}</pre>
+
+        <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+          <a href="mailto:tech@leadsplease.com?subject=Subscriptions+API+early-access" style="display: inline-flex; align-items: center; gap: 8px; background: #fff; color: #0F4C5C; padding: 13px 24px; border-radius: 10px; font-size: 15px; font-weight: 800; text-decoration: none; box-shadow: 0 6px 18px rgba(0,0,0,0.18);">Set up your first subscription &rarr;</a>
+          <a href="https://api-test.leadsplease.com/swagger-ui/index.html#/subscriptions" target="_blank" rel="noopener" style="display: inline-flex; align-items: center; gap: 8px; border: 1.5px solid rgba(255,255,255,0.40); color: #fff; padding: 13px 24px; border-radius: 10px; font-size: 15px; font-weight: 700; text-decoration: none; background: rgba(255,255,255,0.06);">See full Subscriptions spec &rarr;</a>
         </div>
       </div>
     </div>
@@ -518,6 +603,12 @@
         <span class="verb get">GET</span><span class="path">/sic-codes/search</span>
         <h4>SIC lookup</h4>
         <p>Find SIC codes by description (e.g. <code style="font-family:'JetBrains Mono',monospace; font-size:12px;">?description=Restaurant</code>) or fetch the full 13,806-code catalog.</p>
+      </div>
+      <div class="ov-endpoint" style="border: 2px solid #176B82; background: linear-gradient(135deg, #E0F2F4 0%, #C5E8EC 100%); position: relative;">
+        <span style="position: absolute; top: -10px; right: 14px; background: #176B82; color: #fff; font-size: 10px; font-weight: 800; letter-spacing: 1.2px; padding: 3px 10px; border-radius: 99px; text-transform: uppercase;">⚡ Auto-Pilot</span>
+        <span class="verb post">POST</span><span class="path">/subscriptions</span>
+        <h4>Subscriptions <span style="font-size: 12px; color: #0F4C5C; font-weight: 600;">— fresh leads, daily push</span></h4>
+        <p>Save criteria once; receive only newly-loaded matches on your cadence. Powers New Homeowner / New Mover / T65 / Intent Data automated drops. Incremental, deduplicated, EMAIL delivery (more channels coming).</p>
       </div>
     </div>
   </div>
@@ -683,11 +774,11 @@ access_token = r.json()[<span class="s">"accessToken"</span>]</pre>
         <p>Print &amp; mail companies (postcard apps, EDDM platforms) call <code style="font-family:'JetBrains Mono',monospace;">/counts</code> live as the user paints a polygon on a map, then <code style="font-family:'JetBrains Mono',monospace;">/lists</code> at checkout. Their customers never leave their app; LeadsPlease is the data backend.</p>
         <div class="stack">geoCriteriaType=polygon · /counts (live) · /lists at checkout</div>
       </div>
-      <div class="uc-card">
-        <div class="cat">Real Estate · Farming</div>
-        <h3>Recurring New Mover &amp; New Homeowner feeds</h3>
-        <p>Real-estate apps subscribe to a saved Criteria (e.g. "homes sold $500K+ in zip 85255 in last 30 days"). Every time the LP database loads new records, Subscriptions emails a CSV of just the new records &mdash; no double-mailing the same household.</p>
-        <div class="stack">/subscriptions · listType=newhomeowner · deliveryChannels=[EMAIL]</div>
+      <div class="uc-card" style="background: linear-gradient(135deg, #E0F2F4 0%, #C5E8EC 100%); border: 2px solid #176B82;">
+        <div class="cat" style="color: #0F4C5C;">⚡ Subscriptions API · Real Estate · Insurance · Home Services</div>
+        <h3>Recurring auto-pilot feeds &mdash; New Homeowner, New Mover, T65, Intent Data</h3>
+        <p>Real-estate apps, Medicare AEP brokers, and home-service marketers subscribe to a saved Criteria once and receive a fresh CSV the moment new matching records load &mdash; never the same household twice. The first 30 days after a move or close are the peak spend window; Subscriptions delivers those records the day they enter the database, not weeks later.</p>
+        <div class="stack" style="background: #fff; border: 1px solid #B0DDE3;">/subscriptions · searchCriteriaId · deliveryChannels=[EMAIL] · daily push</div>
       </div>
       <div class="uc-card">
         <div class="cat">Insurance · Medicare</div>
@@ -721,6 +812,7 @@ access_token = r.json()[<span class="s">"accessToken"</span>]</pre>
       <details class="faq-item"><summary>What's the rate limit?</summary><div class="a">10 Count requests per minute, per API key. List creation, list status checks, aggregation, and subscription endpoints have no fixed minute-cap but are subject to fair-use review at high volumes &mdash; contact us for higher limits or dedicated infrastructure.</div></details>
       <details class="faq-item"><summary>Do you have an OpenAPI / Swagger spec?</summary><div class="a">Yes &mdash; interactive Swagger UI at <a href="https://api-test.leadsplease.com/swagger-ui/index.html" target="_blank" rel="noopener">api-test.leadsplease.com/swagger-ui</a> (TEST) and <a href="https://api.leadsplease.com/swagger-ui/index.html" target="_blank" rel="noopener">api.leadsplease.com/swagger-ui</a> (LIVE). Full request and response schemas plus inline test runner.</div></details>
       <details class="faq-item"><summary>How fresh is the data?</summary><div class="a">Consumer + business: monthly refresh, USPS CASS-certified for deliverability. New Mover: daily loads, ~1M new records/month. New Homeowner: daily loads, ~750K new records/month. Intent Data (Q3 2026): refreshed every 24&ndash;72 hours depending on signal source. The Subscriptions API guarantees you only ever receive records loaded since your last delivery.</div></details>
+      <details class="faq-item" open><summary>How do Subscriptions work? <span style="font-size: 10px; background: #176B82; color: #fff; padding: 2px 8px; border-radius: 99px; font-weight: 800; letter-spacing: 1px; margin-left: 8px; vertical-align: middle;">⚡ AUTO-PILOT</span></summary><div class="a"><strong>Define your criteria once, set your delivery channel, get fresh matching records pushed to you the moment they load.</strong> The flow is three calls: (1) <code style="font-family:'JetBrains Mono',monospace;">POST /search-criteria</code> with geo + demographics + Intent overlays — returns a criteriaId. (2) <code style="font-family:'JetBrains Mono',monospace;">POST /subscriptions</code> wrapping that criteriaId with a name, deliveryChannels, and metadata — returns a subscriptionId. (3) Done. A daily background job checks whether new data has been loaded that matches your criteria; when there is, a fresh CSV is generated and delivered. <strong>Each delivery is incremental</strong> — only records not previously sent. No double-mailing, no manual workflow, no "remind me to pull a new list next month." Currently delivers via EMAIL; webhook + S3 push channels on the roadmap. Ideal for <strong>New Homeowner (peak-spend 30-day window), New Mover (relocation 30-day window), T65 / Medicare AEP (fixed birthday eligibility), and the daily Intent Data refresh</strong> &mdash; the leads where freshness measurably moves response rates.</div></details>
       <details class="faq-item"><summary>What's Intent Data, and why does it matter? <span style="font-size: 10px; background: #FF6633; color: #fff; padding: 2px 8px; border-radius: 99px; font-weight: 800; letter-spacing: 1px; margin-left: 8px; vertical-align: middle;">⚡ NEW</span></summary><div class="a"><strong>Intent Data identifies the 2&ndash;5% of any audience who are actively researching, comparing, or about to buy in a specific category &mdash; right now.</strong> It's compiled from search-behavior partnerships, content-engagement networks, transaction patterns, life-event triggers, connected-TV exposure, and anonymized geo-fence signals. Layered on top of demographic + geographic targeting, it lifts direct-mail response rates from a typical 0.5&ndash;1.5% to <strong>5&ndash;12%</strong> &mdash; a 5&ndash;10&times; improvement on the same audience size. Intent-overlay lists also command 30&ndash;60% higher list prices, so resellers earn proportionally more on each order. Available via the API as additional demographic codes (e.g. <code style="font-family:'JetBrains Mono',monospace;">intent_category=auto_in_market_30d</code>) on the existing Criteria object &mdash; no new endpoint to learn. Early-access waitlist is open now; general availability targeted Q3 2026. Email <a href="mailto:tech@leadsplease.com?subject=Intent+Data+early-access">tech@leadsplease.com</a> to join.</div></details>
       <details class="faq-item"><summary>What output formats are supported?</summary><div class="a">CSV today &mdash; UTF-8, comma-delimited, RFC 4180 quoted. JSON-line and Parquet on the roadmap (request via <a href="mailto:tech@leadsplease.com">tech@leadsplease.com</a> if that would unblock you). Direct mail + email + phone columns are toggled per-criteria via <code style="font-family:'JetBrains Mono',monospace;">contactDataPoints</code>.</div></details>
       <details class="faq-item" open><summary>Can I aggregate multiple lists into one file? <span style="font-size: 10px; background: #FF6633; color: #fff; padding: 2px 8px; border-radius: 99px; font-weight: 800; letter-spacing: 1px; margin-left: 8px; vertical-align: middle;">★ INDUSTRY FIRST</span></summary><div class="a">Yes &mdash; and this is unique to the LeadsPlease Data API. The Lists Aggregation API groups any number of lists into a named aggregate, deduplicates across them, and yields a single signed-URL CSV download. Add or remove member lists at any time &mdash; the aggregate auto-regenerates on next download. No other U.S. mailing-list API exposes this; with anyone else you'd be downloading N separate CSVs and reconciling them in Pandas. Powers multi-region direct-mail campaigns, quarterly mail drops merging saved searches, and customer-segment roll-ups.</div></details>

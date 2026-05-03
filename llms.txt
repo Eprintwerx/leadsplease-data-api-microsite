@@ -33,6 +33,9 @@ LeadsPlease Intent Data is a unique data layer that identifies the 2–5% of any
 ## List Aggregation API (industry first — unique to LeadsPlease)
 POST /list-aggregations groups any number of completed lists into a named aggregate, deduplicates across them, and yields a single signed-URL CSV download. Add or remove member lists at any time — the aggregate auto-regenerates on next download. No other U.S. mailing-list API exposes this; with anyone else you'd download N CSVs and dedupe yourself.
 
+## Subscriptions API (auto-pilot lead delivery)
+Save criteria once, set a delivery channel, get matching new records pushed to you the moment they're loaded. Three calls: (1) POST /search-criteria with geo + demographics + Intent overlays, (2) POST /subscriptions with criteriaId + deliveryChannels (currently EMAIL; webhook + S3 on roadmap), (3) done. A daily background job checks for newly-loaded matches and pushes incremental CSVs — never the same record twice. Ideal for time-sensitive segments where freshness changes response rates: New Homeowner (30-day peak-spend window), New Mover (30-day relocation window), T65 / Medicare AEP (birthday eligibility runway), daily Intent Data refresh (auto-shoppers, kitchen-remodelers, switching-insurance, CRM-evaluators). Endpoints: POST /subscriptions, GET /subscriptions, GET /subscriptions/{id}, DELETE /subscriptions/{id}.
+
 ## Geo selection (geoCriteriaType)
 - manual — array of zip / city / county / state
 - radial — lat/lng + radiusInMiles
