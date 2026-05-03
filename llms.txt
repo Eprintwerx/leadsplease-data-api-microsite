@@ -50,10 +50,10 @@ Authorization: Bearer <token>; tokens valid 20 minutes; re-call /auth to refresh
 ## Pricing — two parts: monthly access fee + per-record data fee
 The API uses a two-part pricing model. The monthly tier covers API access, support, SLAs, rate limits. Records are billed separately at standard LeadsPlease retail per-unit rates from the LP affiliate XML — identical to the public LeadsPlease.com checkout. CRITICAL DIFFERENCE: the website enforces a $125–$300 minimum per order; the API does NOT. A 1-record lookup is 1.2¢. Volume discounts at 2,500 / 5,000 / 10,000 / 25,000 record breakpoints.
 
-Monthly tiers:
-- Free: $0/mo — TEST access, 1,000 counts/mo, 10 lists/mo, all 4 list types
-- Builder: $199/mo — LIVE access, 50K counts/mo, unlimited lists, Subscriptions, 99.9% SLA
-- Scale: custom — white-label, dedicated infra, Slack on-call, volume-discounted per-record rates
+Monthly tiers (two):
+- Standard: $199/mo — full LIVE + TEST access, 50K counts/mo, unlimited lists, Aggregation API, Subscriptions, Intent Data early-access, 99.9% SLA, priority email support
+- Enterprise: custom — everything in Standard plus white-label/OEM, dedicated infra, Slack on-call, volume-discounted per-record rates below retail
+- 30-day free TEST evaluation available on request (records still bill at retail)
 
 Per-record retail rates (from LP affiliate XML):
 - Consumer (mail): $0.12495 (1-2.5K) → $0.05 (10K+) → $0.04 (25K+)
