@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="en" data-astro-cid-lxlojnfr>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+<title>Data API — REST access to 250M+ consumer + 18M+ business records | LeadsPlease</title>
+<meta name="description" content="Programmatic access to USPS-verified U.S. mailing lists. Count, query, and download targeted consumer or business audiences via REST + JSON. Bearer-token auth, OpenAPI/Swagger spec, four list types (Consumer, Business, New Homeowner, New Mover), polygon + radial + ZIP geos, 30+ demographics." />
+<meta name="keywords" content="leadsplease api, mailing list api, b2b data api, consumer data api, list count api, direct mail api, sic code api, demographic api, new mover api, new homeowner api, polygon search api, openapi swagger" />
+<meta name="author" content="LeadsPlease">
+<meta name="publisher" content="LeadsPlease">
+<meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+<meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large">
+<meta name="theme-color" content="#FF6633">
+<meta name="format-detection" content="telephone=no">
+<meta name="application-name" content="LeadsPlease Data API">
+<meta name="apple-mobile-web-app-title" content="LeadsPlease Data API">
+
+<!-- Search engine verification (mirrors leadsplease.com root) -->
+<meta name="google-site-verification" content="pSSntRhP2sca+0DSZooLN7vbX/3KVFcC23J64PDMtBU=">
+
+<!-- Canonical -->
+<link rel="canonical" href="https://developers.leadsplease.com/">
+
+<!-- Open Graph -->
+<meta property="og:site_name" content="LeadsPlease">
+<meta property="og:locale" content="en_US">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://developers.leadsplease.com/">
+<meta property="og:title" content="LeadsPlease Data API — REST access to 250M+ consumer + 18M+ business records">
+<meta property="og:description" content="Programmatic count, query, and CSV download against USPS-verified U.S. lists. Bearer auth, OpenAPI spec, four list types, polygon + radial geos.">
+<meta property="og:image" content="https://developers.leadsplease.com/og-image.svg">
+<meta property="og:image:secure_url" content="https://developers.leadsplease.com/og-image.svg">
+<meta property="og:image:type" content="image/svg+xml">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="LeadsPlease Data API — REST endpoints for U.S. mailing lists">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@leadsplease">
+<meta name="twitter:creator" content="@leadsplease">
+<meta name="twitter:title" content="LeadsPlease Data API — REST access to 250M+ records">
+<meta name="twitter:description" content="Count, query, and download U.S. mailing lists programmatically. JSON over HTTPS, Bearer auth, OpenAPI spec.">
+<meta name="twitter:image" content="https://developers.leadsplease.com/og-image.svg">
+
+<!-- Favicons + PWA manifest -->
+<link rel="icon" type="image/png" href="https://www.leadsplease.com/affiliates/lp/images/look_feel/logo-lp-1777739221978-2993.png">
+<link rel="apple-touch-icon" href="https://www.leadsplease.com/affiliates/lp/images/look_feel/logo-lp-1777739221978-2993.png">
+<link rel="manifest" href="/manifest.json">
+
+<!-- Hreflang -->
+<link rel="alternate" hreflang="en-US" href="https://developers.leadsplease.com/">
+<link rel="alternate" hreflang="x-default" href="https://developers.leadsplease.com/">
+
+<!-- DNS prefetch -->
+<link rel="dns-prefetch" href="https://api.leadsplease.com">
+<link rel="dns-prefetch" href="https://api-test.leadsplease.com">
+<link rel="dns-prefetch" href="https://www.leadsplease.com">
+<link rel="dns-prefetch" href="https://www.googletagmanager.com">
+<link rel="preconnect" href="https://api-test.leadsplease.com" crossorigin>
+
+<!-- Astro CSS bundle from leadsplease.com so the topbar + footer renders pixel-identical -->
+<link rel="stylesheet" href="/_astro/index@_@astro.GXeN1xiA.css" />
+<link rel="stylesheet" href="/_astro/content.OmRAzyvp.css" />
+<link rel="stylesheet" href="/_astro/LayoutFullWidth.DBbAW-TZ.css" />
+
+<!-- ─── Anti-CLS — kill layout shift on first paint ───────────────
+     Reserve topbar height + hide mobile drawer before the external
+     Astro CSS arrives so the page never "drops down" on load. -->
+<style>
+  nav.topbar { display: block; padding: 12px 48px 0; box-sizing: border-box; min-height: 72px; }
+  nav.topbar .topbar-inner { height: 60px; display: flex; align-items: center; justify-content: space-between; max-width: 1200px; margin: 0 auto; }
+  nav.topbar .topbar-logo img { height: 44px; width: auto; display: block; }
+  nav.topbar .nav-dropdown-menu { display: none; }
+  nav.mobile-nav, .mobile-nav-overlay { display: none; }
+  /* Reserve space for sticky topbar + sticky tab nav when scrolling to anchors. */
+  html { scroll-padding-top: 130px; }
+  .sg-panel[id] { scroll-margin-top: 130px; }
+</style>
+
+<!-- Fonts (display=optional so no swap-induced shift) -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=DM+Sans:wght@400;600;700;800;900&family=JetBrains+Mono:wght@400;600;800&display=optional" rel="stylesheet">
+
+<style>
+  body { background: #fff; }
+  .sg-tabs { position: sticky; top: 0; z-index: 50; background: #fff; border-bottom: 1px solid #e5e5e5; box-shadow: 0 1px 0 rgba(0,0,0,0.02); }
+  .sg-tabs-inner { max-width: 1280px; margin: 0 auto; padding: 0 24px; display: flex; gap: 4px; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .sg-tab { font-family: 'DM Sans', sans-serif; font-size: 16px; font-weight: 600; color: #666; padding: 18px 20px; cursor: pointer; border: none; background: transparent; border-bottom: 3px solid transparent; transition: color 0.15s, border-color 0.15s; white-space: nowrap; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; }
+  .sg-tab:hover { color: #1C1410; }
+  .sg-tab.is-active { color: #FF6633; border-bottom-color: #FF6633; }
+  .sg-tab .sg-tab-badge { background: #FF6633; color: #fff; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 99px; letter-spacing: 0.5px; text-transform: uppercase; }
+
+  /* "Next tab" attention pulse */
+  @keyframes sg-tab-pulse {
+    0%, 100% { background: transparent;             transform: scale(1);    box-shadow: none; }
+    50%      { background: rgba(255,102,51,0.14);   transform: scale(1.04); box-shadow: 0 4px 14px rgba(255,102,51,0.18); }
+  }
+  @keyframes sg-tab-flash-color {
+    0%, 100% { color: #FF6633; }
+    50%      { color: #C44E15; }
+  }
+  @keyframes sg-arrow-bounce {
+    0%, 100% { bottom: -22px; }
+    50%      { bottom: -17px; }
+  }
+  .sg-tab.is-next:not(.is-active) {
+    animation: sg-tab-pulse 1.6s ease-in-out infinite, sg-tab-flash-color 1.6s ease-in-out infinite;
+    border-radius: 8px;
+    font-weight: 900;
+    font-size: 17.5px;
+    letter-spacing: 0.2px;
+    text-shadow: 0 0 0.6px currentColor;
+    position: relative;
+  }
+  .sg-tab.is-next:not(.is-active)::after {
+    content: '↑';
+    position: absolute;
+    left: 50%;
+    bottom: -22px;
+    transform: translateX(-50%);
+    font-size: 22px;
+    font-weight: 900;
+    line-height: 1;
+    animation: sg-arrow-bounce 1s ease-in-out infinite;
+  }
+  .sg-tab.is-active.is-next { animation: none; }
+  .sg-tab.is-active.is-next::after { content: none; }
+
+  .sg-panel { display: none; min-height: 60vh; }
+  .sg-panel.is-active { display: block; }
+
+  /* Hero */
+  .ov-wrap { max-width: 1180px; margin: 0 auto; padding: 56px 24px 64px; font-family: 'DM Sans', sans-serif; color: #1C1410; }
+  .ov-eyebrow { display: inline-flex; align-items: center; gap: 8px; font-size: 11.5px; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; color: #C44E15; background: #fff8f5; border: 1px solid #FFE0D0; padding: 6px 14px; border-radius: 999px; margin-bottom: 22px; }
+  .ov-eyebrow .dot { width: 8px; height: 8px; background: #FF6633; border-radius: 50%; animation: ov-dot 2s infinite; }
+  @keyframes ov-dot { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(1.3); } }
+  .ov-h1 { font-family: 'Fraunces', serif; font-size: 56px; line-height: 1.05; letter-spacing: -0.02em; font-weight: 600; margin: 0 0 18px; max-width: 940px; }
+  .ov-h1 em { color: #FF6633; font-style: normal; }
+  .ov-lede { font-size: 18px; line-height: 1.6; color: #4d4e50; max-width: 780px; margin: 0 0 28px; }
+  .ov-lede strong { color: #1C1410; font-weight: 700; }
+
+  .ov-cta-row { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; margin-bottom: 24px; }
+  .ov-cta { display: inline-flex; align-items: center; gap: 8px; background: #FF6633; color: #fff; padding: 13px 26px; border-radius: 10px; font-size: 15px; font-weight: 800; text-decoration: none; box-shadow: 0 6px 18px rgba(255,102,51,0.30); transition: transform 0.12s, box-shadow 0.12s; }
+  .ov-cta:hover { transform: translateY(-1px); box-shadow: 0 10px 26px rgba(255,102,51,0.42); }
+  .ov-cta-secondary { display: inline-flex; align-items: center; gap: 8px; padding: 13px 22px; border: 1.5px solid #FF6633; color: #FF6633; border-radius: 10px; font-size: 15px; font-weight: 700; text-decoration: none; background: #fff; transition: background 0.12s; }
+  .ov-cta-secondary:hover { background: #fff8f5; }
+
+  .ov-pills { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 36px; }
+  .mc-pill { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 600; color: #2C2C2E; background: #fff8f5; border: 1px solid #FFE0D0; padding: 6px 12px; border-radius: 999px; }
+  .mc-pill .dot { width: 6px; height: 6px; background: #22c55e; border-radius: 50%; }
+
+  .ov-stats { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 22px; margin: 32px 0 56px; padding: 28px; background: linear-gradient(135deg, #fff8f5 0%, #FFE9DB 100%); border: 1px solid #FFB59A; border-radius: 14px; }
+  .ov-stat .num { font-family: 'Fraunces', serif; font-size: 30px; font-weight: 700; color: #1C1410; line-height: 1; margin-bottom: 6px; }
+  .ov-stat .num em { color: #FF6633; font-style: normal; }
+  .ov-stat .lab { font-size: 12px; font-weight: 600; color: #5d5e60; letter-spacing: 0.4px; }
+
+  /* Step strip */
+  .ov-steps { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px; margin: 0 0 56px; }
+  .ov-step { background: #fff; border: 1px solid #e8e5e0; border-radius: 14px; padding: 22px 22px; }
+  .ov-step .n { font-family: 'Fraunces', serif; font-size: 38px; font-weight: 700; color: #FF6633; line-height: 1; margin-bottom: 8px; }
+  .ov-step h4 { font-family: 'DM Sans', sans-serif; font-size: 16px; font-weight: 800; color: #1C1410; margin: 0 0 6px; }
+  .ov-step p { font-size: 13.5px; line-height: 1.55; color: #5d5e60; margin: 0; }
+
+  /* Endpoint feature grid */
+  .ov-endpoints { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; margin-bottom: 56px; }
+  .ov-endpoint { background: #fff; border: 1px solid #e8e5e0; border-radius: 14px; padding: 24px; }
+  .ov-endpoint .verb { display: inline-block; font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 800; padding: 3px 8px; border-radius: 4px; margin-right: 8px; vertical-align: middle; }
+  .ov-endpoint .verb.post { background: #ECFCCB; color: #4d7c0f; }
+  .ov-endpoint .verb.get  { background: #DBEAFE; color: #1e40af; }
+  .ov-endpoint .verb.del  { background: #FEE2E2; color: #b91c1c; }
+  .ov-endpoint .path { font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #1C1410; }
+  .ov-endpoint h4 { font-family: 'DM Sans', sans-serif; font-size: 16px; font-weight: 800; color: #1C1410; margin: 10px 0 4px; }
+  .ov-endpoint p { font-size: 13.5px; line-height: 1.55; color: #5d5e60; margin: 0; }
+
+  @media (max-width: 1024px) {
+    .ov-stats { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .ov-steps { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .ov-endpoints { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 640px) {
+    .ov-h1 { font-size: 38px; }
+    .ov-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .ov-steps { grid-template-columns: 1fr; }
+  }
+
+  /* Try It panel */
+  .try-wrap { max-width: 1180px; margin: 0 auto; padding: 48px 24px 64px; font-family: 'DM Sans', sans-serif; color: #1C1410; }
+  .try-wrap h2 { font-family: 'Fraunces', serif; font-size: 36px; line-height: 1.1; letter-spacing: -0.015em; margin: 0 0 12px; font-weight: 600; }
+  .try-wrap > p.lede { font-size: 16px; line-height: 1.6; color: #4d4e50; max-width: 780px; margin: 0 0 32px; }
+  .try-section { background: #fff; border: 1px solid #e8e5e0; border-radius: 14px; padding: 26px 28px; margin-bottom: 24px; }
+  .try-section h3 { font-family: 'DM Sans', sans-serif; font-size: 18px; font-weight: 800; color: #1C1410; margin: 0 0 12px; display: flex; align-items: center; gap: 10px; }
+  .try-section h3 .num { display: inline-flex; align-items: center; justify-content: center; width: 26px; height: 26px; background: #FF6633; color: #fff; border-radius: 50%; font-family: 'Fraunces', serif; font-size: 14px; font-weight: 700; }
+  .try-section p { font-size: 14.5px; line-height: 1.6; color: #4d4e50; margin: 0 0 14px; }
+  .code { font-family: 'JetBrains Mono', monospace; background: #1a1a2e; color: #e6e6f0; padding: 18px 20px; border-radius: 10px; font-size: 12.5px; line-height: 1.55; overflow-x: auto; white-space: pre; }
+  .code .k { color: #ffb86c; }
+  .code .s { color: #8ce99a; }
+  .code .c { color: #6c7086; font-style: italic; }
+  .code-tabs { display: flex; gap: 4px; margin-bottom: -1px; }
+  .code-tab { font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 700; padding: 8px 14px; background: #2a2a40; color: #b0b0c0; border: none; border-radius: 8px 8px 0 0; cursor: pointer; }
+  .code-tab.is-active { background: #1a1a2e; color: #fff; }
+  .code-tab:hover:not(.is-active) { background: #34344a; color: #fff; }
+  .code-block { display: none; }
+  .code-block.is-active { display: block; }
+
+  .try-cta-row { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; padding: 28px; background: linear-gradient(135deg, #fff8f5 0%, #FFE9DB 100%); border: 1px solid #FFB59A; border-radius: 14px; margin-bottom: 24px; }
+  .try-cta-row .copy { flex: 1; min-width: 280px; }
+  .try-cta-row h3 { margin: 0 0 6px; font-family: 'DM Sans', sans-serif; font-size: 17px; font-weight: 800; color: #1C1410; }
+  .try-cta-row p { font-size: 14px; color: #5d5e60; margin: 0; }
+
+  /* Use Cases */
+  .uc-wrap { max-width: 1180px; margin: 0 auto; padding: 48px 24px 64px; font-family: 'DM Sans', sans-serif; color: #1C1410; }
+  .uc-wrap h2 { font-family: 'Fraunces', serif; font-size: 36px; line-height: 1.1; letter-spacing: -0.015em; margin: 0 0 12px; font-weight: 600; }
+  .uc-wrap > p.lede { font-size: 16px; line-height: 1.6; color: #4d4e50; max-width: 780px; margin: 0 0 32px; }
+  .uc-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px; margin-bottom: 40px; }
+  .uc-card { background: #fff; border: 1px solid #e8e5e0; border-radius: 14px; padding: 26px; }
+  .uc-card .cat { font-size: 11.5px; font-weight: 800; letter-spacing: 1.4px; text-transform: uppercase; color: #FF6633; margin-bottom: 8px; }
+  .uc-card h3 { font-family: 'Fraunces', serif; font-size: 22px; font-weight: 600; color: #1C1410; margin: 0 0 10px; line-height: 1.2; }
+  .uc-card p { font-size: 14px; line-height: 1.6; color: #4d4e50; margin: 0 0 12px; }
+  .uc-card .stack { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #5d5e60; background: #f4f4f0; padding: 8px 12px; border-radius: 6px; display: inline-block; }
+  @media (max-width: 768px) { .uc-grid { grid-template-columns: 1fr; } }
+
+  /* Install / Get started */
+  .in-wrap { max-width: 1180px; margin: 0 auto; padding: 48px 24px 64px; font-family: 'DM Sans', sans-serif; color: #1C1410; }
+  .in-wrap h2 { font-family: 'Fraunces', serif; font-size: 36px; line-height: 1.1; letter-spacing: -0.015em; margin: 0 0 12px; font-weight: 600; }
+  .in-wrap > p.lede { font-size: 16px; line-height: 1.6; color: #4d4e50; max-width: 780px; margin: 0 0 32px; }
+
+  .in-pricing { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; margin-bottom: 40px; }
+  .in-tier { background: #fff; border: 1px solid #e8e5e0; border-radius: 14px; padding: 28px 26px; position: relative; }
+  .in-tier.featured { border: 2px solid #FF6633; box-shadow: 0 12px 36px rgba(255,102,51,0.16); }
+  .in-tier.featured::before { content: 'MOST POPULAR'; position: absolute; top: -12px; right: 22px; background: #FF6633; color: #fff; font-size: 10.5px; font-weight: 800; letter-spacing: 1px; padding: 4px 12px; border-radius: 99px; }
+  .in-tier h3 { font-family: 'Fraunces', serif; font-size: 24px; font-weight: 600; margin: 0 0 4px; color: #1C1410; }
+  .in-tier .price { font-family: 'Fraunces', serif; font-size: 36px; font-weight: 700; color: #FF6633; margin-bottom: 4px; }
+  .in-tier .price small { font-size: 14px; color: #5d5e60; font-weight: 500; }
+  .in-tier .desc { font-size: 13.5px; color: #5d5e60; margin: 0 0 16px; }
+  .in-tier ul { list-style: none; padding: 0; margin: 0 0 22px; }
+  .in-tier li { font-size: 14px; color: #1C1410; padding: 6px 0 6px 22px; position: relative; line-height: 1.4; }
+  .in-tier li::before { content: '✓'; position: absolute; left: 0; color: #FF6633; font-weight: 800; }
+  .in-tier .cta { display: block; text-align: center; padding: 12px; border-radius: 8px; font-weight: 800; text-decoration: none; }
+  .in-tier .cta.primary { background: #FF6633; color: #fff; }
+  .in-tier .cta.outline { border: 1.5px solid #FF6633; color: #FF6633; background: #fff; }
+  .in-tier .cta:hover { transform: translateY(-1px); }
+
+  .in-section { background: #fff; border: 1px solid #e8e5e0; border-radius: 14px; padding: 26px 28px; margin-bottom: 24px; }
+  .in-section h3 { font-family: 'DM Sans', sans-serif; font-size: 18px; font-weight: 800; color: #1C1410; margin: 0 0 12px; }
+  .in-section p { font-size: 14.5px; line-height: 1.6; color: #4d4e50; margin: 0 0 12px; }
+
+  @media (max-width: 1024px) { .in-pricing { grid-template-columns: 1fr; } }
+
+  /* FAQ */
+  .faq-wrap { max-width: 900px; margin: 0 auto; padding: 0 24px 64px; font-family: 'DM Sans', sans-serif; color: #1C1410; }
+  .faq-item { border: 1px solid #e8e5e0; border-radius: 12px; margin-bottom: 12px; overflow: hidden; background: #fff; }
+  .faq-item summary { font-weight: 700; font-size: 15.5px; padding: 16px 20px; cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center; color: #1C1410; }
+  .faq-item summary::after { content: '+'; font-size: 22px; color: #FF6633; font-weight: 700; }
+  .faq-item[open] summary::after { content: '−'; }
+  .faq-item .a { padding: 0 20px 18px; font-size: 14.5px; line-height: 1.65; color: #4d4e50; }
+
+  /* Footer link block (mirrors MCP) */
+  .api-footer-grid { background: #fff; border-top: 1px solid #e8e5e0; padding: 48px 24px; }
+  .api-footer-inner { max-width: 1180px; margin: 0 auto; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 36px; font-family: 'DM Sans', sans-serif; }
+  .api-footer-grid .col-title { font-family: 'DM Sans', sans-serif; font-size: 11.5px; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; color: #1C1410; margin-bottom: 14px; }
+  .api-footer-grid ul { list-style: none; padding: 0; margin: 0; }
+  .api-footer-grid li { margin-bottom: 8px; }
+  .api-footer-grid a { color: #4d4e50; text-decoration: none; font-size: 13.5px; transition: color 0.15s; }
+  .api-footer-grid a:hover { color: #FF6633; }
+  @media (max-width: 768px) { .api-footer-inner { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+</style>
+
+<!-- ──────────────────────────────────────────────────────── -->
+<!-- Schema.org / JSON-LD — rich-result eligibility on Google -->
+<!-- ──────────────────────────────────────────────────────── -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "LeadsPlease Data API",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Any (REST + JSON over HTTPS)",
+  "description": "Programmatic count, query, and CSV download against USPS-verified U.S. mailing lists. Bearer-token auth, OpenAPI/Swagger spec, four list types (Consumer, Business, New Homeowner, New Mover), polygon + radial + ZIP geo selection, 30+ demographics.",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD",
+    "url": "https://developers.leadsplease.com/#install"
+  },
+  "publisher": { "@type": "Organization", "name": "LeadsPlease", "url": "https://www.leadsplease.com" }
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type":"ListItem","position":1,"name":"LeadsPlease","item":"https://www.leadsplease.com/"},
+    {"@type":"ListItem","position":2,"name":"Data API"}
+  ]
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {"@type":"Question","name":"How do I authenticate to the LeadsPlease Data API?","acceptedAnswer":{"@type":"Answer","text":"POST your username and password to /auth — you receive a JWT access token valid for 20 minutes. Include it as Authorization: Bearer <token> on every authenticated endpoint (Criteria, Count, List, Aggregation, Subscriptions). Tokens auto-rotate on expiry; just call /auth again."}},
+    {"@type":"Question","name":"What list types are supported?","acceptedAnswer":{"@type":"Answer","text":"Four: consumer (210M+ U.S. households, 30+ demographics), business (18M+ verified businesses with SIC, NAICS, employee count, sales volume, executive titles), newhomeowner (people who closed on a home in the last 90 days), and newmover (people who relocated in the last 30 days). All four support manual ZIP/city/county/state, radial (lat/lng + miles), and polygon geo selection."}},
+    {"@type":"Question","name":"Is there an OpenAPI / Swagger spec?","acceptedAnswer":{"@type":"Answer","text":"Yes — interactive Swagger UI is at https://api-test.leadsplease.com/swagger-ui/index.html (TEST) and https://api.leadsplease.com/swagger-ui/index.html (LIVE). Full request and response schemas, plus inline test runner."}},
+    {"@type":"Question","name":"What's the rate limit?","acceptedAnswer":{"@type":"Answer","text":"10 Count requests per minute, per API key. List creation, list status checks, aggregation, and subscription endpoints have no fixed minute-cap but are subject to fair-use review at high volumes — contact us for higher limits."}},
+    {"@type":"Question","name":"Can I get periodic deliveries of new leads?","acceptedAnswer":{"@type":"Answer","text":"Yes. The Subscriptions API lets you save a search criteria once, then receive a fresh CSV every time new New Homeowner or New Mover records are loaded that match. Each delivery is incremental — only records not previously sent. Currently supported delivery channel: EMAIL."}},
+    {"@type":"Question","name":"How do I order a list, and how does fulfillment work?","acceptedAnswer":{"@type":"Answer","text":"Three steps: (1) POST a Criteria object → returns a criteria ID. (2) POST that ID to the Create List endpoint → returns a status URL. (3) Poll the status URL — when status flips from Pending to Completed, the response includes a CSV download URL signed for direct fetch. End-to-end typically completes within 30–90 seconds depending on list size."}}
+  ]
+}
+</script>
+
+<!-- Google Tag Manager (mirrors leadsplease.com) -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-TXZ6RL');</script>
+</head>
+<body data-astro-cid-lxlojnfr>
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TXZ6RL" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+
+<!-- ─── LP top-bar — same chrome as leadsplease.com ───────── -->
+<nav class="topbar" data-astro-cid-lxlojnfr><div class="topbar-inner" data-astro-cid-lxlojnfr><div class="topbar-left" data-astro-cid-lxlojnfr><a href="https://www.leadsplease.com/" class="topbar-logo" data-astro-cid-tvrurpns><img src="https://www.leadsplease.com/affiliates/lp/images/look_feel/logo-lp-1777739221978-2993.png" alt="LeadsPlease" width="248" height="44" /></a><div class="topbar-nav" data-astro-cid-lxlojnfr><div class="nav-dropdown" data-astro-cid-lxlojnfr><a href="https://www.leadsplease.com/mailing-lists" class="nav-dropdown-trigger" data-astro-cid-lxlojnfr>Mailing Lists</a></div><div class="nav-dropdown" data-astro-cid-lxlojnfr><a href="https://www.leadsplease.com/email-lists" class="nav-dropdown-trigger" data-astro-cid-lxlojnfr>Email Lists</a></div><div class="nav-dropdown" data-astro-cid-lxlojnfr><a href="/" class="nav-dropdown-trigger" data-astro-cid-lxlojnfr>Marketing</a><div class="nav-dropdown-menu" data-astro-cid-lxlojnfr><a href="https://sales-garden-microsite-production.up.railway.app/" data-astro-cid-lxlojnfr>Sell LeadsPlease Data</a><a href="https://leadsplease-mcp-microsite-production.up.railway.app/" data-astro-cid-lxlojnfr><strong>MCP Server</strong> &middot; for AI tools</a><a href="/" data-astro-cid-lxlojnfr><strong>Data API</strong> &middot; REST/JSON</a></div></div><div class="nav-dropdown" data-astro-cid-lxlojnfr><a href="https://www.leadsplease.com/contact" class="nav-dropdown-trigger" data-astro-cid-lxlojnfr>Contact</a></div></div></div><div class="topbar-right" data-astro-cid-lxlojnfr><a href="tel:18663068674" class="topbar-phone" data-astro-cid-lxlojnfr>(866) 306-8674</a></div></div></nav>
+
+<main data-astro-cid-lxlojnfr>
+
+<!-- ─── Tab nav ────────────────────────────────────────── -->
+<div class="sg-tabs" role="tablist" aria-label="Data API sections" data-astro-cid-lxlojnfr>
+  <div class="sg-tabs-inner">
+    <a href="#overview"  class="sg-tab is-active" role="tab" data-panel="overview" >Use the LeadsPlease Data API</a>
+    <a href="#try"       class="sg-tab"           role="tab" data-panel="try"      >Try It</a>
+    <a href="#use-cases" class="sg-tab"           role="tab" data-panel="use-cases">Use Cases</a>
+    <a href="#install"   class="sg-tab"           role="tab" data-panel="install"  >Get Started <span class="sg-tab-badge">Free</span></a>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     Tab 1 — Overview
+     ═══════════════════════════════════════════════════════════════ -->
+<section id="overview" class="sg-panel is-active" role="tabpanel">
+  <div class="ov-wrap">
+    <span class="ov-eyebrow"><span class="dot"></span>REST API · v1.3.4 · OpenAPI 3.0</span>
+    <h1 class="ov-h1">Build mailing lists into <em>your own product</em>. REST + JSON. Five steps.</h1>
+    <p class="ov-lede">The official LeadsPlease Data API gives your app programmatic access to <strong>210M+ USPS-verified U.S. consumers</strong>, <strong>18M+ verified businesses</strong>, plus <strong>New Homeowner</strong> and <strong>New Mover</strong> feeds. JSON over HTTPS, Bearer-token auth, OpenAPI 3.0 spec, polygon + radial + ZIP geos, 30+ demographics, signed CSV downloads. Same data engine that powers leadsplease.com checkout — exposed as endpoints you can call from any backend.</p>
+
+    <div class="ov-cta-row">
+      <a class="ov-cta" href="#install">Get API keys &mdash; it's free &rarr;</a>
+      <a class="ov-cta-secondary" href="https://api-test.leadsplease.com/swagger-ui/index.html" target="_blank" rel="noopener">Open Swagger UI &rarr;</a>
+      <a class="ov-cta-secondary" href="#try">See a live example</a>
+    </div>
+
+    <div class="ov-pills">
+      <span class="mc-pill"><span class="dot"></span>Live in TEST mode now</span>
+      <span class="mc-pill">Bearer-token auth (JWT)</span>
+      <span class="mc-pill">USPS CASS-certified</span>
+      <span class="mc-pill">SOC 2 · GDPR · CCPA · CAN-SPAM</span>
+      <span class="mc-pill">99.9% uptime SLA on paid tiers</span>
+    </div>
+
+    <div class="ov-stats">
+      <div class="ov-stat"><div class="num"><em>210M+</em></div><div class="lab">Consumer records</div></div>
+      <div class="ov-stat"><div class="num"><em>18M+</em></div><div class="lab">Business contacts</div></div>
+      <div class="ov-stat"><div class="num"><em>30+</em></div><div class="lab">Demographic selects</div></div>
+      <div class="ov-stat"><div class="num"><em>4</em></div><div class="lab">List types · Consumer · Business · New Homeowner · New Mover</div></div>
+      <div class="ov-stat"><div class="num"><em>13.8K</em></div><div class="lab">SIC codes searchable</div></div>
+    </div>
+
+    <h2 style="font-family:'Fraunces',serif; font-size:30px; font-weight:600; margin:48px 0 18px; line-height:1.15;">From auth to CSV in five calls</h2>
+    <p class="ov-lede" style="margin-bottom:28px;">Every list-build follows the same pipeline. The Subscriptions endpoint wraps step 2&ndash;5 into a single recurring delivery for New Mover / New Homeowner.</p>
+
+    <div class="ov-steps">
+      <div class="ov-step">
+        <div class="n">1</div>
+        <h4>Authenticate</h4>
+        <p><code style="font-family:'JetBrains Mono',monospace; font-size:12px;">POST /auth</code> with username + password. Returns a 20-minute JWT to send as <code style="font-family:'JetBrains Mono',monospace; font-size:12px;">Authorization: Bearer &lt;token&gt;</code>.</p>
+      </div>
+      <div class="ov-step">
+        <div class="n">2</div>
+        <h4>Define criteria</h4>
+        <p><code style="font-family:'JetBrains Mono',monospace; font-size:12px;">POST /search-criteria</code> with list type, geos (manual/radial/polygon), demographics, and which contact data points to include (direct mail, email, phone). Returns a criteriaId.</p>
+      </div>
+      <div class="ov-step">
+        <div class="n">3</div>
+        <h4>Get count</h4>
+        <p><code style="font-family:'JetBrains Mono',monospace; font-size:12px;">POST /counts</code> with the criteriaId. Returns the exact number of records that match. Rate-limited to 10/min.</p>
+      </div>
+      <div class="ov-step">
+        <div class="n">4</div>
+        <h4>Create &amp; download</h4>
+        <p><code style="font-family:'JetBrains Mono',monospace; font-size:12px;">POST /lists</code> &rarr; status URL. Poll until <em>Completed</em>. Response includes a signed download URL for the generated CSV.</p>
+      </div>
+    </div>
+
+    <h2 style="font-family:'Fraunces',serif; font-size:30px; font-weight:600; margin:48px 0 18px; line-height:1.15;">Endpoint quick reference</h2>
+    <p class="ov-lede" style="margin-bottom:28px;">Eight core endpoints cover 95% of integrations. Full schemas in the Swagger UI.</p>
+
+    <div class="ov-endpoints">
+      <div class="ov-endpoint">
+        <span class="verb post">POST</span><span class="path">/auth</span>
+        <h4>Authenticate</h4>
+        <p>Trade username + password for a 20-minute JWT. No prior token required.</p>
+      </div>
+      <div class="ov-endpoint">
+        <span class="verb post">POST</span><span class="path">/search-criteria</span>
+        <h4>Create criteria</h4>
+        <p>Persist a list type + geo + demographic combo. Returns a <code style="font-family:'JetBrains Mono',monospace; font-size:12px;">criteriaId</code> reusable across count + list calls.</p>
+      </div>
+      <div class="ov-endpoint">
+        <span class="verb post">POST</span><span class="path">/counts</span>
+        <h4>Get count</h4>
+        <p>How many records match these criteria? 10 calls/min. Use this for live UI estimates and pricing previews.</p>
+      </div>
+      <div class="ov-endpoint">
+        <span class="verb post">POST</span><span class="path">/lists</span>
+        <h4>Create list</h4>
+        <p>Triggers async CSV generation. Returns a status URL to poll.</p>
+      </div>
+      <div class="ov-endpoint">
+        <span class="verb get">GET</span><span class="path">/lists/{id}</span>
+        <h4>Check list status</h4>
+        <p>Status flips Pending &rarr; Completed; once complete, response includes a signed download URL.</p>
+      </div>
+      <div class="ov-endpoint">
+        <span class="verb post">POST</span><span class="path">/list-aggregations</span>
+        <h4>Aggregate lists</h4>
+        <p>Merge multiple completed lists into a single CSV. Add or remove members; the aggregate auto-regenerates.</p>
+      </div>
+      <div class="ov-endpoint">
+        <span class="verb get">GET</span><span class="path">/demographic-categories</span>
+        <h4>Discover filters</h4>
+        <p>Fetch the full demographic catalog for a given list type and affiliate code. Drives dynamic UIs.</p>
+      </div>
+      <div class="ov-endpoint">
+        <span class="verb get">GET</span><span class="path">/sic-codes/search</span>
+        <h4>SIC lookup</h4>
+        <p>Find SIC codes by description (e.g. <code style="font-family:'JetBrains Mono',monospace; font-size:12px;">?description=Restaurant</code>) or fetch the full 13,806-code catalog.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     Tab 2 — Try It
+     ═══════════════════════════════════════════════════════════════ -->
+<section id="try" class="sg-panel" role="tabpanel">
+  <div class="try-wrap">
+    <h2>Run a real call right now</h2>
+    <p class="lede">Below is the exact pipeline that powers the LeadsPlease checkout. Every snippet is copy-paste ready against TEST. Swap the base URL to <code style="font-family:'JetBrains Mono',monospace;">https://api.leadsplease.com</code> when you're ready for live.</p>
+
+    <div class="try-cta-row">
+      <div class="copy">
+        <h3>Want the full interactive runner?</h3>
+        <p>The Swagger UI gives you in-browser request bodies and "Try it out" against TEST &mdash; no client setup needed.</p>
+      </div>
+      <a class="ov-cta" href="https://api-test.leadsplease.com/swagger-ui/index.html" target="_blank" rel="noopener">Open Swagger UI &rarr;</a>
+    </div>
+
+    <div class="try-section">
+      <h3><span class="num">1</span>Authenticate &mdash; trade credentials for a JWT</h3>
+      <p>POST your username and password. The response includes <code style="font-family:'JetBrains Mono',monospace;">accessToken</code> &mdash; valid for 20 minutes. Re-call this endpoint when it expires; no refresh-token flow needed.</p>
+      <div class="code-tabs">
+        <button class="code-tab is-active" data-lang="curl-1">cURL</button>
+        <button class="code-tab" data-lang="node-1">Node.js</button>
+        <button class="code-tab" data-lang="python-1">Python</button>
+      </div>
+      <div class="code-block is-active" data-lang="curl-1">
+<pre class="code"><span class="c"># Trade credentials for a JWT (TEST environment)</span>
+curl -X POST https://api-test.leadsplease.com/api/v1/auth \
+  -H <span class="s">"Content-Type: application/json"</span> \
+  -d <span class="s">'{"username":"john@example.com","password":"yourpassword"}'</span>
+
+<span class="c"># → { "accessToken": "eyJhbGciOiJIUzUxMi..." }</span></pre>
+      </div>
+      <div class="code-block" data-lang="node-1">
+<pre class="code"><span class="k">const</span> r = <span class="k">await</span> fetch(<span class="s">'https://api-test.leadsplease.com/api/v1/auth'</span>, {
+  method: <span class="s">'POST'</span>,
+  headers: { <span class="s">'Content-Type'</span>: <span class="s">'application/json'</span> },
+  body: <span class="k">JSON</span>.stringify({ username, password })
+});
+<span class="k">const</span> { accessToken } = <span class="k">await</span> r.json();</pre>
+      </div>
+      <div class="code-block" data-lang="python-1">
+<pre class="code"><span class="k">import</span> requests
+
+r = requests.post(
+    <span class="s">"https://api-test.leadsplease.com/api/v1/auth"</span>,
+    json={<span class="s">"username"</span>: username, <span class="s">"password"</span>: password},
+)
+access_token = r.json()[<span class="s">"accessToken"</span>]</pre>
+      </div>
+    </div>
+
+    <div class="try-section">
+      <h3><span class="num">2</span>Create criteria &mdash; pick list type, geos, demographics</h3>
+      <p>Below: a Consumer list across two ZIP codes (Scottsdale 85255 + Flagstaff 86001), filtered to high-value home owners who are December birthdays and donate to animal-welfare or cultural causes.</p>
+      <div class="code-tabs">
+        <button class="code-tab is-active" data-lang="curl-2">cURL</button>
+        <button class="code-tab" data-lang="json-2">JSON body</button>
+      </div>
+      <div class="code-block is-active" data-lang="curl-2">
+<pre class="code">curl -X POST https://api-test.leadsplease.com/api/v1/search-criteria \
+  -H <span class="s">"Authorization: Bearer $TOKEN"</span> \
+  -H <span class="s">"Content-Type: application/json"</span> \
+  -d @criteria.json
+
+<span class="c"># → { "id": "a9bae6d8-17bb-11f1-8fa0-0afff3a94407" }</span></pre>
+      </div>
+      <div class="code-block" data-lang="json-2">
+<pre class="code">{
+  <span class="k">"listType"</span>: <span class="s">"consumer"</span>,
+  <span class="k">"geoCriteriaType"</span>: <span class="s">"manual"</span>,
+  <span class="k">"affiliateCode"</span>: <span class="s">"lp"</span>,
+  <span class="k">"contactDataPoints"</span>: [<span class="s">"direct_mail"</span>],
+  <span class="k">"geos"</span>: [
+    { <span class="k">"name"</span>: <span class="s">"85255"</span>, <span class="k">"type"</span>: <span class="s">"zip"</span> },
+    { <span class="k">"name"</span>: <span class="s">"86001"</span>, <span class="k">"type"</span>: <span class="s">"zip"</span> }
+  ],
+  <span class="k">"demographics"</span>: [
+    { <span class="k">"name"</span>: <span class="s">"charityDonor"</span>,        <span class="k">"codes"</span>: [<span class="s">"aw"</span>, <span class="s">"cc"</span>] },
+    { <span class="k">"name"</span>: <span class="s">"current_home_value"</span>,  <span class="k">"codes"</span>: [<span class="s">"Q"</span>, <span class="s">"R"</span>, <span class="s">"S"</span>] },
+    { <span class="k">"name"</span>: <span class="s">"personbirthmonthonly"</span>, <span class="k">"codes"</span>: [<span class="s">"12"</span>] }
+  ]
+}</pre>
+      </div>
+    </div>
+
+    <div class="try-section">
+      <h3><span class="num">3</span>Get count &mdash; how many match?</h3>
+      <p>Rate-limited to 10/min. Use this for live count estimates as the user adjusts filters in your UI.</p>
+<pre class="code">curl -X POST https://api-test.leadsplease.com/api/v1/counts \
+  -H <span class="s">"Authorization: Bearer $TOKEN"</span> \
+  -H <span class="s">"Content-Type: application/json"</span> \
+  -d <span class="s">'{"criteriaId":"a9bae6d8-17bb-11f1-8fa0-0afff3a94407"}'</span>
+
+<span class="c"># → { "count": 1247 }</span></pre>
+    </div>
+
+    <div class="try-section">
+      <h3><span class="num">4</span>Create list &mdash; trigger async CSV generation</h3>
+      <p>Returns a status URL. Poll it until <code style="font-family:'JetBrains Mono',monospace;">status</code> flips from <em>Pending</em> to <em>Completed</em>; the same response then includes a signed download URL.</p>
+<pre class="code">curl -X POST https://api-test.leadsplease.com/api/v1/lists \
+  -H <span class="s">"Authorization: Bearer $TOKEN"</span> \
+  -H <span class="s">"Content-Type: application/json"</span> \
+  -d <span class="s">'{"criteriaId":"a9bae6d8-17bb-11f1-8fa0-0afff3a94407","name":"AZ donor list"}'</span>
+
+<span class="c"># → {
+#     "id": "list_4f8a...",
+#     "status": "Pending",
+#     "statusUrl": "https://api-test.leadsplease.com/api/v1/lists/list_4f8a..."
+#   }</span></pre>
+    </div>
+
+    <div class="try-section">
+      <h3><span class="num">5</span>Poll status &amp; download</h3>
+      <p>Typically 30&ndash;90 seconds end-to-end depending on list size. The download URL is signed and time-limited.</p>
+<pre class="code">curl https://api-test.leadsplease.com/api/v1/lists/list_4f8a... \
+  -H <span class="s">"Authorization: Bearer $TOKEN"</span>
+
+<span class="c"># → {
+#     "id": "list_4f8a...",
+#     "status": "Completed",
+#     "downloadUrl": "https://api-test.leadsplease.com/files/list_4f8a.csv?signature=..."
+#   }</span></pre>
+    </div>
+
+    <div class="try-section">
+      <h3>Bonus &mdash; one-shot SIC keyword lookup</h3>
+      <p>No auth required. Useful for autocomplete in business-list builders.</p>
+<pre class="code">curl <span class="s">'https://api-test.leadsplease.com/api/v1/sic-codes/search?description=Restaurant'</span>
+
+<span class="c"># → [
+#     { "sicCode": "5812", "description": "Eating Places", "parentCode": "58" },
+#     { "sicCode": "5812008", "description": "Restaurants - Italian", "parentCode": "5812" },
+#     ...
+#   ]</span></pre>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     Tab 3 — Use Cases
+     ═══════════════════════════════════════════════════════════════ -->
+<section id="use-cases" class="sg-panel" role="tabpanel">
+  <div class="uc-wrap">
+    <h2>Six common patterns</h2>
+    <p class="lede">Patterns we see most often in the wild. Most teams ship something working in less than a day &mdash; the data is real, the spec is OpenAPI, and the polling pattern is well-trodden.</p>
+
+    <div class="uc-grid">
+      <div class="uc-card">
+        <div class="cat">Direct Mail Platform</div>
+        <h3>Embed list-building inside your postcard tool</h3>
+        <p>Print &amp; mail companies (postcard apps, EDDM platforms) call <code style="font-family:'JetBrains Mono',monospace;">/counts</code> live as the user paints a polygon on a map, then <code style="font-family:'JetBrains Mono',monospace;">/lists</code> at checkout. Their customers never leave their app; LeadsPlease is the data backend.</p>
+        <div class="stack">geoCriteriaType=polygon · /counts (live) · /lists at checkout</div>
+      </div>
+      <div class="uc-card">
+        <div class="cat">Real Estate · Farming</div>
+        <h3>Recurring New Mover &amp; New Homeowner feeds</h3>
+        <p>Real-estate apps subscribe to a saved Criteria (e.g. "homes sold $500K+ in zip 85255 in last 30 days"). Every time the LP database loads new records, Subscriptions emails a CSV of just the new records &mdash; no double-mailing the same household.</p>
+        <div class="stack">/subscriptions · listType=newhomeowner · deliveryChannels=[EMAIL]</div>
+      </div>
+      <div class="uc-card">
+        <div class="cat">Insurance · Medicare</div>
+        <h3>Turning-65 birthday targeting</h3>
+        <p>Insurance brokers buy weekly lists of people turning 65 in the next 90 days for Medicare Annual Enrollment outreach. <code style="font-family:'JetBrains Mono',monospace;">personbirthmonthonly</code> + <code style="font-family:'JetBrains Mono',monospace;">age_min/age_max</code> filters carve a precise birthday cohort.</p>
+        <div class="stack">listType=consumer · age_min=65, age_max=65 · birthMonth filter</div>
+      </div>
+      <div class="uc-card">
+        <div class="cat">B2B SaaS · Sales Enrichment</div>
+        <h3>SIC-code prospecting at scale</h3>
+        <p>Sales-tech tools fetch verified business contacts by 4-digit or 7-digit SIC, then enrich with employee size + sales volume + executive title. The <code style="font-family:'JetBrains Mono',monospace;">/sic-codes/search</code> endpoint powers the "find your industry" autocomplete.</p>
+        <div class="stack">listType=business · SIC + employee_code + sales_volume filters</div>
+      </div>
+      <div class="uc-card">
+        <div class="cat">Marketing Automation</div>
+        <h3>Audience handoff into your ESP</h3>
+        <p>Pull a list with <code style="font-family:'JetBrains Mono',monospace;">contactDataPoints=[email]</code>, get a CSV signed URL, pipe directly into Klaviyo / HubSpot / Mailchimp via their import APIs. Lights-out workflow no human touches.</p>
+        <div class="stack">contactDataPoints=[direct_mail, email] · downloadUrl &rarr; ESP import</div>
+      </div>
+      <div class="uc-card">
+        <div class="cat">Mass Tort · Legal</div>
+        <h3>Claimant-prospect lists by demo + geo</h3>
+        <p>Legal-tech firms build claimant prospect pools by demographic + geography (e.g. women 50&ndash;75 within 50 miles of specific medical facilities). <code style="font-family:'JetBrains Mono',monospace;">geoCriteriaType=radial</code> + age + gender filters do this in one criteria object.</p>
+        <div class="stack">geoCriteriaType=radial · gender · age_min/max · radiusInMiles</div>
+      </div>
+    </div>
+
+    <h2 style="margin-top:48px;">Frequently asked</h2>
+    <div class="faq-wrap" style="padding-left:0; padding-right:0;">
+      <details class="faq-item"><summary>How do I authenticate?</summary><div class="a">POST your username and password to <code style="font-family:'JetBrains Mono',monospace;">/auth</code> &mdash; you receive a JWT access token valid for 20 minutes. Include it as <code style="font-family:'JetBrains Mono',monospace;">Authorization: Bearer &lt;token&gt;</code> on every authenticated endpoint. Tokens auto-rotate on expiry; just call <code style="font-family:'JetBrains Mono',monospace;">/auth</code> again.</div></details>
+      <details class="faq-item"><summary>What's the rate limit?</summary><div class="a">10 Count requests per minute, per API key. List creation, list status checks, aggregation, and subscription endpoints have no fixed minute-cap but are subject to fair-use review at high volumes &mdash; contact us for higher limits or dedicated infrastructure.</div></details>
+      <details class="faq-item"><summary>Do you have an OpenAPI / Swagger spec?</summary><div class="a">Yes &mdash; interactive Swagger UI at <a href="https://api-test.leadsplease.com/swagger-ui/index.html" target="_blank" rel="noopener">api-test.leadsplease.com/swagger-ui</a> (TEST) and <a href="https://api.leadsplease.com/swagger-ui/index.html" target="_blank" rel="noopener">api.leadsplease.com/swagger-ui</a> (LIVE). Full request and response schemas plus inline test runner.</div></details>
+      <details class="faq-item"><summary>How fresh is the data?</summary><div class="a">Consumer + business: monthly refresh, USPS CASS-certified for deliverability. New Mover: daily loads, ~1M new records/month. New Homeowner: daily loads, ~750K new records/month. The Subscriptions API guarantees you only ever receive records loaded since your last delivery.</div></details>
+      <details class="faq-item"><summary>What output formats are supported?</summary><div class="a">CSV today &mdash; UTF-8, comma-delimited, RFC 4180 quoted. JSON-line and Parquet on the roadmap (request via <a href="mailto:tech@leadsplease.com">tech@leadsplease.com</a> if that would unblock you). Direct mail + email + phone columns are toggled per-criteria via <code style="font-family:'JetBrains Mono',monospace;">contactDataPoints</code>.</div></details>
+      <details class="faq-item"><summary>Can I aggregate multiple lists into one file?</summary><div class="a">Yes &mdash; the Lists Aggregation API groups any number of lists, deduplicates across them, and yields a single CSV. Add or remove member lists at any time; the aggregate auto-regenerates on next download. Useful for multi-region campaigns or quarterly mail drops that combine several saved searches.</div></details>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     Tab 4 — Get Started
+     ═══════════════════════════════════════════════════════════════ -->
+<section id="install" class="sg-panel" role="tabpanel">
+  <div class="in-wrap">
+    <h2>Get started</h2>
+    <p class="lede">Three tiers. Start free against TEST, graduate to LIVE when you ship. No credit card on the free tier.</p>
+
+    <div class="in-pricing">
+      <div class="in-tier">
+        <h3>Free</h3>
+        <div class="price">$0<small>/mo</small></div>
+        <p class="desc">Build, prototype, integrate.</p>
+        <ul>
+          <li>TEST environment access</li>
+          <li>1,000 Count calls / month</li>
+          <li>10 List downloads / month</li>
+          <li>All 4 list types</li>
+          <li>Swagger UI + Postman collection</li>
+          <li>Email support</li>
+        </ul>
+        <a class="cta outline" href="mailto:tech@leadsplease.com?subject=API+access+request+%E2%80%94+Free+tier">Request keys &rarr;</a>
+      </div>
+      <div class="in-tier featured">
+        <h3>Builder</h3>
+        <div class="price">$199<small>/mo</small></div>
+        <p class="desc">Production traffic, real customers.</p>
+        <ul>
+          <li>LIVE environment access</li>
+          <li>50,000 Count calls / month</li>
+          <li>Unlimited List downloads</li>
+          <li>List Aggregation API</li>
+          <li>Subscriptions (New Mover + Homeowner)</li>
+          <li>Priority email support · 1 business day</li>
+          <li>99.9% uptime SLA</li>
+        </ul>
+        <a class="cta primary" href="mailto:tech@leadsplease.com?subject=API+access+request+%E2%80%94+Builder+tier">Start Builder &rarr;</a>
+      </div>
+      <div class="in-tier">
+        <h3>Scale</h3>
+        <div class="price">Custom</div>
+        <p class="desc">High-volume, white-label, enterprise.</p>
+        <ul>
+          <li>Unlimited everything</li>
+          <li>Dedicated infrastructure</li>
+          <li>White-label / OEM licensing</li>
+          <li>Custom data points + filters</li>
+          <li>Slack-shared on-call channel</li>
+          <li>Volume-tiered per-record pricing</li>
+          <li>Quarterly business reviews</li>
+        </ul>
+        <a class="cta outline" href="mailto:tech@leadsplease.com?subject=API+access+request+%E2%80%94+Scale+tier">Contact sales &rarr;</a>
+      </div>
+    </div>
+
+    <div class="in-section">
+      <h3>30-second smoke test (TEST environment)</h3>
+      <p>Once you have a username/password from us, this is the smallest possible end-to-end smoke test &mdash; auth &rarr; criteria &rarr; count, in three calls.</p>
+<pre class="code"><span class="c">#!/usr/bin/env bash</span>
+<span class="c"># Replace USERNAME / PASSWORD with the credentials we email you.</span>
+
+BASE=<span class="s">"https://api-test.leadsplease.com/api/v1"</span>
+
+TOKEN=$(curl -s -X POST $BASE/auth \
+  -H <span class="s">"Content-Type: application/json"</span> \
+  -d <span class="s">'{"username":"USERNAME","password":"PASSWORD"}'</span> \
+  | jq -r <span class="s">'.accessToken'</span>)
+
+CID=$(curl -s -X POST $BASE/search-criteria \
+  -H <span class="s">"Authorization: Bearer $TOKEN"</span> \
+  -H <span class="s">"Content-Type: application/json"</span> \
+  -d <span class="s">'{"listType":"consumer","geoCriteriaType":"manual","affiliateCode":"lp","contactDataPoints":["direct_mail"],"geos":[{"name":"85255","type":"zip"}]}'</span> \
+  | jq -r <span class="s">'.id'</span>)
+
+curl -s -X POST $BASE/counts \
+  -H <span class="s">"Authorization: Bearer $TOKEN"</span> \
+  -H <span class="s">"Content-Type: application/json"</span> \
+  -d <span class="s">"{\"criteriaId\":\"$CID\"}"</span>
+
+<span class="c"># → { "count": 28934 }</span></pre>
+    </div>
+
+    <div class="in-section">
+      <h3>Spec, status, support</h3>
+      <p style="margin-bottom:6px;">📘 <strong>Swagger UI (TEST)</strong> &mdash; <a href="https://api-test.leadsplease.com/swagger-ui/index.html" target="_blank" rel="noopener">api-test.leadsplease.com/swagger-ui</a></p>
+      <p style="margin-bottom:6px;">📘 <strong>Swagger UI (LIVE)</strong> &mdash; <a href="https://api.leadsplease.com/swagger-ui/index.html" target="_blank" rel="noopener">api.leadsplease.com/swagger-ui</a></p>
+      <p style="margin-bottom:6px;">📄 <strong>Full API manual</strong> &mdash; <a href="https://docs.google.com/document/d/10Fc69C9uAniNGKDv0SMR03z0pr9WEWbHsGPLRBYUano" target="_blank" rel="noopener">developer reference (Google Doc, v1.3.4)</a></p>
+      <p style="margin-bottom:6px;">📊 <strong>Status page</strong> &mdash; live monitoring at <a href="https://status.leadsplease.com" target="_blank" rel="noopener">status.leadsplease.com</a> (uptime, latency, incident history)</p>
+      <p style="margin-bottom:0;">✉️ <strong>Tech support</strong> &mdash; <a href="mailto:tech@leadsplease.com">tech@leadsplease.com</a> &mdash; phone <strong>(866) 306-8674</strong> &mdash; replies within one business day on free tier, four hours on Builder, one hour on Scale.</p>
+    </div>
+
+    <div class="in-section">
+      <h3>Compliance &amp; data handling</h3>
+      <p>The data and the API are CCPA-compliant, GDPR-ready, CAN-SPAM compatible, and SOC 2 Type II certified. Mailing addresses are USPS CASS-certified for maximum deliverability. Every CSV download URL is signed and expires in 24 hours; we don't store your queries or downloaded files beyond standard operational logging.</p>
+      <p style="margin-bottom:0;">For DPA, security questionnaire, or vendor-onboarding paperwork, email <a href="mailto:legal@leadsplease.com">legal@leadsplease.com</a>.</p>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ─── Compact link footer (mirrors MCP microsite) ──────── -->
+<div class="api-footer-grid">
+  <nav class="api-footer-inner" aria-label="Related — explore LeadsPlease">
+    <div>
+      <div class="col-title">Data API</div>
+      <ul>
+        <li><a href="/#overview">Use the Data API</a></li>
+        <li><a href="/#try">Try it live</a></li>
+        <li><a href="/#use-cases">Use cases</a></li>
+        <li><a href="/#install">Get Started · Free</a></li>
+        <li><a href="https://api-test.leadsplease.com/swagger-ui/index.html">Swagger (TEST)</a></li>
+        <li><a href="https://api.leadsplease.com/swagger-ui/index.html">Swagger (LIVE)</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="col-title">Marketing</div>
+      <ul>
+        <li><a href="https://sales-garden-microsite-production.up.railway.app/">Sell LeadsPlease Data</a></li>
+        <li><a href="https://leadsplease-mcp-microsite-production.up.railway.app/">MCP Server · for AI tools</a></li>
+        <li><a href="/">Data API · REST/JSON</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="col-title">Datasets</div>
+      <ul>
+        <li><a href="https://www.leadsplease.com/mailing-lists/consumer">Consumer Lists</a></li>
+        <li><a href="https://www.leadsplease.com/mailing-lists/business">Business Lists</a></li>
+        <li><a href="https://www.leadsplease.com/email-lists/new-homeowner">New Homeowner</a></li>
+        <li><a href="https://www.leadsplease.com/email-lists/new-mover">New Mover</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="col-title">Company</div>
+      <ul>
+        <li><a href="https://www.leadsplease.com/about_us">About</a></li>
+        <li><a href="https://www.leadsplease.com/contact">Contact</a></li>
+        <li><a href="https://www.leadsplease.com/privacy_policy">Privacy</a></li>
+        <li><a href="https://www.leadsplease.com/terms_of_use">Terms</a></li>
+        <li><a href="mailto:tech@leadsplease.com">tech@leadsplease.com</a></li>
+      </ul>
+    </div>
+  </nav>
+</div>
+
+<footer style="background:#1a2332; color:#c8d0db; padding:20px 24px; font-size:12px; font-family:'DM Sans',sans-serif; text-align:center;">
+  © 2026 LeadsPlease.com · 14362 N Frank Lloyd Wright Blvd, Suite 1000, Scottsdale, AZ 85260 · (866) 306-8674 · <a href="mailto:info@leadsplease.com" style="color:#7e99ae; text-decoration:none;">info@leadsplease.com</a>
+</footer>
+
+<!-- ─── Tab switcher + URL hash sync ──────────────────────────── -->
+<script>
+(function () {
+  var tabs = Array.from(document.querySelectorAll('.sg-tab[data-panel]'));
+  var panels = Array.from(document.querySelectorAll('.sg-panel[id]'));
+  var tabOrder = ['overview', 'try', 'use-cases', 'install'];
+
+  function show(id) {
+    tabs.forEach(function (t) { t.classList.toggle('is-active', t.getAttribute('data-panel') === id); });
+    panels.forEach(function (p) { p.classList.toggle('is-active', p.id === id); });
+    var idx = tabOrder.indexOf(id);
+    var nextId = idx >= 0 && idx < tabOrder.length - 1 ? tabOrder[idx + 1] : null;
+    tabs.forEach(function (t) {
+      t.classList.toggle('is-next', nextId !== null && t.getAttribute('data-panel') === nextId);
+    });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  tabs.forEach(function (t) {
+    t.addEventListener('click', function (e) {
+      e.preventDefault();
+      var id = t.getAttribute('data-panel');
+      show(id);
+      history.replaceState(null, '', '#' + id);
+    });
+  });
+
+  var TAB_META = {
+    'overview':  { title: 'Data API — REST access to 250M+ consumer + 18M+ business records | LeadsPlease',
+                   desc: 'Programmatic count, query, and CSV download against USPS-verified U.S. mailing lists. Bearer auth, OpenAPI spec, four list types.' },
+    'try':       { title: 'Try the LeadsPlease Data API Live — Real Audience Counts | LeadsPlease',
+                   desc: 'Five copy-paste calls take you from auth to CSV download. Same JSON your backend will send.' },
+    'use-cases': { title: 'Data API Use Cases — Direct Mail · Real Estate · Insurance · B2B SaaS | LeadsPlease',
+                   desc: 'Six recurring patterns developers use the LeadsPlease Data API for: postcard tools, real-estate farming, Medicare birthday targeting, SIC-code B2B prospecting, ESP audience handoff, mass tort prospect pools.' },
+    'install':   { title: 'Get Started — Free Data API access | LeadsPlease',
+                   desc: 'Three tiers. Free TEST access for build + prototype. $199/mo Builder for production traffic. Custom Scale for white-label and high-volume.' },
+  };
+  function applyTabMeta(id) {
+    var m = TAB_META[id]; if (!m) return;
+    if (m.title) document.title = m.title;
+    if (m.desc) {
+      var d = document.querySelector('meta[name="description"]');
+      if (d) d.setAttribute('content', m.desc);
+      var od = document.querySelector('meta[property="og:description"]');
+      if (od) od.setAttribute('content', m.desc);
+      var td = document.querySelector('meta[name="twitter:description"]');
+      if (td) td.setAttribute('content', m.desc);
+    }
+    if (window.dataLayer) {
+      window.dataLayer.push({ event: 'tab_view', tab: id, page_title: m.title, page_path: '/' + id });
+    }
+  }
+  var origShow = show;
+  show = function (id) { origShow(id); applyTabMeta(id); };
+
+  var initial = (location.hash || '#overview').replace('#', '');
+  if (tabOrder.indexOf(initial) === -1) initial = 'overview';
+  show(initial);
+
+  // Sync the active tab to URL hash changes from in-page anchors
+  window.addEventListener('hashchange', function () {
+    var id = (location.hash || '#overview').replace('#', '');
+    if (tabOrder.indexOf(id) !== -1) show(id);
+  });
+})();
+
+// Code-tab switcher (cURL / Node / Python tabs inside Try-It snippets)
+(function () {
+  document.querySelectorAll('.code-tabs').forEach(function (group) {
+    var tabs = group.querySelectorAll('.code-tab');
+    var blocks = group.parentElement.querySelectorAll('.code-block');
+    tabs.forEach(function (tab) {
+      tab.addEventListener('click', function () {
+        tabs.forEach(function (t) { t.classList.remove('is-active'); });
+        blocks.forEach(function (b) { b.classList.remove('is-active'); });
+        tab.classList.add('is-active');
+        var lang = tab.getAttribute('data-lang');
+        var match = group.parentElement.querySelector('.code-block[data-lang="' + lang + '"]');
+        if (match) match.classList.add('is-active');
+      });
+    });
+  });
+})();
+</script>
+
+</body>
+</html>

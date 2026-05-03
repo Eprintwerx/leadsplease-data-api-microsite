@@ -1,0 +1,12 @@
+{
+  "name": "leadsplease-data-api-microsite",
+  "version": "1.0.0",
+  "description": "LeadsPlease Data API marketing landing page — REST/JSON endpoint reference, Try-It snippets, use cases, and pricing tiers. Hosted at developers.leadsplease.com. The actual API runs separately at api.leadsplease.com.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.21.2"
+  }
+}

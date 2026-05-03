@@ -1,0 +1,52 @@
+# LeadsPlease Data API
+
+> The official LeadsPlease REST/JSON Data API. Programmatic access to 210M+ USPS-verified U.S. consumers, 18M+ verified businesses, plus daily-loaded New Homeowner and New Mover feeds. Bearer-token (JWT) auth. OpenAPI 3.0. Polygon, radial, and ZIP/city/county/state geo selection. 30+ demographic filters. Async list generation with signed CSV downloads. Lists Aggregation API for merging multiple lists. Subscriptions API for periodic deliveries of newly loaded New Mover / New Homeowner records.
+
+## Base URLs
+- TEST: https://api-test.leadsplease.com/api/v1
+- LIVE: https://api.leadsplease.com/api/v1
+
+## Spec
+- Swagger UI (TEST): https://api-test.leadsplease.com/swagger-ui/index.html
+- Swagger UI (LIVE): https://api.leadsplease.com/swagger-ui/index.html
+
+## Core endpoints
+- POST /auth — exchange username/password for a 20-minute JWT
+- POST /search-criteria — define list type + geos + demographics; returns criteriaId
+- POST /counts — count records matching a criteriaId; rate-limited 10/min
+- POST /lists — async create CSV; returns status URL
+- GET  /lists/{id} — poll status; once Completed includes a signed downloadUrl
+- POST /list-aggregations — merge multiple lists into one CSV
+- GET  /demographic-categories?type={listType}&affiliateCode={code} — full demographic catalog
+- GET  /sic-codes/search?description={kw} — SIC code lookup by description (no auth)
+- POST /subscriptions — periodic delivery of newly loaded records (New Mover + New Homeowner only)
+
+## List types
+- consumer (210M+ households, 30+ demographics)
+- business (18M+ verified businesses; SIC, NAICS, employee count, sales volume, executive titles)
+- newhomeowner (people who closed on a home; daily loads)
+- newmover (people who relocated; daily loads)
+
+## Geo selection (geoCriteriaType)
+- manual — array of zip / city / county / state
+- radial — lat/lng + radiusInMiles
+- polygon — array of lat/lng vertices
+
+## Contact data points
+direct_mail (always included), email, phone — toggle per criteria via contactDataPoints
+
+## Authentication
+Authorization: Bearer <token>; tokens valid 20 minutes; re-call /auth to refresh
+
+## Pricing
+- Free: TEST access, 1,000 counts/mo, 10 lists/mo, all 4 list types
+- Builder: $199/mo, LIVE access, 50K counts/mo, unlimited lists, Subscriptions, 99.9% SLA
+- Scale: custom (white-label, dedicated infra, Slack on-call)
+
+## Support
+- tech@leadsplease.com (replies within 1 business day on Free, 4 hours on Builder, 1 hour on Scale)
+- (866) 306-8674
+- Status page: https://status.leadsplease.com
+
+## Compliance
+USPS CASS-certified · SOC 2 Type II · GDPR · CCPA · CAN-SPAM · TCPA

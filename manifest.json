@@ -1,0 +1,16 @@
+{
+  "name": "LeadsPlease Data API",
+  "short_name": "LP Data API",
+  "description": "Programmatic count, query, and CSV download against USPS-verified U.S. mailing lists.",
+  "start_url": "/",
+  "display": "standalone",
+  "theme_color": "#FF6633",
+  "background_color": "#ffffff",
+  "icons": [
+    {
+      "src": "https://www.leadsplease.com/affiliates/lp/images/look_feel/logo-lp-1777739221978-2993.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ]
+}

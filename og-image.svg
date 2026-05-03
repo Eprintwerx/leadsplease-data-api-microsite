@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fff8f5"/>
+      <stop offset="100%" stop-color="#FFE9DB"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect x="0" y="0" width="1200" height="8" fill="#FF6633"/>
+  <text x="80" y="120" font-family="DM Sans, sans-serif" font-size="20" font-weight="800" fill="#C44E15" letter-spacing="3">LEADSPLEASE · DATA API · v1.3.4</text>
+  <text x="80" y="220" font-family="Fraunces, Georgia, serif" font-size="80" font-weight="700" fill="#1C1410">REST + JSON access to</text>
+  <text x="80" y="312" font-family="Fraunces, Georgia, serif" font-size="80" font-weight="700" fill="#1C1410">U.S. mailing list data.</text>
+  <text x="80" y="380" font-family="DM Sans, sans-serif" font-size="26" fill="#4d4e50">210M+ consumers · 18M+ businesses · 30+ demographics</text>
+  <text x="80" y="418" font-family="DM Sans, sans-serif" font-size="26" fill="#4d4e50">Polygon · radial · ZIP geos · OpenAPI 3.0 spec</text>
+
+  <g transform="translate(80, 480)">
+    <rect width="280" height="62" rx="10" fill="#FF6633"/>
+    <text x="140" y="40" font-family="DM Sans, sans-serif" font-size="22" font-weight="800" fill="#fff" text-anchor="middle">Get API keys — free →</text>
+  </g>
+  <g transform="translate(380, 480)">
+    <rect width="280" height="62" rx="10" fill="#fff" stroke="#FF6633" stroke-width="2"/>
+    <text x="140" y="40" font-family="DM Sans, sans-serif" font-size="22" font-weight="700" fill="#FF6633" text-anchor="middle">Open Swagger UI →</text>
+  </g>
+
+  <text x="1120" y="595" font-family="DM Sans, sans-serif" font-size="14" fill="#8888a4" text-anchor="end">developers.leadsplease.com</text>
+</svg>
