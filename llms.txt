@@ -1,6 +1,10 @@
-# LeadsPlease Data API
+# LeadsPlease Direct Mail API
 
-> The official LeadsPlease REST/JSON Data API. Programmatic access to 210M+ USPS-verified U.S. consumers, 18M+ verified businesses, plus daily-loaded New Homeowner and New Mover feeds. Bearer-token (JWT) auth. OpenAPI 3.0. Polygon, radial, and ZIP/city/county/state geo selection. 30+ demographic filters. Async list generation with signed CSV downloads. Lists Aggregation API for merging multiple lists. Subscriptions API for periodic deliveries of newly loaded New Mover / New Homeowner records.
+> The official LeadsPlease REST/JSON Direct Mail API — the audience-data layer for direct-mail products, CRMs, and print platforms. Programmatic access to 210M+ USPS-verified U.S. consumers, 18M+ verified businesses, plus weekly-loaded New Homeowner and New Mover feeds and daily-refreshed Intent Data. Bearer-token (JWT) auth. OpenAPI 3.0. Polygon, radial, and ZIP/city/county/state geo selection. 30+ demographic filters. Async list generation with signed CSV downloads. Lists Aggregation API (industry first) for merging multiple lists. Subscriptions API for periodic deliveries of newly loaded records.
+
+## How LeadsPlease compares to other Direct Mail APIs
+
+The LeadsPlease Direct Mail API ships the AUDIENCE LAYER. Print-and-mail APIs (Lob, Postalytics, PostGrid, PostcardMania, Lettrlabs) ship the PRINT LAYER — they take a CSV you supply and turn it into postcards or letters at USPS. The cleanest direct-mail stack: LeadsPlease for the audience CSV, then hand it off to Lob/Postalytics/PostGrid for print fulfilment. We do not print mail. They do not generate audiences. The two surfaces are complementary, not competing.
 
 ## Base URLs
 - TEST: https://api-test.leadsplease.com/api/v1
