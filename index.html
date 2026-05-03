@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
 <title>Mailing List API — REST access to 250M+ consumers + 18M+ businesses · USPS-verified | LeadsPlease®</title>
-<meta name="description" content="The LeadsPlease® Mailing List API: programmatic count, query, and CSV download against 250M+ USPS-verified U.S. consumers and 18M+ businesses. Bearer-token auth, OpenAPI 3.0, polygon + radial + ZIP geos, 30+ demographics, plus exclusive Intent Data overlay (5–10× direct-mail conversion lift) and the industry-first List Aggregation API. Free TEST tier, $199/mo Standard, no order minimum." />
+<meta name="description" content="The LeadsPlease® Mailing List API: programmatic count, query, and CSV download against 250M+ USPS-verified U.S. consumers and 18M+ businesses. Bearer-token auth, OpenAPI 3.0, polygon + radial + ZIP geos, 30+ demographics, plus Intent Data — an enhanced percentile-scored demographic field on every consumer record (5–10× direct-mail lift) — and the industry-first List Aggregation API. Free TEST tier, $199/mo Standard, no order minimum." />
 <meta name="keywords" content="mailing list api, consumer data api, b2b data api, direct mail api, USPS verified mailing list api, list count api, intent data api, purchase intent api, SIC code api, NAICS api, demographic api, new mover api, new homeowner api, polygon search api, audience targeting api, prospect database api, mailing list aggregation api, openapi swagger mailing list, list broker api, leadsplease api, REST mailing list, JSON mailing list, mailing list webhook" />
 <meta name="news_keywords" content="mailing list API, intent data API, USPS mailing list API, B2B data API, consumer data API, direct mail API" />
 <meta name="subject" content="REST/JSON Data API for U.S. mailing lists, business contacts, and intent data" />
@@ -313,7 +313,7 @@
   "mainEntity": [
     {"@type":"Question","name":"How does LeadsPlease® Data API pricing work?","acceptedAnswer":{"@type":"Answer","text":"Two tiers, two-part pricing. Tiers: Standard $199/mo (full production access, all features, 99.9% SLA) or Enterprise (custom) for white-label, OEM, and high-volume with negotiated below-standard per-record rates. Both tiers cover API access, support, and rate limits only — records bill separately at the standard LeadsPlease® per-record data rates from the LP affiliate XML, the same per-unit prices the public LeadsPlease.com checkout uses. Key difference: the website enforces a $125–$300 minimum per order; the API does not. A 1-record lookup costs 1.2 cents. Volume discounts auto-apply at 2,500 / 5,000 / 10,000 / 25,000 / 50,000-record breakpoints. 30-day free TEST evaluation available on request."}},
     {"@type":"Question","name":"How do Subscriptions work?","acceptedAnswer":{"@type":"Answer","text":"Define your criteria once via POST /search-criteria, then POST /subscriptions wrapping that criteriaId with a name and deliveryChannels (EMAIL today, webhook + S3 on roadmap). A daily background job checks for new matching records loaded since the last delivery; when there are any, a fresh CSV is generated and pushed to your channel. Each delivery is incremental — only records not previously sent. Ideal for time-sensitive segments like New Homeowner (30-day peak-spend window), New Mover (30-day relocation window), T65 / Medicare AEP (birthday eligibility), and daily Intent Data refresh."}},
-    {"@type":"Question","name":"What is LeadsPlease® Intent Data and why does it matter?","acceptedAnswer":{"@type":"Answer","text":"Intent Data identifies the 2–5% of any audience who are actively in-market for a specific category right now, compiled from search behavior, content engagement, transaction patterns, life-event triggers, connected-TV exposure, and anonymized geo-fence signals. Layered on top of demographic targeting it lifts direct-mail response rates from 0.5–1.5% to 5–12% — a 5–10× improvement. Intent-overlay lists also command 30–60% higher prices. Available via the API as additional demographic codes on the existing Criteria object (e.g. intent_category=auto_in_market_30d). Early-access waitlist open now; general availability Q3 2026."}},
+    {"@type":"Question","name":"What is LeadsPlease® Intent Data and why does it matter?","acceptedAnswer":{"@type":"Answer","text":"Intent Data is an enhanced demographic field in the LeadsPlease® National Consumer Database — not a separate dataset, an extra column on every consumer record. Multiple intent categories (auto-in-market, kitchen-remodel, insurance-shopping, mortgage-refinance, switching-cell-carrier, etc.) are each scored on a 1–100 percentile basis, so you can target the top decile (P90+) or top quartile (P75+) of any category. Combine intent percentile filters with any other consumer demographic — income, age, homeowner status, presence of children, vehicle owned — on the same Consumer Criteria object. Layered on demographic + geographic targeting, intent lifts direct-mail response rates from a typical 0.5–1.5% to 5–12%. Available via the LeadsPlease® Data API and across other LeadsPlease® platforms. Early-access waitlist open now; general availability Q3 2026."}},
     {"@type":"Question","name":"How do I authenticate to the LeadsPlease® Data API?","acceptedAnswer":{"@type":"Answer","text":"POST your username and password to /auth — you receive a JWT access token valid for 20 minutes. Include it as Authorization: Bearer <token> on every authenticated endpoint (Criteria, Count, List, Aggregation, Subscriptions). Tokens auto-rotate on expiry; just call /auth again."}},
     {"@type":"Question","name":"What list types are supported?","acceptedAnswer":{"@type":"Answer","text":"Four: consumer (210M+ U.S. households, 30+ demographics), business (18M+ verified businesses with SIC, NAICS, employee count, sales volume, executive titles), newhomeowner (people who closed on a home in the last 90 days), and newmover (people who relocated in the last 30 days). All four support manual ZIP/city/county/state, radial (lat/lng + miles), and polygon geo selection."}},
     {"@type":"Question","name":"Is there an OpenAPI / Swagger spec?","acceptedAnswer":{"@type":"Answer","text":"Yes — interactive Swagger UI is at https://api-test.leadsplease.com/swagger-ui/index.html (TEST) and https://api.leadsplease.com/swagger-ui/index.html (LIVE). Full request and response schemas, plus inline test runner."}},
@@ -462,6 +462,7 @@
   <div class="sg-tabs-inner">
     <a href="#overview"  class="sg-tab is-active" role="tab" data-panel="overview" >Use the LeadsPlease® Data API</a>
     <a href="#try"       class="sg-tab"           role="tab" data-panel="try"      >Try It</a>
+    <a href="#reference" class="sg-tab"           role="tab" data-panel="reference">API Reference <span class="sg-tab-badge" style="background: #1e40af;">Swagger</span></a>
     <a href="#use-cases" class="sg-tab"           role="tab" data-panel="use-cases">Use Cases</a>
     <a href="#prices"    class="sg-tab"           role="tab" data-panel="prices"   >Prices</a>
     <a href="#install"   class="sg-tab"           role="tab" data-panel="install"  >Get Started <span class="sg-tab-badge">Free trial</span></a>
@@ -510,8 +511,8 @@
           <span style="display: inline-block; background: #1C1410; color: #fff; font-size: 11px; font-weight: 800; letter-spacing: 1.6px; padding: 5px 14px; border-radius: 99px; text-transform: uppercase;">⚡ Coming Q3 2026</span>
           <span style="display: inline-block; background: rgba(255,255,255,0.18); border: 1px solid rgba(255,255,255,0.32); color: #fff; font-size: 11px; font-weight: 800; letter-spacing: 1.6px; padding: 5px 14px; border-radius: 99px; text-transform: uppercase;">★ Industry-Leading Data Layer</span>
         </div>
-        <h2 style="font-family: 'Fraunces', serif; font-size: 44px; font-weight: 600; margin: 0 0 16px; line-height: 1.05; max-width: 900px;">Intent Data &mdash; <span style="text-decoration: underline; text-decoration-color: rgba(255,255,255,0.35); text-decoration-thickness: 3px; text-underline-offset: 6px;">available via the Data API and other LeadsPlease® platforms</span>. Reach prospects who are actively shopping, right now.</h2>
-        <p style="font-size: 18px; line-height: 1.6; color: rgba(255,255,255,0.94); margin: 0 0 18px; max-width: 920px; font-weight: 500;">Everyone sells demographic data. Almost no one sells <strong style="color: #fff; font-weight: 800;">verified, real-time purchase-intent signals</strong> alongside it. LeadsPlease® is changing that &mdash; and the Data API is one of several access paths (alongside the MCP Server and the LeadsPlease® reseller platforms). Layer in-market intent over any consumer or business audience and find the 2&ndash;5% of your demographic match who are <em>actively researching, comparing, or about to buy</em> &mdash; and ignore the 95% who aren't. </p>
+        <h2 style="font-family: 'Fraunces', serif; font-size: 44px; font-weight: 600; margin: 0 0 16px; line-height: 1.05; max-width: 900px;">Intent Data &mdash; <span style="text-decoration: underline; text-decoration-color: rgba(255,255,255,0.35); text-decoration-thickness: 3px; text-underline-offset: 6px;">an enhanced demographic field</span> in the LeadsPlease® National Consumer Database. Percentile-scored. Layer with anything.</h2>
+        <p style="font-size: 18px; line-height: 1.6; color: rgba(255,255,255,0.94); margin: 0 0 18px; max-width: 920px; font-weight: 500;">Intent Data isn't a separate dataset &mdash; it's an <strong style="color: #fff;">extra demographic field</strong> on every record in the LeadsPlease® National Consumer Database. <strong style="color: #fff;">Multiple intent categories</strong> (auto-in-market, kitchen-remodel, insurance-shopping, mortgage-refinance, switching-cell-carrier, and more) are each <strong style="color: #fff;">scored on a 1&ndash;100 percentile basis</strong>. Pick the top decile (P90+) for the highest-intent prospects, or widen to top quartile (P75+) for a larger audience. Then <strong style="color: #fff;">layer it with any other demographic in the database</strong> &mdash; income, age, homeowner status, presence of children, charity-donor flags, vehicle owned &mdash; to build precision audiences in seconds. Available via the LeadsPlease® Data API and across other LeadsPlease® platforms.</p>
 
         <div style="background: rgba(0,0,0,0.20); border: 1px solid rgba(255,255,255,0.18); border-radius: 12px; padding: 22px 24px; margin: 22px 0; backdrop-filter: blur(4px);">
           <div style="font-family: 'DM Sans', sans-serif; font-size: 11px; font-weight: 800; letter-spacing: 1.6px; color: rgba(255,255,255,0.78); margin-bottom: 10px; text-transform: uppercase;">⚡ The Math</div>
@@ -553,7 +554,7 @@
         </div>
 
         <h3 style="font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 800; letter-spacing: 1.4px; text-transform: uppercase; color: #fff; margin: 22px 0 12px;">How you'll use it</h3>
-        <p style="font-size: 15.5px; line-height: 1.6; color: rgba(255,255,255,0.94); margin: 0 0 18px; max-width: 900px;">Intent surfaces as standard demographic codes inside the existing Criteria object. One example: <code style="background: rgba(0,0,0,0.30); color: #fff; padding: 3px 8px; border-radius: 4px; font-family: 'JetBrains Mono', monospace; font-size: 13px;">intent_category=auto_in_market_30d</code> filters consumer audiences down to people verified to be actively shopping for a vehicle in the next 30 days. Same filter pattern works on Business lists for B2B ABM &mdash; <code style="background: rgba(0,0,0,0.30); color: #fff; padding: 3px 8px; border-radius: 4px; font-family: 'JetBrains Mono', monospace; font-size: 13px;">intent_category=crm_evaluation_60d</code>, etc. No new endpoint to learn &mdash; just richer filters on the calls you already make.</p>
+        <p style="font-size: 15.5px; line-height: 1.6; color: rgba(255,255,255,0.94); margin: 0 0 18px; max-width: 900px;">Intent appears as additional demographic fields on the existing Consumer Criteria object &mdash; one field per intent category, each carrying a percentile score. Pick the top decile (<code style="background: rgba(0,0,0,0.30); color: #fff; padding: 3px 8px; border-radius: 4px; font-family: 'JetBrains Mono', monospace; font-size: 13px;">intent_auto_in_market: ["P90+"]</code>) or widen to top quartile (<code style="background: rgba(0,0,0,0.30); color: #fff; padding: 3px 8px; border-radius: 4px; font-family: 'JetBrains Mono', monospace; font-size: 13px;">intent_kitchen_remodel: ["P75+"]</code>). Then layer with any other consumer demographic on the same Criteria call &mdash; income, age, homeowner, presence of children, vehicle owned. <strong style="color:#fff;">Example:</strong> top-decile auto-shoppers + household income $100K+ + age 35–55 + kids in the home, in five Phoenix-metro ZIPs &mdash; one Criteria object, one /counts call, one /lists call.</p>
 
         <div style="display: flex; gap: 12px; flex-wrap: wrap;">
           <a href="mailto:tech@leadsplease.com?subject=Intent+Data+early-access+request" style="display: inline-flex; align-items: center; gap: 8px; background: #fff; color: #C44E15; padding: 13px 24px; border-radius: 10px; font-size: 15px; font-weight: 800; text-decoration: none; box-shadow: 0 6px 18px rgba(0,0,0,0.18);">Join the early-access list &rarr;</a>
@@ -761,9 +762,9 @@ POST /subscriptions
           </div>
           <span class="verb post" style="background: rgba(0,0,0,0.32); color: #fff;">POST</span>
           <span class="path" style="color: #fff; font-weight: 700;">/search-criteria</span>
-          <span style="font-family: 'DM Sans', sans-serif; font-size: 12px; color: rgba(255,255,255,0.78); margin-left: 8px; font-weight: 600;">+ <code style="font-family:'JetBrains Mono',monospace; background: rgba(0,0,0,0.30); padding: 1px 6px; border-radius: 4px; font-size: 11px;">demographics: [{name: "intent_category", codes: [...]}]</code></span>
-          <h4 style="color: #fff; font-size: 22px; margin: 12px 0 8px;">⚡ Intent Data overlay <span style="font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.88);">— find the 2–5% who are actively shopping right now</span></h4>
-          <p style="color: rgba(255,255,255,0.94); font-size: 14.5px; line-height: 1.6;"><strong style="color:#fff;">Available via the LeadsPlease® Data API and other LeadsPlease® platforms.</strong> Layered on any Consumer or Business audience as additional <code style="font-family:'JetBrains Mono',monospace; background: rgba(0,0,0,0.32); color: #fff; padding: 2px 7px; border-radius: 4px; font-size: 12.5px;">demographics</code> codes (e.g. <code style="font-family:'JetBrains Mono',monospace; background: rgba(0,0,0,0.32); color: #fff; padding: 2px 7px; border-radius: 4px; font-size: 12.5px;">auto_in_market_30d</code>, <code style="font-family:'JetBrains Mono',monospace; background: rgba(0,0,0,0.32); color: #fff; padding: 2px 7px; border-radius: 4px; font-size: 12.5px;">kitchen_remodel_60d</code>, <code style="font-family:'JetBrains Mono',monospace; background: rgba(0,0,0,0.32); color: #fff; padding: 2px 7px; border-radius: 4px; font-size: 12.5px;">crm_evaluation_60d</code>). Same Criteria, same /counts, same /lists workflow &mdash; but the audience is now filtered to verified in-market intent. Direct-mail response rates lift from a typical 0.5–1.5% to <strong style="color: #fff; background: rgba(0,0,0,0.32); padding: 2px 8px; border-radius: 4px;">5–12%</strong>. Intent-overlay lists also command 30–60% higher prices, so reseller margin compounds against a bigger ticket.</p>
+          <span style="font-family: 'DM Sans', sans-serif; font-size: 12px; color: rgba(255,255,255,0.78); margin-left: 8px; font-weight: 600;">+ <code style="font-family:'JetBrains Mono',monospace; background: rgba(0,0,0,0.30); padding: 1px 6px; border-radius: 4px; font-size: 11px;">demographics: [{name: "intent_auto_in_market", codes: ["P90+"]}, ...]</code></span>
+          <h4 style="color: #fff; font-size: 22px; margin: 12px 0 8px;">⚡ Intent Data <span style="font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.88);">— enhanced demographic fields, percentile-scored, layerable with any other demo</span></h4>
+          <p style="color: rgba(255,255,255,0.94); font-size: 14.5px; line-height: 1.6;"><strong style="color:#fff;">Available via the LeadsPlease® Data API and other LeadsPlease® platforms.</strong> Multiple intent categories (auto-in-market, kitchen-remodel, insurance-shopping, mortgage-refinance, switching-cell-carrier, etc.) appear as additional fields on the existing Consumer Criteria object &mdash; each scored on a <strong style="color:#fff;">1–100 percentile basis</strong>. Pick the top decile (<code style="font-family:'JetBrains Mono',monospace; background: rgba(0,0,0,0.32); color: #fff; padding: 2px 7px; border-radius: 4px; font-size: 12.5px;">intent_auto_in_market: ["P90+"]</code>) for highest-intent prospects, or top quartile (<code style="font-family:'JetBrains Mono',monospace; background: rgba(0,0,0,0.32); color: #fff; padding: 2px 7px; border-radius: 4px; font-size: 12.5px;">["P75+"]</code>) for a larger audience &mdash; then combine with any other consumer demographic (income, age, homeowner, children, vehicle, donor flags) on the same call. Same /counts, same /lists, same workflow &mdash; richer targeting. Direct-mail response rates lift from 0.5–1.5% to <strong style="color: #fff; background: rgba(0,0,0,0.32); padding: 2px 8px; border-radius: 4px;">5–12%</strong>.</p>
           <p style="color: rgba(255,255,255,0.94); font-size: 13px; line-height: 1.55; margin: 10px 0 0;">Signal sources: search behavior · content engagement · transaction patterns · life-event triggers · connected-TV exposure · geo-fence dwell time. Refreshed every 24–72 hours. <a href="mailto:tech@leadsplease.com?subject=Intent+Data+early-access" style="color: #fff; text-decoration: underline; font-weight: 800;">Join the early-access waitlist &rarr;</a></p>
         </div>
       </div>
@@ -910,7 +911,67 @@ access_token = r.json()[<span class="s">"accessToken"</span>]</pre>
 </section>
 
 <!-- ═══════════════════════════════════════════════════════════════
-     Tab 3 — Use Cases
+     Tab 3 — API Reference (Swagger UI)
+     ═══════════════════════════════════════════════════════════════ -->
+<section id="reference" class="sg-panel" role="tabpanel">
+  <div style="max-width: 1340px; margin: 0 auto; padding: 24px 24px 48px; font-family: 'DM Sans', sans-serif;">
+    <div style="display: flex; gap: 18px; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; margin-bottom: 18px;">
+      <div style="flex: 1; min-width: 280px;">
+        <h2 style="font-family: 'Fraunces', serif; font-size: 36px; font-weight: 600; color: #1C1410; margin: 0 0 8px; line-height: 1.1;">API Reference &mdash; live Swagger UI</h2>
+        <p style="font-size: 15px; line-height: 1.55; color: #4d4e50; margin: 0;">Embedded directly from the LeadsPlease® OpenAPI 3.0 spec. Expand any endpoint to see request/response schemas, parameter types, example payloads, and the inline "Try it out" runner. Same source-of-truth that powers the upstream Swagger UI &mdash; just rendered here so you don't bounce off the docs site.</p>
+      </div>
+      <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center;">
+        <span style="display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; color: #1e40af; background: #DBEAFE; padding: 7px 14px; border-radius: 99px;"><span style="width:8px;height:8px;background:#1e40af;border-radius:50%;animation:ov-dot 2s infinite;"></span>OpenAPI 3.0.1 &middot; live spec</span>
+        <a href="https://api-test.leadsplease.com/swagger-ui/index.html" target="_blank" rel="noopener" style="display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 700; color: #FF6633; text-decoration: none; padding: 7px 14px; border: 1.5px solid #FF6633; border-radius: 99px;">Open in new tab &rarr;</a>
+      </div>
+    </div>
+
+    <!-- Swagger UI assets from CDN — same canonical version Spring/Springdoc emits -->
+    <link rel="stylesheet" href="https://unpkg.com/swagger-ui-dist@5.17.14/swagger-ui.css" />
+    <div id="swagger-ui" style="background: #fff; border: 1px solid #e8e5e0; border-radius: 14px; padding: 12px 4px; min-height: 1200px;"></div>
+    <script src="https://unpkg.com/swagger-ui-dist@5.17.14/swagger-ui-bundle.js" charset="UTF-8"></script>
+    <script>
+    (function () {
+      // The reference tab is hidden until activated, so initialise lazily
+      // (otherwise Swagger UI sees a 0-height container and renders broken).
+      var done = false;
+      function initSwagger() {
+        if (done || typeof SwaggerUIBundle === 'undefined') return;
+        var panel = document.getElementById('reference');
+        if (!panel || !panel.classList.contains('is-active')) return;
+        done = true;
+        window.swaggerUiInstance = SwaggerUIBundle({
+          url: '/api-spec.json',
+          dom_id: '#swagger-ui',
+          deepLinking: true,
+          docExpansion: 'list',
+          defaultModelsExpandDepth: 0,
+          tryItOutEnabled: true,
+          persistAuthorization: true,
+          // Use BaseLayout so the topbar (with its own URL field) is hidden;
+          // we want our own canonical spec, not user-overridable
+          layout: 'BaseLayout',
+          presets: [SwaggerUIBundle.presets.apis],
+          plugins: [SwaggerUIBundle.plugins.DownloadUrl]
+        });
+      }
+      // Fire once if the page loads with #reference already active
+      if (document.readyState !== 'loading') initSwagger();
+      else document.addEventListener('DOMContentLoaded', initSwagger);
+      // Hook the existing tab switcher so we initialise on first activation
+      window.addEventListener('hashchange', initSwagger);
+      // Also catch programmatic tab activation (the show() call in the
+      // existing tab-switcher script doesn't fire hashchange when invoked
+      // by a click on a .sg-tab — it uses history.replaceState).
+      var refTab = document.querySelector('.sg-tab[data-panel="reference"]');
+      if (refTab) refTab.addEventListener('click', function () { setTimeout(initSwagger, 60); });
+    })();
+    </script>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     Tab 4 — Use Cases
      ═══════════════════════════════════════════════════════════════ -->
 <section id="use-cases" class="sg-panel" role="tabpanel">
   <div class="uc-wrap">
@@ -923,7 +984,7 @@ access_token = r.json()[<span class="s">"accessToken"</span>]</pre>
         <div class="cat" style="color: #C44E15; margin-top: 6px;">Direct Mail · Auto · Insurance · Home Services</div>
         <h3 style="font-size: 26px;">Find the 2&ndash;5% who are buying <em style="font-style: normal; color: #FF6633;">right now</em> &mdash; ignore the other 95%</h3>
         <p style="font-size: 15px;">Standard demographic mail converts at 0.5&ndash;1.5%. Layer the Intent Data overlay (auto-in-market, kitchen-remodel-in-market, switching-insurance-in-market, etc.) and the same audience converts at <strong style="color: #C44E15;">5&ndash;12%</strong>. Solar installer mailing 10K homes hits the 200&ndash;500 actively quoting now &mdash; not the 9,500 who don't care. Same postage, 5&ndash;10&times; the response. Intent overlays sell for 30&ndash;60% more, so reseller margin compounds against a bigger ticket.</p>
-        <div class="stack" style="background: #fff; border: 1px solid #FFB59A;">demographics + intent_category=auto_in_market_30d / kitchen_remodel_60d / etc.</div>
+        <div class="stack" style="background: #fff; border: 1px solid #FFB59A;">consumer demographics + intent_auto_in_market: ["P90+"] + age + income + presence of children + ZIPs</div>
       </div>
       <div class="uc-card">
         <div class="cat">Direct Mail Platform</div>
@@ -977,7 +1038,7 @@ access_token = r.json()[<span class="s">"accessToken"</span>]</pre>
       <details class="faq-item"><summary>How fresh is the data?</summary><div class="a">Consumer + business: monthly refresh, USPS CASS-certified for deliverability. New Mover: daily loads, ~1M new records/month. New Homeowner: daily loads, ~750K new records/month. Intent Data (Q3 2026): refreshed every 24&ndash;72 hours depending on signal source. The Subscriptions API guarantees you only ever receive records loaded since your last delivery.</div></details>
       <details class="faq-item" open><summary>How does pricing work? <span style="font-size: 10px; background: #FF6633; color: #fff; padding: 2px 8px; border-radius: 99px; font-weight: 800; letter-spacing: 1px; margin-left: 8px; vertical-align: middle;">$ TWO-PART</span></summary><div class="a"><strong>Two tiers, two-part pricing.</strong> Tiers: <strong>Standard $199/mo</strong> (production access, all features, 99.9% SLA) or <strong>Enterprise (custom)</strong> for white-label, OEM, and high-volume with negotiated below-standard per-record rates. Both tiers cover API access, support, and rate limits only &mdash; <strong>records bill separately at the standard LeadsPlease® per-record data rates</strong> from the LP affiliate XML, the same per-unit prices the public LeadsPlease.com checkout uses. The key difference: <strong>the website enforces a $125&ndash;$300 minimum per order; the API does not.</strong> A 1-record lookup costs 1.2 cents; a 100-record drop costs $12.50; a 10K-record campaign drops to $500 at the volume tier. Volume discounts kick in at 2,500 / 5,000 / 10,000 / 25,000 / 50,000-record breakpoints. 30-day free TEST evaluation available on request.</div></details>
       <details class="faq-item" open><summary>How do Subscriptions work? <span style="font-size: 10px; background: #176B82; color: #fff; padding: 2px 8px; border-radius: 99px; font-weight: 800; letter-spacing: 1px; margin-left: 8px; vertical-align: middle;">⚡ AUTO-PILOT</span></summary><div class="a"><strong>Define your criteria once, set your delivery channel, get fresh matching records pushed to you the moment they load.</strong> The flow is three calls: (1) <code style="font-family:'JetBrains Mono',monospace;">POST /search-criteria</code> with geo + demographics + Intent overlays — returns a criteriaId. (2) <code style="font-family:'JetBrains Mono',monospace;">POST /subscriptions</code> wrapping that criteriaId with a name, deliveryChannels, and metadata — returns a subscriptionId. (3) Done. A daily background job checks whether new data has been loaded that matches your criteria; when there is, a fresh CSV is generated and delivered. <strong>Each delivery is incremental</strong> — only records not previously sent. No double-mailing, no manual workflow, no "remind me to pull a new list next month." Currently delivers via EMAIL; webhook + S3 push channels on the roadmap. Ideal for <strong>New Homeowner (peak-spend 30-day window), New Mover (relocation 30-day window), T65 / Medicare AEP (fixed birthday eligibility), and the daily Intent Data refresh</strong> &mdash; the leads where freshness measurably moves response rates.</div></details>
-      <details class="faq-item"><summary>What's Intent Data, and why does it matter? <span style="font-size: 10px; background: #FF6633; color: #fff; padding: 2px 8px; border-radius: 99px; font-weight: 800; letter-spacing: 1px; margin-left: 8px; vertical-align: middle;">⚡ NEW</span></summary><div class="a"><strong>Intent Data identifies the 2&ndash;5% of any audience who are actively researching, comparing, or about to buy in a specific category &mdash; right now.</strong> It's compiled from search-behavior partnerships, content-engagement networks, transaction patterns, life-event triggers, connected-TV exposure, and anonymized geo-fence signals. Layered on top of demographic + geographic targeting, it lifts direct-mail response rates from a typical 0.5&ndash;1.5% to <strong>5&ndash;12%</strong> &mdash; a 5&ndash;10&times; improvement on the same audience size. Intent-overlay lists also command 30&ndash;60% higher list prices, so resellers earn proportionally more on each order. Available via the API as additional demographic codes (e.g. <code style="font-family:'JetBrains Mono',monospace;">intent_category=auto_in_market_30d</code>) on the existing Criteria object &mdash; no new endpoint to learn. Early-access waitlist is open now; general availability targeted Q3 2026. Email <a href="mailto:tech@leadsplease.com?subject=Intent+Data+early-access">tech@leadsplease.com</a> to join.</div></details>
+      <details class="faq-item"><summary>What's Intent Data, and why does it matter? <span style="font-size: 10px; background: #FF6633; color: #fff; padding: 2px 8px; border-radius: 99px; font-weight: 800; letter-spacing: 1px; margin-left: 8px; vertical-align: middle;">⚡ NEW</span></summary><div class="a"><strong>Intent Data is an enhanced demographic field in the LeadsPlease® National Consumer Database.</strong> It isn't a separate dataset &mdash; it's an extra column on every consumer record. Multiple intent categories (auto-in-market, kitchen-remodel, insurance-shopping, mortgage-refinance, switching-cell-carrier, and more) are each <strong>scored on a 1&ndash;100 percentile basis</strong>. Pick the top decile (P90+) for the highest-intent prospects, or widen to top quartile (P75+) for a larger audience. Then <strong>combine it with any other demographic in the database</strong> &mdash; income, age, homeowner status, presence of children, charity-donor flags, vehicle owned &mdash; on the same Consumer Criteria object. Layered on demographic + geographic targeting, intent lifts direct-mail response rates from a typical 0.5&ndash;1.5% to <strong>5&ndash;12%</strong>, a 5&ndash;10&times; improvement, and intent-overlay lists command 30&ndash;60% higher prices. Available via the LeadsPlease® Data API and across other LeadsPlease® platforms. Early-access waitlist is open now; general availability targeted Q3 2026. Email <a href="mailto:tech@leadsplease.com?subject=Intent+Data+early-access">tech@leadsplease.com</a> to join.</div></details>
       <details class="faq-item"><summary>What output formats are supported?</summary><div class="a">CSV today &mdash; UTF-8, comma-delimited, RFC 4180 quoted. JSON-line and Parquet on the roadmap (request via <a href="mailto:tech@leadsplease.com">tech@leadsplease.com</a> if that would unblock you). Direct mail + email + phone columns are toggled per-criteria via <code style="font-family:'JetBrains Mono',monospace;">contactDataPoints</code>.</div></details>
       <details class="faq-item" open><summary>Can I aggregate multiple lists into one file? <span style="font-size: 10px; background: #FF6633; color: #fff; padding: 2px 8px; border-radius: 99px; font-weight: 800; letter-spacing: 1px; margin-left: 8px; vertical-align: middle;">★ INDUSTRY FIRST</span></summary><div class="a">Yes &mdash; and this is unique to the LeadsPlease® Data API. The Lists Aggregation API groups any number of lists into a named aggregate, deduplicates across them, and yields a single signed-URL CSV download. Add or remove member lists at any time &mdash; the aggregate auto-regenerates on next download. No other U.S. mailing-list API exposes this; with anyone else you'd be downloading N separate CSVs and reconciling them in Pandas. Powers multi-region direct-mail campaigns, quarterly mail drops merging saved searches, and customer-segment roll-ups.</div></details>
     </div>
@@ -1585,6 +1646,7 @@ curl -s -X POST $BASE/counts \
       <ul>
         <li><a href="/#overview">Use the Data API</a></li>
         <li><a href="/#try">Try it live</a></li>
+        <li><a href="/#reference">API Reference (Swagger)</a></li>
         <li><a href="/#use-cases">Use cases</a></li>
         <li><a href="/#prices">Prices</a></li>
         <li><a href="/#install">Get Started · Apply for keys</a></li>
@@ -1631,7 +1693,7 @@ curl -s -X POST $BASE/counts \
 (function () {
   var tabs = Array.from(document.querySelectorAll('.sg-tab[data-panel]'));
   var panels = Array.from(document.querySelectorAll('.sg-panel[id]'));
-  var tabOrder = ['overview', 'try', 'use-cases', 'prices', 'install'];
+  var tabOrder = ['overview', 'try', 'reference', 'use-cases', 'prices', 'install'];
 
   function show(id) {
     tabs.forEach(function (t) { t.classList.toggle('is-active', t.getAttribute('data-panel') === id); });
@@ -1658,6 +1720,8 @@ curl -s -X POST $BASE/counts \
                    desc: 'Programmatic count, query, and CSV download against USPS-verified U.S. mailing lists. Bearer auth, OpenAPI spec, four list types.' },
     'try':       { title: 'Try the LeadsPlease® Data API Live — Real Audience Counts | LeadsPlease®',
                    desc: 'Five copy-paste calls take you from auth to CSV download. Same JSON your backend will send.' },
+    'reference': { title: 'API Reference — Live Swagger UI | LeadsPlease® Data API',
+                   desc: 'Embedded Swagger UI rendered from the live OpenAPI 3.0 spec — every endpoint, request schema, response shape, and "Try it out" runner. 30 paths, JWT bearer auth.' },
     'use-cases': { title: 'Data API Use Cases — Direct Mail · Real Estate · Insurance · B2B SaaS | LeadsPlease®',
                    desc: 'Recurring patterns developers use the LeadsPlease® Data API for: List Aggregation for agent-driven invitation lists, postcard tools, real-estate farming, Medicare birthday targeting, SIC-code B2B prospecting, ESP audience handoff, mass tort prospect pools.' },
     'prices':    { title: 'Prices — Two-part pricing, no order minimum | LeadsPlease® Data API',
