@@ -337,7 +337,8 @@
     <a href="#overview"  class="sg-tab is-active" role="tab" data-panel="overview" >Use the LeadsPlease Data API</a>
     <a href="#try"       class="sg-tab"           role="tab" data-panel="try"      >Try It</a>
     <a href="#use-cases" class="sg-tab"           role="tab" data-panel="use-cases">Use Cases</a>
-    <a href="#install"   class="sg-tab"           role="tab" data-panel="install"  >Get Started <span class="sg-tab-badge">Free</span></a>
+    <a href="#prices"    class="sg-tab"           role="tab" data-panel="prices"   >Prices</a>
+    <a href="#install"   class="sg-tab"           role="tab" data-panel="install"  >Get Started <span class="sg-tab-badge">Free trial</span></a>
   </div>
 </div>
 
@@ -839,11 +840,11 @@ access_token = r.json()[<span class="s">"accessToken"</span>]</pre>
 </section>
 
 <!-- ═══════════════════════════════════════════════════════════════
-     Tab 4 — Get Started
+     Tab 4 — Prices
      ═══════════════════════════════════════════════════════════════ -->
-<section id="install" class="sg-panel" role="tabpanel">
+<section id="prices" class="sg-panel" role="tabpanel">
   <div class="in-wrap">
-    <h2>Get started</h2>
+    <h2>Prices</h2>
     <p class="lede">Two tiers, two-part pricing: a <strong>monthly access fee</strong> for the API itself plus a <strong>per-record data fee</strong> at the standard LeadsPlease per-record data rates. <span style="color: #C44E15; font-weight: 700;">No minimum per order.</span></p>
 
     <!-- ─── Two-part pricing model callout ─── -->
@@ -1120,9 +1121,272 @@ access_token = r.json()[<span class="s">"accessToken"</span>]</pre>
       </div>
     </div>
 
-    <p style="font-size: 13px; color: #5d5e60; margin: -16px auto 32px; max-width: 880px; text-align: center;">Want to evaluate before committing? Tell us in your <a href="mailto:tech@leadsplease.com?subject=API+evaluation+keys">access request</a> &mdash; we'll set you up with TEST keys for 30 days at no cost (records still bill at the per-record data rates above). All commercial production usage is on the Standard tier.</p>
+    <p style="font-size: 13px; color: #5d5e60; margin: -16px auto 32px; max-width: 880px; text-align: center;">Want to evaluate before committing? On the <a href="#install">Get Started</a> tab choose <strong>Free 30-day TEST</strong> &mdash; you'll get an API key restricted to <strong>Count calls only</strong> (no list downloads, no aggregation, no subscriptions), capped at <strong>1,000 calls/month</strong>. All production traffic is on the Standard tier.</p>
+  </div>
+</section>
 
-    <div class="in-section">
+<!-- ═══════════════════════════════════════════════════════════════
+     Tab 5 — Get Started (signup form + Stripe)
+     ═══════════════════════════════════════════════════════════════ -->
+<section id="install" class="sg-panel" role="tabpanel">
+  <div class="in-wrap">
+    <h2>Get started</h2>
+    <p class="lede">You're 60 seconds away from your API keys. Pick a plan, fill out the form, and we'll provision your key &mdash; <strong>Free 30-day TEST</strong> arrives instantly by email; <strong>Standard</strong> kicks off a Stripe Checkout for the $199/mo subscription and your LIVE keys land the moment payment confirms.</p>
+
+    <style>
+      .ak-form { max-width: 760px; margin: 0 auto 32px; background: #fff; border: 1px solid #e8e5e0; border-radius: 16px; padding: 32px 36px; }
+      .ak-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+      .ak-row.solo { grid-template-columns: 1fr; }
+      .ak-field { display: flex; flex-direction: column; gap: 6px; }
+      .ak-field label { font-size: 12px; font-weight: 800; letter-spacing: 0.6px; color: #1C1410; text-transform: uppercase; }
+      .ak-field label .req { color: #FF6633; margin-left: 3px; }
+      .ak-field input, .ak-field select, .ak-field textarea {
+        font-family: 'DM Sans', sans-serif; font-size: 15px; color: #1C1410;
+        padding: 11px 14px; border: 1.5px solid #e2d0c8; border-radius: 9px;
+        background: #fff; transition: border-color 0.15s, box-shadow 0.15s; width: 100%;
+      }
+      .ak-field input:focus, .ak-field select:focus, .ak-field textarea:focus {
+        outline: none; border-color: #FF6633; box-shadow: 0 0 0 3px rgba(255,102,51,0.14);
+      }
+      .ak-field textarea { resize: vertical; min-height: 70px; }
+      .ak-tier-radio { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin: 6px 0 14px; }
+      .ak-tier-radio label {
+        cursor: pointer; padding: 18px 16px; border: 2px solid #e2d0c8; border-radius: 12px;
+        background: #fff; transition: all 0.15s; text-align: left; display: block;
+      }
+      .ak-tier-radio input[type="radio"] { position: absolute; opacity: 0; pointer-events: none; }
+      .ak-tier-radio label:hover { border-color: #FF6633; background: #fff8f5; }
+      .ak-tier-radio input[type="radio"]:checked + label,
+      .ak-tier-radio label.is-selected { border-color: #FF6633; background: linear-gradient(135deg, #fff8f5 0%, #FFE9DB 100%); box-shadow: 0 6px 18px rgba(255,102,51,0.18); }
+      .ak-tier-radio .tier-name { display: block; font-family: 'DM Sans', sans-serif; font-size: 11px; font-weight: 800; letter-spacing: 1.4px; color: #C44E15; text-transform: uppercase; margin-bottom: 6px; }
+      .ak-tier-radio .tier-price { display: block; font-family: 'Fraunces', serif; font-size: 22px; font-weight: 700; color: #1C1410; line-height: 1; margin-bottom: 6px; }
+      .ak-tier-radio .tier-price small { font-size: 12px; font-weight: 500; color: #5d5e60; }
+      .ak-tier-radio .tier-desc { display: block; font-size: 12.5px; color: #5d5e60; line-height: 1.45; }
+      .ak-agreement { display: flex; align-items: flex-start; gap: 10px; margin: 12px 0; font-size: 13.5px; color: #1C1410; line-height: 1.5; }
+      .ak-agreement input[type="checkbox"] { margin-top: 3px; flex-shrink: 0; width: 17px; height: 17px; cursor: pointer; accent-color: #FF6633; }
+      .ak-agreement a { color: #FF6633; text-decoration: underline; }
+      .ak-submit-row { margin-top: 20px; }
+      .ak-submit { display: block; width: 100%; padding: 16px; background: #FF6633; color: #fff; font-family: 'DM Sans', sans-serif; font-size: 15.5px; font-weight: 800; letter-spacing: 0.3px; border: none; border-radius: 11px; cursor: pointer; box-shadow: 0 8px 22px rgba(255,102,51,0.32); transition: transform 0.12s, box-shadow 0.12s; }
+      .ak-submit:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 12px 28px rgba(255,102,51,0.42); }
+      .ak-submit:disabled { opacity: 0.6; cursor: not-allowed; }
+      .ak-submit-note { font-size: 12.5px; color: #5d5e60; text-align: center; margin: 12px 0 0; line-height: 1.5; }
+      .ak-msg { padding: 14px 18px; border-radius: 10px; font-size: 14px; line-height: 1.55; margin-top: 14px; display: none; }
+      .ak-msg.is-shown { display: block; }
+      .ak-msg.success { background: #E8F5E9; border: 1px solid #4CAF50; color: #1B5E20; }
+      .ak-msg.error { background: #FFEBEE; border: 1px solid #C62828; color: #B71C1C; }
+      @media (max-width: 640px) {
+        .ak-row { grid-template-columns: 1fr; }
+        .ak-tier-radio { grid-template-columns: 1fr; }
+        .ak-form { padding: 24px 20px; }
+      }
+    </style>
+
+    <form id="ak-form" class="ak-form" novalidate>
+      <h3 style="font-family: 'Fraunces', serif; font-size: 24px; font-weight: 600; color: #1C1410; margin: 0 0 6px;">Apply for API keys</h3>
+      <p style="font-size: 14px; color: #5d5e60; margin: 0 0 22px;">Choose a plan first &mdash; the form below adapts to what you pick.</p>
+
+      <div class="ak-tier-radio">
+        <input type="radio" id="ak-tier-test" name="tier" value="test" checked>
+        <label for="ak-tier-test">
+          <span class="tier-name">⚡ Free 30-day TEST</span>
+          <span class="tier-price">$0<small>/mo</small></span>
+          <span class="tier-desc">API key issued instantly. <strong>Counts only · 1,000 calls/month cap.</strong> No list downloads, no aggregation, no subscriptions. Records still bill if you order.</span>
+        </label>
+        <input type="radio" id="ak-tier-standard" name="tier" value="standard">
+        <label for="ak-tier-standard">
+          <span class="tier-name">★ Standard</span>
+          <span class="tier-price">$199<small>/mo</small></span>
+          <span class="tier-desc">Full LIVE access &mdash; lists, aggregation, subscriptions, Intent Data early-access, 99.9% SLA. Records bill at per-record data rates.</span>
+        </label>
+        <input type="radio" id="ak-tier-enterprise" name="tier" value="enterprise">
+        <label for="ak-tier-enterprise">
+          <span class="tier-name">⚙ Enterprise</span>
+          <span class="tier-price">Custom</span>
+          <span class="tier-desc">High-volume, white-label, OEM. Negotiated below-standard per-record rates. Sales team will reach out within 4 hours.</span>
+        </label>
+      </div>
+
+      <div class="ak-row">
+        <div class="ak-field">
+          <label for="ak-first-name">First name<span class="req">*</span></label>
+          <input type="text" id="ak-first-name" name="first_name" autocomplete="given-name" required>
+        </div>
+        <div class="ak-field">
+          <label for="ak-last-name">Last name<span class="req">*</span></label>
+          <input type="text" id="ak-last-name" name="last_name" autocomplete="family-name" required>
+        </div>
+      </div>
+
+      <div class="ak-row solo">
+        <div class="ak-field">
+          <label for="ak-business">Business / company name<span class="req">*</span></label>
+          <input type="text" id="ak-business" name="business_name" autocomplete="organization" required>
+        </div>
+      </div>
+
+      <div class="ak-row">
+        <div class="ak-field">
+          <label for="ak-email">Work email<span class="req">*</span></label>
+          <input type="email" id="ak-email" name="email" autocomplete="email" required>
+        </div>
+        <div class="ak-field">
+          <label for="ak-phone">Phone</label>
+          <input type="tel" id="ak-phone" name="phone" autocomplete="tel" placeholder="(555) 123-4567">
+        </div>
+      </div>
+
+      <div class="ak-row">
+        <div class="ak-field">
+          <label for="ak-website">Website</label>
+          <input type="url" id="ak-website" name="website" autocomplete="url" placeholder="https://example.com">
+        </div>
+        <div class="ak-field">
+          <label for="ak-volume">Expected monthly volume</label>
+          <select id="ak-volume" name="expected_volume">
+            <option value="">— optional —</option>
+            <option value="lt_1k">Under 1,000 records / month</option>
+            <option value="1k_10k">1,000 – 10,000</option>
+            <option value="10k_50k">10,000 – 50,000</option>
+            <option value="50k_250k">50,000 – 250,000</option>
+            <option value="gt_250k">250,000+ (Enterprise)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="ak-row solo">
+        <div class="ak-field">
+          <label for="ak-use-case">What will you use the API for?</label>
+          <textarea id="ak-use-case" name="use_case" rows="2" placeholder="e.g. integrating into our postcard-builder app · weekly New Mover feeds for our real-estate platform · enriching our CRM with verified mailing addresses"></textarea>
+        </div>
+      </div>
+
+      <label class="ak-agreement">
+        <input type="checkbox" id="ak-accept-terms" name="accept_terms" required>
+        <span>I accept the <a href="https://www.leadsplease.com/terms_of_use" target="_blank" rel="noopener">Terms of Service</a> and <a href="https://www.leadsplease.com/privacy_policy" target="_blank" rel="noopener">Privacy Policy</a>, and confirm I'm authorised to bind my organisation to this agreement.<span class="req">*</span></span>
+      </label>
+      <label class="ak-agreement">
+        <input type="checkbox" id="ak-accept-data" name="accept_data" required>
+        <span>I will use LeadsPlease data in compliance with CAN-SPAM, TCPA, CCPA, and GDPR where applicable, and will not resell or redistribute records outside my own application without a separate reseller agreement.<span class="req">*</span></span>
+      </label>
+
+      <div class="ak-submit-row">
+        <button type="submit" class="ak-submit" id="ak-submit-btn">Request my Free TEST key &rarr;</button>
+        <p class="ak-submit-note" id="ak-submit-note">Free TEST key arrives by email within seconds. No credit card required for TEST.</p>
+      </div>
+
+      <div class="ak-msg success" id="ak-msg-success" role="status" aria-live="polite"></div>
+      <div class="ak-msg error" id="ak-msg-error" role="alert" aria-live="assertive"></div>
+    </form>
+
+    <script>
+    (function () {
+      var form = document.getElementById('ak-form');
+      if (!form) return;
+      var firstName = document.getElementById('ak-first-name');
+      var lastName  = document.getElementById('ak-last-name');
+      var business  = document.getElementById('ak-business');
+      var email     = document.getElementById('ak-email');
+      var phone     = document.getElementById('ak-phone');
+      var website   = document.getElementById('ak-website');
+      var volume    = document.getElementById('ak-volume');
+      var useCase   = document.getElementById('ak-use-case');
+      var acceptT   = document.getElementById('ak-accept-terms');
+      var acceptD   = document.getElementById('ak-accept-data');
+      var btn       = document.getElementById('ak-submit-btn');
+      var note      = document.getElementById('ak-submit-note');
+      var msgOk     = document.getElementById('ak-msg-success');
+      var msgErr    = document.getElementById('ak-msg-error');
+
+      // Phone auto-formatter — same convention used across the LP family
+      function formatPhone(raw) {
+        var d = String(raw || '').replace(/\D+/g, '').slice(0, 10);
+        if (d.length === 0) return '';
+        if (d.length < 4) return '(' + d;
+        if (d.length < 7) return '(' + d.slice(0, 3) + ') ' + d.slice(3);
+        return '(' + d.slice(0, 3) + ') ' + d.slice(3, 6) + '-' + d.slice(6);
+      }
+      phone.addEventListener('input', function () { phone.value = formatPhone(phone.value); });
+      phone.addEventListener('blur',  function () { phone.value = formatPhone(phone.value); });
+
+      // Tier-aware submit button label
+      function tierValue() {
+        var r = document.querySelector('input[name="tier"]:checked');
+        return r ? r.value : 'test';
+      }
+      function refreshTierUI() {
+        var t = tierValue();
+        if (t === 'test')        { btn.textContent = 'Request my Free TEST key →';      note.innerHTML = 'Free TEST key arrives by email within seconds. <strong>No credit card required for TEST.</strong>'; }
+        else if (t === 'standard') { btn.textContent = 'Continue to Stripe — $199/mo →'; note.innerHTML = 'Stripe Checkout opens after you click. Your LIVE API keys land the moment payment confirms.'; }
+        else                     { btn.textContent = 'Talk to sales →';                  note.innerHTML = 'No payment now — our sales team replies within 4 business hours with a custom quote.'; }
+      }
+      document.querySelectorAll('input[name="tier"]').forEach(function (r) {
+        r.addEventListener('change', refreshTierUI);
+      });
+      refreshTierUI();
+
+      function showError(msg)   { msgErr.innerHTML = msg; msgErr.classList.add('is-shown'); msgOk.classList.remove('is-shown'); msgErr.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+      function showSuccess(msg) { msgOk.innerHTML  = msg; msgOk.classList.add('is-shown');  msgErr.classList.remove('is-shown'); msgOk.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        msgOk.classList.remove('is-shown'); msgErr.classList.remove('is-shown');
+
+        var missing = [];
+        if (!firstName.value.trim()) missing.push('First name');
+        if (!lastName.value.trim())  missing.push('Last name');
+        if (!business.value.trim())  missing.push('Business name');
+        if (!email.value.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value)) missing.push('Valid email');
+        if (!acceptT.checked) missing.push('Terms of Service acceptance');
+        if (!acceptD.checked) missing.push('Data-use acceptance');
+        if (missing.length) { showError('<strong>Please fix:</strong> ' + missing.join(', ')); return; }
+
+        var t = tierValue();
+        var payload = {
+          tier: t,
+          first_name: firstName.value.trim(),
+          last_name:  lastName.value.trim(),
+          business_name: business.value.trim(),
+          email: email.value.trim().toLowerCase(),
+          phone: phone.value.trim(),
+          website: website.value.trim(),
+          expected_volume: volume.value,
+          use_case: useCase.value.trim(),
+          accept_terms: acceptT.checked,
+          accept_data:  acceptD.checked,
+          source: 'developers.leadsplease.com/api-keys',
+        };
+
+        btn.disabled = true;
+        btn.textContent = '⏳ Submitting…';
+
+        fetch('https://datawidget-checkout-production.up.railway.app/api/api-key-application', {
+          method: 'POST',
+          mode: 'cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        })
+          .then(function (r) { return r.json().then(function (j) { return { ok: r.ok, status: r.status, body: j }; }); })
+          .then(function (resp) {
+            btn.disabled = false; refreshTierUI();
+            if (!resp.ok) throw new Error((resp.body && resp.body.error) || ('HTTP ' + resp.status));
+            if (resp.body.checkout_url) {
+              showSuccess('Redirecting to Stripe Checkout…');
+              setTimeout(function () { window.location.href = resp.body.checkout_url; }, 600);
+            } else if (resp.body.api_key) {
+              showSuccess('<strong>Your TEST key:</strong> <code style="font-family:\'JetBrains Mono\',monospace; background:#fff; padding:3px 8px; border-radius:4px;">' + resp.body.api_key + '</code><br>We also emailed it to <strong>' + payload.email + '</strong>. Counts only · 1,000 calls / month cap. Run the <a href="#install" onclick="document.getElementById(\'ak-smoke\')?.scrollIntoView({behavior:\'smooth\'})">smoke test below</a> to verify.');
+            } else {
+              showSuccess(resp.body.message || 'Thanks — application received. We\'ll email you within one business day.');
+            }
+          })
+          .catch(function (err) {
+            btn.disabled = false; refreshTierUI();
+            showError(err.message + '. <br>If this keeps failing, email <a href="mailto:tech@leadsplease.com">tech@leadsplease.com</a> with your details and we\'ll provision keys manually within one business day.');
+          });
+      });
+    })();
+    </script>
+
+    <div class="in-section" id="ak-smoke">
       <h3>30-second smoke test (TEST environment)</h3>
       <p>Once you have a username/password from us, this is the smallest possible end-to-end smoke test &mdash; auth &rarr; criteria &rarr; count, in three calls.</p>
 <pre class="code"><span class="c">#!/usr/bin/env bash</span>
@@ -1177,7 +1441,8 @@ curl -s -X POST $BASE/counts \
         <li><a href="/#overview">Use the Data API</a></li>
         <li><a href="/#try">Try it live</a></li>
         <li><a href="/#use-cases">Use cases</a></li>
-        <li><a href="/#install">Get Started · Free</a></li>
+        <li><a href="/#prices">Prices</a></li>
+        <li><a href="/#install">Get Started · Apply for keys</a></li>
         <li><a href="https://api-test.leadsplease.com/swagger-ui/index.html">Swagger (TEST)</a></li>
         <li><a href="https://api.leadsplease.com/swagger-ui/index.html">Swagger (LIVE)</a></li>
       </ul>
@@ -1221,7 +1486,7 @@ curl -s -X POST $BASE/counts \
 (function () {
   var tabs = Array.from(document.querySelectorAll('.sg-tab[data-panel]'));
   var panels = Array.from(document.querySelectorAll('.sg-panel[id]'));
-  var tabOrder = ['overview', 'try', 'use-cases', 'install'];
+  var tabOrder = ['overview', 'try', 'use-cases', 'prices', 'install'];
 
   function show(id) {
     tabs.forEach(function (t) { t.classList.toggle('is-active', t.getAttribute('data-panel') === id); });
@@ -1249,9 +1514,11 @@ curl -s -X POST $BASE/counts \
     'try':       { title: 'Try the LeadsPlease Data API Live — Real Audience Counts | LeadsPlease',
                    desc: 'Five copy-paste calls take you from auth to CSV download. Same JSON your backend will send.' },
     'use-cases': { title: 'Data API Use Cases — Direct Mail · Real Estate · Insurance · B2B SaaS | LeadsPlease',
-                   desc: 'Six recurring patterns developers use the LeadsPlease Data API for: postcard tools, real-estate farming, Medicare birthday targeting, SIC-code B2B prospecting, ESP audience handoff, mass tort prospect pools.' },
-    'install':   { title: 'Get Started — Free Data API access | LeadsPlease',
-                   desc: 'Three tiers. Free TEST access for build + prototype. $199/mo Builder for production traffic. Custom Scale for white-label and high-volume.' },
+                   desc: 'Recurring patterns developers use the LeadsPlease Data API for: List Aggregation for agent-driven invitation lists, postcard tools, real-estate farming, Medicare birthday targeting, SIC-code B2B prospecting, ESP audience handoff, mass tort prospect pools.' },
+    'prices':    { title: 'Prices — Two-part pricing, no order minimum | LeadsPlease Data API',
+                   desc: 'Monthly access fee + per-record data fee. Standard $199/mo or Enterprise (custom). Records bill at LP per-record data rates from the affiliate XML — same per-unit prices as the website but with no $125–$300 order minimum.' },
+    'install':   { title: 'Get Started — Apply for API keys | LeadsPlease Data API',
+                   desc: 'Apply for API keys in 60 seconds. Free 30-day TEST (counts only, 1K cap) or Standard $199/mo via Stripe. LIVE keys arrive the moment payment confirms.' },
   };
   function applyTabMeta(id) {
     var m = TAB_META[id]; if (!m) return;
