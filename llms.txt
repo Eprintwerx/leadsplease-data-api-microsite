@@ -27,6 +27,12 @@
 - newhomeowner (people who closed on a home; daily loads)
 - newmover (people who relocated; daily loads)
 
+## Intent Data overlay (Q3 2026 GA — early access open now)
+LeadsPlease Intent Data is a unique data layer that identifies the 2–5% of any audience actively in-market for a specific category, compiled from anonymized search behavior, content engagement, transaction patterns, life-event triggers, connected-TV exposure, and geo-fence signals. Layered on demographic + geographic targeting it lifts direct-mail response rates from a typical 0.5–1.5% to 5–12% (5–10× improvement). Intent-overlay lists also sell at 30–60% premium prices. Surfaces as additional demographic codes on the existing Criteria object (e.g. intent_category=auto_in_market_30d, kitchen_remodel_60d, crm_evaluation_60d). Email tech@leadsplease.com for waitlist.
+
+## List Aggregation API (industry first — unique to LeadsPlease)
+POST /list-aggregations groups any number of completed lists into a named aggregate, deduplicates across them, and yields a single signed-URL CSV download. Add or remove member lists at any time — the aggregate auto-regenerates on next download. No other U.S. mailing-list API exposes this; with anyone else you'd download N CSVs and dedupe yourself.
+
 ## Geo selection (geoCriteriaType)
 - manual — array of zip / city / county / state
 - radial — lat/lng + radiusInMiles
