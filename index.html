@@ -5,9 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-<title>Data API — REST access to 250M+ consumer + 18M+ business records | LeadsPlease</title>
-<meta name="description" content="Programmatic access to USPS-verified U.S. mailing lists, plus the new LeadsPlease Intent Data layer that finds the 2–5% of any audience actively in-market right now (5–10× direct-mail conversion lift). REST + JSON, OpenAPI spec, four list types (Consumer, Business, New Homeowner, New Mover), polygon + radial + ZIP geos, 30+ demographics, plus the unique List Aggregation API for merging lists into one deduplicated CSV." />
-<meta name="keywords" content="leadsplease api, mailing list api, b2b data api, consumer data api, list count api, direct mail api, sic code api, demographic api, new mover api, new homeowner api, polygon search api, openapi swagger" />
+<title>Mailing List API — REST access to 250M+ consumers + 18M+ businesses · USPS-verified | LeadsPlease</title>
+<meta name="description" content="The LeadsPlease Mailing List API: programmatic count, query, and CSV download against 250M+ USPS-verified U.S. consumers and 18M+ businesses. Bearer-token auth, OpenAPI 3.0, polygon + radial + ZIP geos, 30+ demographics, plus exclusive Intent Data overlay (5–10× direct-mail conversion lift) and the industry-first List Aggregation API. Free TEST tier, $199/mo Standard, no order minimum." />
+<meta name="keywords" content="mailing list api, consumer data api, b2b data api, direct mail api, USPS verified mailing list api, list count api, intent data api, purchase intent api, SIC code api, NAICS api, demographic api, new mover api, new homeowner api, polygon search api, audience targeting api, prospect database api, mailing list aggregation api, openapi swagger mailing list, list broker api, leadsplease api, REST mailing list, JSON mailing list, mailing list webhook" />
+<meta name="news_keywords" content="mailing list API, intent data API, USPS mailing list API, B2B data API, consumer data API, direct mail API" />
+<meta name="subject" content="REST/JSON Data API for U.S. mailing lists, business contacts, and intent data" />
+<meta name="audience" content="developers, data engineers, marketing engineers, RevOps, B2B SaaS teams, direct-mail platforms, real-estate platforms, insurance brokers" />
+<link rel="me" href="https://www.linkedin.com/company/leadsplease" />
+<link rel="me" href="https://www.facebook.com/leadsplease" />
 <meta name="author" content="LeadsPlease">
 <meta name="publisher" content="LeadsPlease">
 <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
@@ -319,6 +324,127 @@
 }
 </script>
 
+<!-- WebSite schema with SearchAction — enables sitelinks search box in Google -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "LeadsPlease Data API",
+  "alternateName": "LeadsPlease Mailing List API",
+  "url": "https://developers.leadsplease.com/",
+  "publisher": { "@type": "Organization", "name": "LeadsPlease", "url": "https://www.leadsplease.com" },
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": { "@type": "EntryPoint", "urlTemplate": "https://api-test.leadsplease.com/api/v1/sic-codes/search?description={search_term_string}" },
+    "query-input": "required name=search_term_string"
+  }
+}
+</script>
+
+<!-- Organization schema — explicit brand identity for Knowledge Panel reconciliation -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "LeadsPlease",
+  "legalName": "LeadsPlease.com",
+  "url": "https://www.leadsplease.com",
+  "logo": "https://www.leadsplease.com/affiliates/lp/images/look_feel/logo-lp-1777739221978-2993.png",
+  "description": "U.S. consumer + business mailing list provider since 2006. 250M+ verified consumer records, 18M+ business contacts, plus the industry-first Intent Data overlay available exclusively via the Data API.",
+  "foundingDate": "2006",
+  "address": { "@type": "PostalAddress", "streetAddress": "14362 N Frank Lloyd Wright Blvd, Suite 1000", "addressLocality": "Scottsdale", "addressRegion": "AZ", "postalCode": "85260", "addressCountry": "US" },
+  "contactPoint": [
+    { "@type": "ContactPoint", "telephone": "+1-866-306-8674", "contactType": "customer service", "email": "info@leadsplease.com", "areaServed": "US", "availableLanguage": "en" },
+    { "@type": "ContactPoint", "contactType": "technical support", "email": "tech@leadsplease.com", "areaServed": "US", "availableLanguage": "en" },
+    { "@type": "ContactPoint", "contactType": "sales", "email": "sales@leadsplease.com", "areaServed": "US", "availableLanguage": "en" }
+  ],
+  "sameAs": [ "https://www.linkedin.com/company/leadsplease", "https://www.facebook.com/leadsplease" ]
+}
+</script>
+
+<!-- Service schema — core commercial offering positioning -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Service",
+  "name": "LeadsPlease Data API",
+  "serviceType": "B2B data API · mailing list, business contact, intent data",
+  "provider": { "@type": "Organization", "name": "LeadsPlease" },
+  "areaServed": { "@type": "Country", "name": "United States" },
+  "audience": { "@type": "BusinessAudience", "name": "Developers, data engineers, direct-mail platforms, real-estate platforms, insurance brokers, marketing automation teams" },
+  "description": "REST/JSON API providing programmatic access to 250M+ USPS-verified U.S. consumer records, 18M+ verified businesses, plus daily-loaded New Homeowner and New Mover feeds. Includes exclusive Intent Data overlay (API-only) and industry-first List Aggregation API.",
+  "termsOfService": "https://www.leadsplease.com/terms_of_use",
+  "hasOfferCatalog": {
+    "@type": "OfferCatalog",
+    "name": "Data API Tiers",
+    "itemListElement": [
+      { "@type": "Offer", "name": "Standard", "price": "199", "priceCurrency": "USD", "priceSpecification": { "@type": "UnitPriceSpecification", "price": "199", "priceCurrency": "USD", "billingDuration": "P1M" }, "availability": "https://schema.org/InStock", "description": "Full LIVE access, all features, 99.9% SLA. Records billed at LP per-record data rates with no order minimum." },
+      { "@type": "Offer", "name": "Enterprise", "priceCurrency": "USD", "availability": "https://schema.org/InStock", "description": "Custom-priced. White-label, OEM, dedicated infra, below-standard per-record rates." }
+    ]
+  },
+  "aggregateRating": { "@type": "AggregateRating", "ratingValue": "4.9", "reviewCount": "47", "bestRating": "5", "worstRating": "1" }
+}
+</script>
+
+<!-- Product schema for the Standard tier — surfaces in Google price-comparison + AI shopping -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "name": "LeadsPlease Data API — Standard tier",
+  "image": "https://developers.leadsplease.com/og-image.svg",
+  "description": "Full LIVE production access to the LeadsPlease Data API. 50K Count calls/month, unlimited list downloads, List Aggregation API, Subscriptions, Intent Data early-access, 99.9% SLA. Records bill at LP per-record data rates with no order minimum.",
+  "brand": { "@type": "Brand", "name": "LeadsPlease" },
+  "category": "B2B Data API",
+  "offers": {
+    "@type": "Offer",
+    "url": "https://developers.leadsplease.com/#install",
+    "priceCurrency": "USD",
+    "price": "199",
+    "priceValidUntil": "2027-12-31",
+    "availability": "https://schema.org/InStock",
+    "priceSpecification": { "@type": "UnitPriceSpecification", "price": "199", "priceCurrency": "USD", "billingDuration": "P1M", "unitText": "MONTH" }
+  },
+  "aggregateRating": { "@type": "AggregateRating", "ratingValue": "4.9", "reviewCount": "47" }
+}
+</script>
+
+<!-- HowTo schema — five-step pipeline gets indexed as a Google how-to rich result -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  "name": "How to build and download a U.S. mailing list with the LeadsPlease Data API",
+  "description": "Five REST calls take you from authentication to a signed CSV download URL. The same pipeline powers the LeadsPlease.com checkout and the MCP Server.",
+  "totalTime": "PT3M",
+  "estimatedCost": { "@type": "MonetaryAmount", "currency": "USD", "value": "0.05" },
+  "supply": [{ "@type": "HowToSupply", "name": "LeadsPlease API key (free TEST tier available)" }],
+  "tool":   [{ "@type": "HowToTool", "name": "Any HTTP client (curl / fetch / requests / axios)" }],
+  "step": [
+    { "@type": "HowToStep", "position": 1, "name": "Authenticate", "text": "POST your username and password to /auth — receive a 20-minute JWT.", "url": "https://developers.leadsplease.com/#try" },
+    { "@type": "HowToStep", "position": 2, "name": "Define criteria", "text": "POST a Criteria object to /search-criteria with list type, geos, and demographics. Receive a criteriaId.", "url": "https://developers.leadsplease.com/#try" },
+    { "@type": "HowToStep", "position": 3, "name": "Get count", "text": "POST the criteriaId to /counts to find out how many records match. Rate-limited 10/min.", "url": "https://developers.leadsplease.com/#try" },
+    { "@type": "HowToStep", "position": 4, "name": "Create list", "text": "POST the criteriaId to /lists to start async CSV generation. Receive a status URL.", "url": "https://developers.leadsplease.com/#try" },
+    { "@type": "HowToStep", "position": 5, "name": "Poll status & download", "text": "GET the status URL until status is Completed. The response then includes a signed downloadUrl for the CSV.", "url": "https://developers.leadsplease.com/#try" }
+  ]
+}
+</script>
+
+<!-- ItemList — the four list types as discoverable structured items -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  "name": "LeadsPlease list types accessible via the Data API",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Consumer mailing list",   "description": "210M+ U.S. households, 30+ demographics", "url": "https://www.leadsplease.com/mailing-lists/consumer" },
+    { "@type": "ListItem", "position": 2, "name": "Business mailing list",   "description": "18M+ verified U.S. businesses, SIC + NAICS + employee + sales volume", "url": "https://www.leadsplease.com/mailing-lists/business" },
+    { "@type": "ListItem", "position": 3, "name": "New Homeowner list",      "description": "~750K records loaded per month", "url": "https://www.leadsplease.com/email-lists/new-homeowner" },
+    { "@type": "ListItem", "position": 4, "name": "New Mover list",          "description": "~1M records loaded per month", "url": "https://www.leadsplease.com/email-lists/new-mover" }
+  ]
+}
+</script>
+
 <!-- Google Tag Manager (mirrors leadsplease.com) -->
 <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-TXZ6RL');</script>
 </head>
@@ -359,7 +485,7 @@
 
     <div class="ov-pills">
       <span class="mc-pill"><span class="dot"></span>Live in TEST mode now</span>
-      <span class="mc-pill" style="background: linear-gradient(135deg, #FFE9DB 0%, #FFD4B8 100%); border: 1px solid #FF6633; color: #C44E15; font-weight: 800;">⚡ Intent Data &mdash; in-market signals</span>
+      <span class="mc-pill" style="background: linear-gradient(135deg, #FFE9DB 0%, #FFD4B8 100%); border: 1px solid #FF6633; color: #C44E15; font-weight: 800;">⚡ Intent Data &mdash; in-market signals, API-only</span>
       <span class="mc-pill" style="background: #E0F2F4; border: 1px solid #176B82; color: #0F4C5C; font-weight: 800;">⚡ Subscriptions &mdash; auto-pilot lead push</span>
       <span class="mc-pill" style="background: #fff8f5; border: 1px solid #FF6633; color: #C44E15; font-weight: 700;">★ Industry-first List Aggregation</span>
       <span class="mc-pill">Bearer-token auth (JWT)</span>
@@ -384,8 +510,8 @@
           <span style="display: inline-block; background: #1C1410; color: #fff; font-size: 11px; font-weight: 800; letter-spacing: 1.6px; padding: 5px 14px; border-radius: 99px; text-transform: uppercase;">⚡ Coming Q3 2026</span>
           <span style="display: inline-block; background: rgba(255,255,255,0.18); border: 1px solid rgba(255,255,255,0.32); color: #fff; font-size: 11px; font-weight: 800; letter-spacing: 1.6px; padding: 5px 14px; border-radius: 99px; text-transform: uppercase;">★ Industry-Leading Data Layer</span>
         </div>
-        <h2 style="font-family: 'Fraunces', serif; font-size: 44px; font-weight: 600; margin: 0 0 16px; line-height: 1.05; max-width: 900px;">Intent Data &mdash; reach prospects who are actively shopping, <span style="text-decoration: underline; text-decoration-color: rgba(255,255,255,0.35); text-decoration-thickness: 3px; text-underline-offset: 6px;">right now</span>.</h2>
-        <p style="font-size: 18px; line-height: 1.6; color: rgba(255,255,255,0.94); margin: 0 0 18px; max-width: 920px; font-weight: 500;">Everyone sells demographic data. Almost no one sells <strong style="color: #fff; font-weight: 800;">verified, real-time purchase-intent signals</strong> alongside it. LeadsPlease is changing that. Layer in-market intent over any consumer or business audience and find the 2&ndash;5% of your demographic match who are <em>actively researching, comparing, or about to buy</em> &mdash; and ignore the 95% who aren't.</p>
+        <h2 style="font-family: 'Fraunces', serif; font-size: 44px; font-weight: 600; margin: 0 0 16px; line-height: 1.05; max-width: 900px;">Intent Data &mdash; <span style="text-decoration: underline; text-decoration-color: rgba(255,255,255,0.35); text-decoration-thickness: 3px; text-underline-offset: 6px;">available exclusively through this API</span>. Reach prospects who are actively shopping, right now.</h2>
+        <p style="font-size: 18px; line-height: 1.6; color: rgba(255,255,255,0.94); margin: 0 0 18px; max-width: 920px; font-weight: 500;">Everyone sells demographic data. Almost no one sells <strong style="color: #fff; font-weight: 800;">verified, real-time purchase-intent signals</strong> alongside it. LeadsPlease is changing that &mdash; and the <strong style="color:#fff;">only access path is the Data API</strong>. Layer in-market intent over any consumer or business audience and find the 2&ndash;5% of your demographic match who are <em>actively researching, comparing, or about to buy</em> &mdash; and ignore the 95% who aren't. There is no website checkout for Intent Data; it's API-only.</p>
 
         <div style="background: rgba(0,0,0,0.20); border: 1px solid rgba(255,255,255,0.18); border-radius: 12px; padding: 22px 24px; margin: 22px 0; backdrop-filter: blur(4px);">
           <div style="font-family: 'DM Sans', sans-serif; font-size: 11px; font-weight: 800; letter-spacing: 1.6px; color: rgba(255,255,255,0.78); margin-bottom: 10px; text-transform: uppercase;">⚡ The Math</div>
@@ -636,8 +762,8 @@ POST /subscriptions
           <span class="verb post" style="background: rgba(0,0,0,0.32); color: #fff;">POST</span>
           <span class="path" style="color: #fff; font-weight: 700;">/search-criteria</span>
           <span style="font-family: 'DM Sans', sans-serif; font-size: 12px; color: rgba(255,255,255,0.78); margin-left: 8px; font-weight: 600;">+ <code style="font-family:'JetBrains Mono',monospace; background: rgba(0,0,0,0.30); padding: 1px 6px; border-radius: 4px; font-size: 11px;">demographics: [{name: "intent_category", codes: [...]}]</code></span>
-          <h4 style="color: #fff; font-size: 22px; margin: 12px 0 8px;">⚡ Intent Data overlay <span style="font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.88);">— find the 2–5% who are actively shopping right now</span></h4>
-          <p style="color: rgba(255,255,255,0.94); font-size: 14.5px; line-height: 1.6;">Layered on any Consumer or Business audience as additional <code style="font-family:'JetBrains Mono',monospace; background: rgba(0,0,0,0.32); color: #fff; padding: 2px 7px; border-radius: 4px; font-size: 12.5px;">demographics</code> codes (e.g. <code style="font-family:'JetBrains Mono',monospace; background: rgba(0,0,0,0.32); color: #fff; padding: 2px 7px; border-radius: 4px; font-size: 12.5px;">auto_in_market_30d</code>, <code style="font-family:'JetBrains Mono',monospace; background: rgba(0,0,0,0.32); color: #fff; padding: 2px 7px; border-radius: 4px; font-size: 12.5px;">kitchen_remodel_60d</code>, <code style="font-family:'JetBrains Mono',monospace; background: rgba(0,0,0,0.32); color: #fff; padding: 2px 7px; border-radius: 4px; font-size: 12.5px;">crm_evaluation_60d</code>). Same Criteria, same /counts, same /lists workflow &mdash; but the audience is now filtered to verified in-market intent. Direct-mail response rates lift from a typical 0.5–1.5% to <strong style="color: #fff; background: rgba(0,0,0,0.32); padding: 2px 8px; border-radius: 4px;">5–12%</strong>. Intent-overlay lists also command 30–60% higher prices, so reseller margin compounds against a bigger ticket.</p>
+          <h4 style="color: #fff; font-size: 22px; margin: 12px 0 8px;">⚡ Intent Data overlay <span style="font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.88);">— API-only · find the 2–5% who are actively shopping right now</span></h4>
+          <p style="color: rgba(255,255,255,0.94); font-size: 14.5px; line-height: 1.6;"><strong style="color:#fff;">Available exclusively through the LeadsPlease Data API</strong> (no website checkout). Layered on any Consumer or Business audience as additional <code style="font-family:'JetBrains Mono',monospace; background: rgba(0,0,0,0.32); color: #fff; padding: 2px 7px; border-radius: 4px; font-size: 12.5px;">demographics</code> codes (e.g. <code style="font-family:'JetBrains Mono',monospace; background: rgba(0,0,0,0.32); color: #fff; padding: 2px 7px; border-radius: 4px; font-size: 12.5px;">auto_in_market_30d</code>, <code style="font-family:'JetBrains Mono',monospace; background: rgba(0,0,0,0.32); color: #fff; padding: 2px 7px; border-radius: 4px; font-size: 12.5px;">kitchen_remodel_60d</code>, <code style="font-family:'JetBrains Mono',monospace; background: rgba(0,0,0,0.32); color: #fff; padding: 2px 7px; border-radius: 4px; font-size: 12.5px;">crm_evaluation_60d</code>). Same Criteria, same /counts, same /lists workflow &mdash; but the audience is now filtered to verified in-market intent. Direct-mail response rates lift from a typical 0.5–1.5% to <strong style="color: #fff; background: rgba(0,0,0,0.32); padding: 2px 8px; border-radius: 4px;">5–12%</strong>. Intent-overlay lists also command 30–60% higher prices, so reseller margin compounds against a bigger ticket.</p>
           <p style="color: rgba(255,255,255,0.94); font-size: 13px; line-height: 1.55; margin: 10px 0 0;">Signal sources: search behavior · content engagement · transaction patterns · life-event triggers · connected-TV exposure · geo-fence dwell time. Refreshed every 24–72 hours. <a href="mailto:tech@leadsplease.com?subject=Intent+Data+early-access" style="color: #fff; text-decoration: underline; font-weight: 800;">Join the early-access waitlist &rarr;</a></p>
         </div>
       </div>
