@@ -1703,7 +1703,6 @@ curl -s -X POST $BASE/counts \
       <h3>Spec, status, support</h3>
       <p style="margin-bottom:6px;">📘 <strong>Swagger UI</strong> &mdash; embedded on the <a href="#reference">API Reference</a> tab (live spec, every endpoint, inline test runner)</p>
       <p style="margin-bottom:6px;">📄 <strong>Full API manual</strong> &mdash; <a href="https://docs.google.com/document/d/10Fc69C9uAniNGKDv0SMR03z0pr9WEWbHsGPLRBYUano" target="_blank" rel="noopener">developer reference (Google Doc, v1.3.4)</a></p>
-      <p style="margin-bottom:6px;">📊 <strong>Status page</strong> &mdash; live monitoring at <a href="https://status.leadsplease.com" target="_blank" rel="noopener">status.leadsplease.com</a> (uptime, latency, incident history)</p>
       <p style="margin-bottom:0;">✉️ <strong>Tech support</strong> &mdash; <a href="mailto:tech@leadsplease.com">tech@leadsplease.com</a> &mdash; phone <strong>(866) 306-8674</strong> &mdash; replies within one business day on free tier, four hours on Builder, one hour on Scale.</p>
     </div>
 
@@ -1770,17 +1769,32 @@ curl -s -X POST $BASE/counts \
     scrollLockUntil = Date.now() + 2000;
   }
 
+  function activateTab(id) {
+    show(id);
+    // Update URL via a query param (?tab=...) instead of a fragment.
+    // Using a fragment fires `hashchange`, which Swagger UI's bundle
+    // listens to and uses to scroll the page — we don't want that.
+    var url = window.location.pathname + '?tab=' + encodeURIComponent(id);
+    history.replaceState(null, '', url);
+  }
+
   tabs.forEach(function (t) {
     t.addEventListener('click', function (e) {
       e.preventDefault();
-      var id = t.getAttribute('data-panel');
-      show(id);
-      // Update URL via a query param (?tab=...) instead of a fragment.
-      // Using a fragment fires `hashchange`, which Swagger UI's bundle
-      // listens to and uses to scroll the page — we don't want that.
-      var url = window.location.pathname + '?tab=' + encodeURIComponent(id);
-      history.replaceState(null, '', url);
+      activateTab(t.getAttribute('data-panel'));
     });
+  });
+
+  // Delegated handler: any in-content anchor that points to a tab id
+  // (e.g. "Get API keys → #install", "Open Swagger UI → #reference") should
+  // also switch tabs, not just no-op because the target panel is display:none.
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest && e.target.closest('a[href^="#"]');
+    if (!a || a.classList.contains('sg-tab')) return; // sg-tab is already handled above
+    var id = a.getAttribute('href').slice(1);
+    if (tabOrder.indexOf(id) === -1) return;          // not a tab id, leave it alone
+    e.preventDefault();
+    activateTab(id);
   });
 
   var TAB_META = {
