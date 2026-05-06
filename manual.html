@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>API Manual — LeadsPlease® Data API</title>
+<meta name="robots" content="noindex,follow" />
+<link rel="icon" type="image/png" href="/og-image.svg" />
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body { font-family: 'DM Sans', system-ui, sans-serif; color: #1C1410; background: #fff; display: flex; flex-direction: column; }
+  .topbar { background: #fff; padding: 12px 48px 0; position: sticky; top: 0; z-index: 100; border-bottom: 0; flex-shrink: 0; }
+  .topbar-inner { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; height: 60px; }
+  .topbar-logo { display: flex; align-items: center; text-decoration: none; flex-shrink: 0; }
+  .topbar-logo img { height: 44px; width: auto; display: block; }
+  [role="tablist"] { display: flex; gap: 4px; overflow-x: auto; align-items: center; scrollbar-width: none; }
+  [role="tablist"]::-webkit-scrollbar { display: none; }
+  .sg-tab { font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 600; color: #666; padding: 10px 12px; border: none; background: transparent; border-bottom: 3px solid transparent; transition: color 0.15s, border-color 0.15s; white-space: nowrap; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; }
+  .sg-tab:hover { color: #1C1410; }
+  .sg-tab-badge { background: #FF6633; color: #fff; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 99px; letter-spacing: 0.5px; text-transform: uppercase; }
+  .doc-bar { background: #faf9f7; border-bottom: 1px solid #e8e5e0; padding: 14px 48px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+  .doc-bar h1 { font-family: 'Fraunces', serif; font-size: 22px; font-weight: 600; color: #1C1410; margin: 0; }
+  .doc-bar .meta { font-size: 13px; color: #6b6962; }
+  .doc-frame { flex: 1; border: 0; width: 100%; min-height: 600px; }
+</style>
+</head>
+<body>
+
+<nav class="topbar">
+  <div class="topbar-inner">
+    <a href="/" class="topbar-logo"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAPgAAAAwCAMAAAALtEfgAAAAwFBMVEX/////ZjOWlpj/eEtdXmB2d3i2t7iGh4jGx8f/18rq6ur/mnnb29zy8vL/yLViY2X/pYf/i2T/vKXj4+SqqqvT09T/49r/bDtpamz/6uOjo6X/tJv5+fn/gln/9fFmZ2n8/Pz/+/n/8e3+/v7//f2mp6j/rZL/km3/aDbn6OhtbW//+Pb/ZzWAgYNwcXJgYWKdnZ739/eOj5BnZ2n//v2vsLF7fH6nqKn//v69vb6goaL//PvX19jBwcLOzs/f3+A2zfwrAAAACXBIWXMAAABIAAAASABGyWs+AAAKl0lEQVRo3u1aCZeiyg5GKBdURHHBXRTbrUEUWxttl///r15SCxRqz5l5fefNvDuTe05Pd6gq6ktSyZfiKspf+YOlX89t/Gz2EL5fi796L/9Dca6hSYRkG/W7x6+Vaq/19bdMK9WZ/iMTto3u8qfivoUBAF75qhoe8Ld1zkltuJTJZAZfRj7tLTIZ7UeQHwnpOj8w/kelsCLEDK/FreP0jds+C9BVOd71hQfIq9EXX9OxYZVM7fX7Z7zARn4i8CNEeXiO/3S3uRUJ/AT51MrQHX988T06XUabfP+Mxk8FXjBJsO+nVDefEN+I/+TAx18F7v1WwMsjEhzvlUYIr3T/aeC/lce3B0Jyj2oDfB6b41/p8T0hm2dr39pkLY75v9HjxXWC784iAXn5h4H/Rh6PcoTsnz5xt1mSLX4CfDpstVrDt7sp406r9axWfUxg8PTB4zgc1eKF/B9XmnkH3H2yuOt+j+5Bs82TlaE8F7DJ5SnwjjXX7IWtlSpDaXinN7BtW6sCzxlaVasj9BNrjvp5ZdiSgeuzAa5RszqMHlzVgqs45/1GPR1vAqwEfFveb8JNrpwqP8VCV1UbzS3kpMaLIXQvoCsUE6hGc6/Cqik6WjbJ6RPcSnEn3poCPrY0GrIgXi2hYaClNMezK6+U6DHkU33geWz83EpC/XVm8zUymoXrGivSNgyVcWZTLd8Db1JuiTyrHHvR2K/Z+HxZufDINRpct9rwgW7BZ5r2RqK/wAmbzwKISp6sDfce+KSU8QTwTMauMH+Nq5lEN6egZswedvJgsRDAqWli6QEzWppkVA8RWRubhvYlDfw4wkcrfLTiYUjJBoxso+4MwLuIO091I/qTVqV+Fy02auPPbDM22oasPu/F9iS4yR5H5jacy1v2wL/Ur7PMvXhzfFBZPDwA4FEvpbEhOJYjYsKmw0K9WD9ChTUvEnAX/BOEV3hUANsEBbqpJTDrXfdcLJ5PI2gzCKZiZwMz38vF4jUPQHH3bhdQb5rL4u0IQ9pxuOSJv/0U+JWQwl2oT4VnNW3B/K61nuPLlCAWWlrmGfB7dYsChz3nWPRhyK/rbgz8PBIhAJnHJG10Rx9MkOU8u0nDG4CXA2KyLTsQ4OaNhrTw8xZscBAJLfutcgHL5NLAP3QauZ5m6S2dh2t1rEwGHMGgNohDuySbqVbTEuCRxQ93xZqDxRYY/BR4Q7wZ6ROyCwa8n+cBwOOQhA6cXPC36C/cpsmAQz4OhW57uUIaWJNV7GVHTV6xIptPj7hSH5F9lAL+Wku8PB2zgLVbUYVDqnSGE12chdJUaTEr2FZnMmmJ06ANFWoPz4JFXvWqRjMkAj8kGbsJgVoXwK8BCZNdbsGVTaUPppHS8oYB38tEm1tpnyjqK5JdCuCnbwDfcQPFwFklzohczjBaY+r7hc3Uw1rscW4ZC60XKbMYOIuVHh0eDWnpR+ASc3Z8+icFDomIH+sYzEkpM8tIwYnAIbBHZ2koGGl1S/501bhCfzPUbybJpbM623tN4dRFp0e71GFhPOPTdNtjHn+rsV94/X8dcOBRlertWSuhQJjcpC3SgGbAFSNL2nIGvo6I34eg9qWSbrDkVoQUn71K9mgTX8YHs3iE+yT/eXJrPiQ36kxvYHGZUeADRkVtQVle59zjQ2qQRYXreS6HEy1yIVAgwfQAeFZmUpBYsw4DDvY/yNsClr1abkjqkOLxRYJdGNEkLsBecL6MKCA++00VpfqZ38E+Zxn4dJxQFxSR19njQcxWq9zjHXvBcoAIBQF8HNfExcCaCOB5mZRB7K4MlwK/4lWYJI0dMcvqHdXuMuBKARP8yN8vKSCY7x+lqVDTs66IKJr0zqHUkm8buS2zCi/yAvjkSXWCpMw8OY+pfI8nN5rbPC2+q0u4eqeUcKCBzoGrMnBIrKMl8/iRPEhwzt8103sOXCnSmzMyUrGInR6nruJopobbEPMqIgdZAHoaSkHYTwEfPgOeKVU8fhK4zGLgHi0Bscdj5qZ8VGoxdMqBAHgoA78FaHUB3Mym5bRF4PIdYIPEvaRxpDfGQdfAZL9LzzzwOIHEQYtIAWgBz5x9rPNFdkC4UQVzexuwKl4qVZP/ehOdaUXHEpX4GWdJz475vBV7HGSol3jJX9iMwKSyDXhkvWXAC7gfWZZFRwnToQ6ZPwYOrjufELrqvuOtaVrEGHhUAMvhaTI3Z8MoIqVfYZg4eUaRFCm5sbM5nyrTDyYRiNKhnl0IgB1twbP6IJXteRUTbWk0hX6OJYxehMBT9wLg5rzLk1uAee5OwDtSbac87kV67JaRyF8LCaG5l/KOkVZnTxuAA1L+NeV4EASCDMTAe7GHuLx19FdBa0Ss9zxRx6sJ3QGgjPUx4Gzo24SNmLM63pQ2zrK0KGej2922I4Ak99PFVRo4cDY46uptl64VkuCBZjFzzae6N3ydIHsxcEbFvBrvoSO9pC3mEwG1SoO9YsfMjfOdGkWu8wQBwDvVOf+iwhasMeAbCciO5hkE7mIY7+/v9BGpxGou5A44TXc+pAKzoDwXWMFkpt5Cvx6Kfh0LY1eMiYGPOT/XZsDVW1bNZgyMNx3eoGf15qJfAY/zUMhoVcuq2p5gbljoPXuuv0Yf+G2FNnII3IxZNWYl5CeMsgITX8u3CPWXM03YCYPpHyhw5yrRNqQ4+CMvu7z5kvTkYKy1eKPriEDADLd174EruuhBvIUtIUy60qRMgcfTXZsAPm5RtN5Cm/PmxopYkxJ/xMBPHOgp3p3BAc7HCcCBUg0Htw6Hsiuuq95Zd5YLzJPBdZj3XzBuySZOmttcIKfEF0Au0Twa52BPieRKFxHpTpptG87q4FGN/fi49KjXPlhZS+4zNNaPBybx6a3IEvPNph8Dj5bASg4XCt1o4i1NjvXo5EQDoX6CeocwIbrJoYDjHGQ4O3iKfVv+atBTXwBbmBLSPsTVqJEKiDzP7AK4x08iQHm4cpjjyU512OympYTDJzVJz2JEG7/WUgsssE1bYst9IKPw/T1EBsICVNzAnJGPZdVTV/XxgqGBRnEQ5jp8OYXw8Hih/sUrHHJQu5s8pAD2XeACyANf7Z7CA73ZkXsyByMlmyvSOHf7Z3WU9PhUGCzcnxJ9WCkWY7OM9tZKfF6r4AhG0aNJcmOj6QjYm71FrZQ56LoAfGfUD4KZ8fCMr57q+SBmbb5w2iXLVeaefleFWN63E4rGuKjbPMQqM7yvDnSJXf49l9tvcFygpi+kKgNbq4pvhq2qxk+6PZiJyhZNqqx8a6UOHS6q99gaUL09b7215rZWwmo2hLzIif5cjzhwoKhG49DetbOhiLbyWtywOYUw297tVgf1mhA8Y++v27s1fvA8r1fUHsuGD+Paa78RIzCOeao6nM7KgxRfsrFdSJB/KAEdXf463qn0ZtVqr6IP3yJZC0qLlqmJPHxS6cFgfQxDP3SdmS8a66idWYL1MOB4i9wsS0av35LQLJab59tdVXbq5/OSjxSq5fl8rjupYUuYWk9/F02eXdTsKAjMVf69+XmnGkv0ox/LHyakFQL4rxBnW7zd6kb/6yv9F/Irgf9S+Qv8T5O/wP80WZrEXH71f6v6f5S+n3ze+bNkmbt9fZG/8leeyn8AXcIb51KFyI4AAAAASUVORK5CYII=" alt="LeadsPlease®" width="248" height="44"></a>
+    <div role="tablist" aria-label="Data API sections">
+      <a href="/?tab=overview"  class="sg-tab" role="tab">Use the LeadsPlease&reg; Data API</a>
+      <a href="/?tab=try"       class="sg-tab" role="tab">Try It</a>
+      <a href="/?tab=reference" class="sg-tab" role="tab">API Reference <span class="sg-tab-badge" style="background:#1e40af;">Swagger</span></a>
+      <a href="/?tab=use-cases" class="sg-tab" role="tab">Use Cases</a>
+      <a href="/?tab=prices"    class="sg-tab" role="tab">Prices</a>
+      <a href="/?tab=install"   class="sg-tab" role="tab">Get Started <span class="sg-tab-badge">Free trial</span></a>
+    </div>
+  </div>
+</nav>
+
+<div class="doc-bar">
+  <h1>📘 LeadsPlease&reg; Data API Manual</h1>
+  <span class="meta">v1.3.4 &middot; live document &mdash; updates here automatically when the source is edited</span>
+</div>
+
+<iframe class="doc-frame"
+        src="https://docs.google.com/document/d/10Fc69C9uAniNGKDv0SMR03z0pr9WEWbHsGPLRBYUano/preview"
+        title="LeadsPlease Data API Manual"
+        loading="lazy"></iframe>
+
+</body>
+</html>
