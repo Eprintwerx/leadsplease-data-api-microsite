@@ -56,6 +56,56 @@ const SPEC_UPSTREAM = process.env.OPENAPI_SPEC_URL || 'https://api-test.leadsple
 let specCache = { json: null, fetchedAt: 0 };
 const SPEC_TTL_MS = 10 * 60 * 1000; // 10 min
 
+// ─── /manual — server-rendered API manual ────────────────────────
+// Fetches the Google Doc as HTML, extracts just the <body>, and injects
+// into manual.html. This keeps the manual content crawlable by Google
+// (an iframe embed is invisible to search engines) while still letting
+// the source document be edited live in Google Docs.
+const fs = require('fs');
+const MANUAL_DOC_ID = process.env.MANUAL_DOC_ID || '10Fc69C9uAniNGKDv0SMR03z0pr9WEWbHsGPLRBYUano';
+const MANUAL_DOC_URL = 'https://docs.google.com/document/d/' + MANUAL_DOC_ID + '/export?format=html';
+const MANUAL_TTL_MS = 10 * 60 * 1000; // 10 min cache
+let manualCache = { html: null, fetchedAt: 0 };
+
+function extractDocBody(rawHtml) {
+  // Google Docs export wraps the actual content in <body>...</body>
+  // with a top-level <style> in <head>. Strip the chrome, keep the body.
+  var m = rawHtml.match(/<body[^>]*>([\s\S]*?)<\/body>/i);
+  var body = m ? m[1] : rawHtml;
+  // Unwrap every Google redirect href: https://www.google.com/url?q=<real>&sa=D...
+  // → real URL. Saves a round-trip and gives Google clean signals.
+  body = body.replace(/https:\/\/www\.google\.com\/url\?q=([^&"]+)(?:&[^"]*)?/g, function (_m, encoded) {
+    try { return decodeURIComponent(encoded); } catch (e) { return encoded; }
+  });
+  // Promote the doc's title <p class="...title"> to an <h1> for SEO + a11y.
+  body = body.replace(/<p\b([^>]*\bclass="[^"]*\btitle\b[^"]*"[^>]*)>([\s\S]*?)<\/p>/, '<h1$1>$2</h1>');
+  return body;
+}
+
+app.get('/manual', async function (req, res) {
+  try {
+    const fresh = !manualCache.html || Date.now() - manualCache.fetchedAt > MANUAL_TTL_MS;
+    if (fresh) {
+      const r = await fetch(MANUAL_DOC_URL, { redirect: 'follow' });
+      if (!r.ok) throw new Error('upstream ' + r.status);
+      const raw = await r.text();
+      manualCache = { html: extractDocBody(raw), fetchedAt: Date.now() };
+    }
+    const template = fs.readFileSync(path.join(__dirname, 'manual.html'), 'utf-8');
+    const rendered = template.replace('<!-- DOC_BODY -->', manualCache.html);
+    res.set('Cache-Control', 'public, max-age=600'); // 10 min CDN cache
+    res.set('Content-Type', 'text/html; charset=UTF-8');
+    res.send(rendered);
+  } catch (err) {
+    console.error('[/manual] error:', err.message);
+    // Fallback: serve the static manual.html with an iframe-style fallback
+    const template = fs.readFileSync(path.join(__dirname, 'manual.html'), 'utf-8');
+    const fallback = '<div class="fallback">Couldn&rsquo;t load the manual right now. <a href="https://docs.google.com/document/d/' + MANUAL_DOC_ID + '/preview" target="_blank" rel="noopener">View it on Google Docs &rarr;</a></div>';
+    res.set('Content-Type', 'text/html; charset=UTF-8');
+    res.send(template.replace('<!-- DOC_BODY -->', fallback));
+  }
+});
+
 app.get('/api-spec.json', async function (req, res) {
   try {
     const fresh = !specCache.json || Date.now() - specCache.fetchedAt > SPEC_TTL_MS;

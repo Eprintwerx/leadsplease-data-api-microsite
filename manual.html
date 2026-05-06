@@ -3,26 +3,50 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>API Manual — LeadsPlease® Data API</title>
-<meta name="robots" content="noindex,follow" />
+<title>API Manual — LeadsPlease® Data API · v1.3.4</title>
+<meta name="description" content="Full developer reference for the LeadsPlease® Data API: authentication, criteria, counts, lists, subscriptions. JSON examples + every parameter." />
+<meta name="robots" content="index, follow" />
+<link rel="canonical" href="https://apidata.cloud/manual" />
+<meta property="og:title" content="LeadsPlease® Data API Manual (v1.3.4)" />
+<meta property="og:description" content="Full developer reference: authentication, criteria, counts, lists, subscriptions. Every endpoint, every parameter." />
+<meta property="og:url" content="https://apidata.cloud/manual" />
+<meta property="og:type" content="article" />
 <link rel="icon" type="image/png" href="/og-image.svg" />
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  html, body { height: 100%; }
-  body { font-family: 'DM Sans', system-ui, sans-serif; color: #1C1410; background: #fff; display: flex; flex-direction: column; }
-  .topbar { background: #fff; padding: 12px 48px 0; position: sticky; top: 0; z-index: 100; border-bottom: 0; flex-shrink: 0; }
+  body { font-family: 'DM Sans', system-ui, sans-serif; color: #1C1410; background: #fff; }
+  .topbar { background: #fff; padding: 12px 48px 0; position: sticky; top: 0; z-index: 100; }
   .topbar-inner { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; height: 60px; }
   .topbar-logo { display: flex; align-items: center; text-decoration: none; flex-shrink: 0; }
   .topbar-logo img { height: 44px; width: auto; display: block; }
   [role="tablist"] { display: flex; gap: 4px; overflow-x: auto; align-items: center; scrollbar-width: none; }
   [role="tablist"]::-webkit-scrollbar { display: none; }
-  .sg-tab { font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 600; color: #666; padding: 10px 12px; border: none; background: transparent; border-bottom: 3px solid transparent; transition: color 0.15s, border-color 0.15s; white-space: nowrap; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; }
+  .sg-tab { font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 600; color: #666; padding: 10px 12px; border-bottom: 3px solid transparent; white-space: nowrap; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; }
   .sg-tab:hover { color: #1C1410; }
   .sg-tab-badge { background: #FF6633; color: #fff; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 99px; letter-spacing: 0.5px; text-transform: uppercase; }
   .doc-bar { background: #faf9f7; border-bottom: 1px solid #e8e5e0; padding: 14px 48px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
   .doc-bar h1 { font-family: 'Fraunces', serif; font-size: 22px; font-weight: 600; color: #1C1410; margin: 0; }
   .doc-bar .meta { font-size: 13px; color: #6b6962; }
-  .doc-frame { flex: 1; border: 0; width: 100%; min-height: 600px; }
+  /* Container for the server-rendered doc body */
+  .doc-content { max-width: 980px; margin: 32px auto 64px; padding: 0 24px; line-height: 1.65; color: #1C1410; }
+  .doc-content h1, .doc-content h2, .doc-content h3, .doc-content h4, .doc-content h5, .doc-content h6 { font-family: 'Fraunces', serif; color: #1C1410; margin: 28px 0 12px; line-height: 1.2; }
+  .doc-content h1 { font-size: 38px; margin-top: 0; }
+  .doc-content h2 { font-size: 28px; border-bottom: 1px solid #e8e5e0; padding-bottom: 6px; }
+  .doc-content h3 { font-size: 22px; border-bottom: 1px solid #e8e5e0; padding-bottom: 4px; }
+  .doc-content h4 { font-size: 18px; color: #1C1410; }
+  .doc-content h5 { font-size: 16px; }
+  .doc-content h6 { font-size: 14px; text-transform: uppercase; letter-spacing: 0.6px; color: #6b6962; }
+  .doc-content p, .doc-content li { font-size: 15.5px; margin-bottom: 10px; }
+  .doc-content ul, .doc-content ol { padding-left: 24px; margin: 8px 0 16px; }
+  .doc-content table { border-collapse: collapse; margin: 16px 0; width: 100%; }
+  .doc-content table td, .doc-content table th { border: 1px solid #e8e5e0; padding: 8px 12px; font-size: 14px; }
+  .doc-content code, .doc-content pre { font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 13.5px; }
+  .doc-content pre { background: #1C1410; color: #fff; padding: 14px 18px; border-radius: 8px; overflow-x: auto; margin: 12px 0; }
+  .doc-content :not(pre) > code { background: #f3f0eb; color: #C44E15; padding: 2px 6px; border-radius: 4px; }
+  .doc-content a { color: #C44E15; }
+  .doc-content img { max-width: 100%; height: auto; }
+  .fallback { padding: 40px 24px; text-align: center; color: #6b6962; }
+  .fallback a { color: #FF6633; font-weight: 700; }
 </style>
 </head>
 <body>
@@ -46,10 +70,7 @@
   <span class="meta">v1.3.4 &middot; live document &mdash; updates here automatically when the source is edited</span>
 </div>
 
-<iframe class="doc-frame"
-        src="https://docs.google.com/document/d/10Fc69C9uAniNGKDv0SMR03z0pr9WEWbHsGPLRBYUano/preview"
-        title="LeadsPlease Data API Manual"
-        loading="lazy"></iframe>
+<article class="doc-content"><!-- DOC_BODY --></article>
 
 </body>
 </html>
