@@ -6,10 +6,15 @@
 //   /health                → Railway healthcheck
 
 const express = require('express');
+const compression = require('compression');
 const path = require('path');
 
 const app = express();
 const PORT = process.env.PORT || 8767;
+
+// Gzip / brotli on every response — DataForSEO's on-page audit flagged
+// `no_content_encoding`. The 200KB index.html compresses to ~25KB gzipped.
+app.use(compression());
 
 // Body parser for the API-key application JSON
 app.use(express.json({ limit: '50kb' }));
