@@ -11,6 +11,9 @@ const path = require('path');
 const app = express();
 const PORT = process.env.PORT || 8767;
 
+// Body parser for the API-key application JSON
+app.use(express.json({ limit: '50kb' }));
+
 function setCacheHeaders(res, filePath) {
   if (filePath.includes('/_astro/')) {
     res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
@@ -50,6 +53,81 @@ app.get('/api-spec.json', async function (req, res) {
   } catch (err) {
     console.error('spec proxy error:', err.message);
     res.status(502).json({ error: 'spec_unreachable', message: err.message });
+  }
+});
+
+// ─── API-key application submission ──────────────────────────────
+// Receives the lead-capture form on the Get Started tab. Forwards
+// the application by email to graham@eprintwerx.com via Resend so
+// keys can be provisioned manually within one business day.
+const RESEND_API_KEY = process.env.RESEND_API_KEY || '';
+const NOTIFY_EMAIL = process.env.NOTIFY_EMAIL || 'graham@eprintwerx.com';
+const FROM_EMAIL = process.env.FROM_EMAIL || 'onboarding@resend.dev';
+
+app.post('/api/api-key-application', async function (req, res) {
+  const data = req.body || {};
+
+  // Minimal validation — the form already validates client-side
+  if (!data.email || !data.first_name || !data.last_name) {
+    return res.status(400).json({ error: 'missing_required_fields' });
+  }
+
+  // Build a human-readable email body
+  const lines = [
+    'New API-key application from the Data API microsite:',
+    '',
+    'Tier:             ' + (data.tier || '(not set)'),
+    'First name:       ' + data.first_name,
+    'Last name:        ' + data.last_name,
+    'Business / org:   ' + (data.business_name || '(none)'),
+    'Email:            ' + data.email,
+    'Phone:            ' + (data.phone || '(none)'),
+    'Website:          ' + (data.website || '(none)'),
+    'Expected volume:  ' + (data.expected_volume || '(not set)'),
+    'Use case:         ' + (data.use_case || '(none)'),
+    'Accept terms:     ' + (data.accept_terms ? 'yes' : 'no'),
+    'Accept data use:  ' + (data.accept_data ? 'yes' : 'no'),
+    'Source:           ' + (data.source || '(unknown)'),
+    'User-Agent:       ' + (req.headers['user-agent'] || '(unknown)'),
+    'Submitted at:     ' + new Date().toISOString(),
+  ];
+  const textBody = lines.join('\n');
+
+  // If Resend is not configured, log the application and still return success
+  // so the user gets a polite confirmation; we'll see it in server logs.
+  if (!RESEND_API_KEY) {
+    console.log('[api-key-application] (no RESEND_API_KEY) ' + JSON.stringify(data));
+    return res.json({ ok: true, message: 'Thanks — application received. We will email you within one business day with your TEST key.' });
+  }
+
+  // Send the notification email via Resend
+  try {
+    const r = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: {
+        'Authorization': 'Bearer ' + RESEND_API_KEY,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        from: FROM_EMAIL,
+        to: [NOTIFY_EMAIL],
+        reply_to: data.email,
+        subject: '[Data API] Application from ' + data.first_name + ' ' + data.last_name + ' (' + (data.business_name || data.email) + ')',
+        text: textBody,
+      }),
+    });
+
+    if (!r.ok) {
+      const errBody = await r.text();
+      console.error('[api-key-application] Resend error', r.status, errBody);
+      return res.status(502).json({ error: 'email_send_failed', detail: 'HTTP ' + r.status });
+    }
+
+    console.log('[api-key-application] sent to ' + NOTIFY_EMAIL + ' for ' + data.email);
+    return res.json({ ok: true, message: 'Thanks — your application is in. We will email your TEST key to ' + data.email + ' within one business day.' });
+  } catch (err) {
+    console.error('[api-key-application] exception:', err.message);
+    return res.status(500).json({ error: 'server_error', detail: err.message });
   }
 });
 
