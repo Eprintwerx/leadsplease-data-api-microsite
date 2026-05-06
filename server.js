@@ -63,7 +63,7 @@ app.get('/api-spec.json', async function (req, res) {
 const RESEND_API_KEY = process.env.RESEND_API_KEY || '';
 const NOTIFY_EMAIL = process.env.NOTIFY_EMAIL || 'graham@eprintwerx.com';
 const NOTIFY_CC = process.env.NOTIFY_CC || 'info@leadsplease.com';
-const FROM_EMAIL = process.env.FROM_EMAIL || 'onboarding@resend.dev';
+const FROM_EMAIL = process.env.FROM_EMAIL || 'LeadsPlease Data API <noreply@datawidget.com>';
 
 app.post('/api/api-key-application', async function (req, res) {
   const data = req.body || {};
