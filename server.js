@@ -14,6 +14,18 @@ const PORT = process.env.PORT || 8767;
 // Body parser for the API-key application JSON
 app.use(express.json({ limit: '50kb' }));
 
+// Security + SEO headers on every response
+app.use(function (req, res, next) {
+  res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+  res.setHeader('Permissions-Policy', 'geolocation=(), camera=(), microphone=()');
+  // X-Frame-Options omitted on purpose — /manual is intentionally embedded
+  // via iframe of docs.google.com and we don't iframe this site elsewhere
+  // (would also need to allow if anyone embeds /api-spec.json's Swagger).
+  next();
+});
+
 function setCacheHeaders(res, filePath) {
   if (filePath.includes('/_astro/')) {
     res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
@@ -143,4 +155,14 @@ app.use(express.static(path.join(__dirname), {
 app.listen(PORT, function () {
   console.log('LeadsPlease Data API microsite running on port ' + PORT);
   console.log('  http://localhost:' + PORT + '/');
+
+  // Pre-warm the OpenAPI spec cache so the first /api-spec.json request
+  // (when a visitor opens the Reference tab) is served from memory, not
+  // a cold proxy round-trip to api-test.leadsplease.com.
+  fetch(SPEC_UPSTREAM, { headers: { 'Accept': 'application/json' } })
+    .then(function (r) { return r.ok ? r.json() : null; })
+    .then(function (j) {
+      if (j) { specCache = { json: j, fetchedAt: Date.now() }; console.log('  spec cache pre-warmed (' + Object.keys(j).length + ' top-level keys)'); }
+    })
+    .catch(function (err) { console.error('  spec pre-warm failed:', err.message); });
 });
