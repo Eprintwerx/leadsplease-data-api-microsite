@@ -82,7 +82,7 @@
   nav.topbar .nav-dropdown-menu { display: none; }
   nav.mobile-nav, .mobile-nav-overlay { display: none; }
   /* Reserve space for sticky topbar + sticky tab nav when scrolling to anchors. */
-  html { scroll-padding-top: 80px; }
+  html { scroll-padding-top: 80px; scroll-behavior: auto; }
   .sg-panel[id] { scroll-margin-top: 80px; }
 </style>
 
@@ -1023,7 +1023,7 @@ access_token = r.json()[<span class="s">"accessToken"</span>]</pre>
         window.swaggerUiInstance = SwaggerUIBundle({
           url: '/api-spec.json',
           dom_id: '#swagger-ui',
-          deepLinking: true,
+          deepLinking: false,
           docExpansion: 'list',
           defaultModelsExpandDepth: 0,
           tryItOutEnabled: true,
@@ -1722,6 +1722,36 @@ curl -s -X POST $BASE/counts \
 <!-- ─── Tab switcher + URL hash sync ──────────────────────────── -->
 <script>
 (function () {
+  // Disable browser-managed scroll restoration so it can't fight our scroll.
+  if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+
+  // The Swagger UI bundle (loaded for the Reference tab) installs a global
+  // hashchange listener that, when triggered, calls scrollTo(0, ~63) — which
+  // makes every tab switch visibly "jump" up by an inch. We defend with two
+  // layers:
+  //   1. Strip any URL fragment that gets added (so Swagger UI has nothing
+  //      to react to next time)
+  //   2. Briefly intercept programmatic scrollTo calls right after a tab
+  //      switch and allow only our own (zero-targeted) calls through.
+  function stripHash() {
+    if (location.hash) {
+      history.replaceState(null, '', location.pathname + location.search);
+    }
+  }
+  window.addEventListener('hashchange', stripHash);
+
+  var origScrollTo = window.scrollTo.bind(window);
+  var scrollLockUntil = 0;
+  window.scrollTo = function () {
+    // Block any programmatic scrollTo that isn't ours during the lock window
+    if (Date.now() < scrollLockUntil) {
+      var first = arguments[0];
+      var y = (typeof first === 'object' && first !== null) ? first.top : arguments[1];
+      if (y !== 0) return; // ignore non-zero scroll attempts (Swagger UI's toY)
+    }
+    return origScrollTo.apply(window, arguments);
+  };
+
   var tabs = Array.from(document.querySelectorAll('.sg-tab[data-panel]'));
   var panels = Array.from(document.querySelectorAll('.sg-panel[id]'));
   var tabOrder = ['overview', 'try', 'reference', 'use-cases', 'prices', 'install'];
@@ -1734,9 +1764,10 @@ curl -s -X POST $BASE/counts \
     tabs.forEach(function (t) {
       t.classList.toggle('is-next', nextId !== null && t.getAttribute('data-panel') === nextId);
     });
-    var target = document.getElementById(id);
-    if (target) target.scrollIntoView({ block: 'start' });
-    else window.scrollTo({ top: 0 });
+    // Snap to top instantly (legacy two-arg form = no animation). Then lock
+    // out non-zero scroll attempts from other libraries for the next ~2s.
+    window.scrollTo(0, 0);
+    scrollLockUntil = Date.now() + 2000;
   }
 
   tabs.forEach(function (t) {
@@ -1744,7 +1775,11 @@ curl -s -X POST $BASE/counts \
       e.preventDefault();
       var id = t.getAttribute('data-panel');
       show(id);
-      history.replaceState(null, '', '#' + id);
+      // Update URL via a query param (?tab=...) instead of a fragment.
+      // Using a fragment fires `hashchange`, which Swagger UI's bundle
+      // listens to and uses to scroll the page — we don't want that.
+      var url = window.location.pathname + '?tab=' + encodeURIComponent(id);
+      history.replaceState(null, '', url);
     });
   });
 
@@ -1780,11 +1815,13 @@ curl -s -X POST $BASE/counts \
   var origShow = show;
   show = function (id) { origShow(id); applyTabMeta(id); };
 
-  var initial = (location.hash || '#overview').replace('#', '');
+  // Initial tab — prefer ?tab=... query param, fall back to #hash for legacy URLs
+  var qsTab = new URLSearchParams(location.search).get('tab');
+  var initial = qsTab || (location.hash || '#overview').replace('#', '');
   if (tabOrder.indexOf(initial) === -1) initial = 'overview';
   show(initial);
 
-  // Sync the active tab to URL hash changes from in-page anchors
+  // Sync the active tab to URL hash changes from in-page anchors (legacy)
   window.addEventListener('hashchange', function () {
     var id = (location.hash || '#overview').replace('#', '');
     if (tabOrder.indexOf(id) !== -1) show(id);

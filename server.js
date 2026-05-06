@@ -62,6 +62,7 @@ app.get('/api-spec.json', async function (req, res) {
 // keys can be provisioned manually within one business day.
 const RESEND_API_KEY = process.env.RESEND_API_KEY || '';
 const NOTIFY_EMAIL = process.env.NOTIFY_EMAIL || 'graham@eprintwerx.com';
+const NOTIFY_CC = process.env.NOTIFY_CC || 'info@leadsplease.com';
 const FROM_EMAIL = process.env.FROM_EMAIL || 'onboarding@resend.dev';
 
 app.post('/api/api-key-application', async function (req, res) {
@@ -111,6 +112,7 @@ app.post('/api/api-key-application', async function (req, res) {
       body: JSON.stringify({
         from: FROM_EMAIL,
         to: [NOTIFY_EMAIL],
+        cc: NOTIFY_CC ? [NOTIFY_CC] : undefined,
         reply_to: data.email,
         subject: '[Data API] Application from ' + data.first_name + ' ' + data.last_name + ' (' + (data.business_name || data.email) + ')',
         text: textBody,
@@ -123,7 +125,7 @@ app.post('/api/api-key-application', async function (req, res) {
       return res.status(502).json({ error: 'email_send_failed', detail: 'HTTP ' + r.status });
     }
 
-    console.log('[api-key-application] sent to ' + NOTIFY_EMAIL + ' for ' + data.email);
+    console.log('[api-key-application] sent to ' + NOTIFY_EMAIL + ' (cc ' + (NOTIFY_CC || 'none') + ') for ' + data.email);
     return res.json({ ok: true, message: 'Thanks — your application is in. We will email your TEST key to ' + data.email + ' within one business day.' });
   } catch (err) {
     console.error('[api-key-application] exception:', err.message);
