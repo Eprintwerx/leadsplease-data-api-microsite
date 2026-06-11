@@ -8,35 +8,81 @@ API-key application form posts directly to Web3Forms (no backend).
 
 | Resource | Value |
 |---|---|
-| S3 bucket | `leadsplease-microsite-data-api` (us-east-1, fully private) |
-| CloudFront distribution | `E2TW90C7MFXMO4` |
-| CloudFront URL | https://d188ipv2jb3hz0.cloudfront.net |
+| Public URL | https://test.leadsplease.com/data-api/ |
+| S3 bucket | `leadsplease-microsite-data-api` (us-east-1, fully private) — all keys live under `data-api/` |
+| CloudFront distribution | `E39WJRUVOH25A4` (shared with `test.leadsplease.com`) |
+| Cache behavior | `/data-api/*` → microsite-bucket origin, with the rewrite function (viewer-request) + security-headers policy attached |
 | Origin Access Control | `E1V97E5SC70HLP` |
-| Response headers policy | `58c1df2f-6294-49cd-ab86-e7092ed7d94d` (HSTS, nosniff, Referrer-Policy, Permissions-Policy) |
-| CloudFront Function | `leadsplease-microsite-data-api-rewrite` (viewer-request — `/foo` → `/foo/index.html`) |
+| Response headers policy | `58c1df2f-6294-49cd-ab86-e7092ed7d94d` (HSTS, X-Content-Type-Options, Referrer-Policy, Permissions-Policy) |
+| CloudFront Function | `leadsplease-microsite-data-api-rewrite` (rewrites `/foo` → `/foo/index.html`) |
 
-There is currently **no custom domain attached** — the site serves only
-at the `d188ipv2jb3hz0.cloudfront.net` URL above. To wire up a custom
-domain later, see "Adding a custom domain" below.
+**Path prefix.** Because the bucket is mounted under `/data-api/*` on a
+shared distribution, the build prefixes every root-relative URL in the
+HTML / sitemap / robots with `/data-api`. This happens in `build.mjs`
+via the `BASE_PATH` env var (defaulted to `/data-api` in `deploy.ps1`).
+Source files stay root-relative — only the build output is prefixed —
+so editing index.html / manual.html is unchanged.
+
+**Trailing-slash redirect.** An exact-match cache behavior for
+`/data-api` (no trailing slash) is attached to a second CloudFront
+Function (`leadsplease-microsite-data-api-redirect`) that returns a
+synthetic `301` to `/data-api/`. So both
+`https://test.leadsplease.com/data-api` and
+`https://test.leadsplease.com/data-api/` work — the former just costs
+the user one extra round trip.
 
 ## Deploying a new version
 
+**Routine deploys: just push to `test`.** The GitHub Actions workflow
+at `.github/workflows/deploy-to-s3.yml` rebuilds and ships on every
+push to that branch — same build, same per-path cache headers, same
+CloudFront invalidation, from an Ubuntu runner. Watch runs at
+https://github.com/Eprintwerx/leadsplease-data-api-microsite/actions.
+
+The workflow needs two repo (or org) secrets to be set at
+`…/settings/secrets/actions`:
+
+| Secret | Used for |
+|---|---|
+| `AWS_ACCESS_KEY_ID` | IAM credentials for the runner |
+| `AWS_SECRET_ACCESS_KEY` | IAM credentials for the runner |
+
+Minimum IAM permissions: `s3:PutObject`, `s3:DeleteObject`,
+`s3:ListBucket` on `leadsplease-microsite-data-api`, plus
+`cloudfront:CreateInvalidation` on `E39WJRUVOH25A4`. Reusing the
+sibling `leadsplease-static-pages` repo's secrets is fine — that
+IAM user has broader access but already works.
+
+The workflow targets a GitHub environment named `test`; create it at
+`…/settings/environments` if you want to add protection rules
+(required reviewers, wait timer) without editing the workflow.
+
+### Local / manual deploys
+
+`deploy.ps1` is still here for one-off Windows deploys (faster
+iteration during dev, no waiting on a CI runner). Run:
+
 ```powershell
-pwsh deploy.ps1
+.\deploy.ps1
 ```
 
-That's it. `deploy.ps1` has defaults for `S3_BUCKET` and
-`CLOUDFRONT_DISTRIBUTION_ID` baked in, and auto-points the AWS CLI at
-`~/.aws/ca-bundle.pem` so the corporate-MITM SSL cert chain validates
-(see "AWS CLI SSL workaround" below).
+`deploy.ps1`:
 
-It runs `build.mjs`, syncs `dist/` to S3 with per-path cache-control
-headers, and creates a CloudFront invalidation for the paths that
-change between deploys (HTML, spec, sitemap, etc.). The content-hashed
-`_astro/*.css` files don't need invalidation.
+1. Builds `dist/` with `BASE_PATH=/data-api` (set as a default in the
+   script; override the env var to deploy at a different prefix or at
+   the root).
+2. Syncs to `s3://leadsplease-microsite-data-api/data-api/` with
+   per-path cache-control headers.
+3. Auto-points the AWS CLI at `~/.aws/ca-bundle.pem` so the
+   corporate-MITM SSL cert chain validates (see "AWS CLI SSL
+   workaround" below).
 
-Override the target via env vars to deploy to a different
-bucket/distribution (e.g. a staging copy).
+CloudFront invalidation is **skipped unless** you set
+`$env:CLOUDFRONT_DISTRIBUTION_ID = 'E39WJRUVOH25A4'` first. We don't
+default to invalidating because the same distribution serves the main
+test site, and we don't want to incur invalidation cost on paths it
+owns. The invalidation paths are auto-prefixed with `BASE_PATH`, so a
+single env-var set is enough.
 
 Because the Google Doc snapshot is taken at build time, **re-running
 `deploy.ps1` is how you publish edits to the manual**. (On Railway it
@@ -57,25 +103,6 @@ The API-key application form will not work until this is replaced.
 
 CC recipient is set via the `NOTIFY_CC_EMAIL` constant on the next
 line — currently `info@leadsplease.com`.
-
-## Adding a custom domain
-
-1. **ACM cert** — in `us-east-1` (CloudFront only consumes certs from
-   that region):
-   ```powershell
-   aws acm request-certificate --domain-name developers.leadsplease.com `
-       --validation-method DNS --region us-east-1
-   ```
-   Add the returned `CNAME` validation record at your DNS provider, wait
-   for the cert to reach `ISSUED`.
-
-2. **Attach to the distribution** — edit `E2TW90C7MFXMO4`'s config:
-   add the domain to `Aliases.Items` and set `ViewerCertificate` to
-   `{ACMCertificateArn, SSLSupportMethod:"sni-only", MinimumProtocolVersion:"TLSv1.2_2021"}`.
-
-3. **DNS** — point `developers.leadsplease.com` at
-   `d188ipv2jb3hz0.cloudfront.net` (CNAME, or ALIAS if your DNS is
-   Route 53).
 
 ## AWS CLI SSL workaround
 

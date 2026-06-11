@@ -1,0 +1,88 @@
+name: Deploy to S3 + CloudFront
+
+on:
+  push:
+    branches: [test]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: test
+    env:
+      AWS_REGION: us-east-1
+      S3_BUCKET: leadsplease-microsite-data-api
+      KEY_PREFIX: data-api
+      CLOUDFRONT_DISTRIBUTION_ID: E39WJRUVOH25A4
+      # build.mjs reads BASE_PATH and rewrites every root-relative URL in the
+      # bundled HTML / sitemap / robots.txt to include this prefix. The S3
+      # keys also live under this path. Keep these two in sync.
+      BASE_PATH: /data-api
+      # PUBLIC_ORIGIN, MANUAL_DOC_ID, OPENAPI_SPEC_URL all have safe defaults
+      # in build.mjs — override here only if a future deploy needs different ones.
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      # Linux runner — no --use-system-ca needed (that flag was a Windows-only
+      # workaround for a corporate CA chain). The Google Doc + OpenAPI spec
+      # fetches in build.mjs work against Node's bundled CA store here.
+      - name: Build
+        run: node build.mjs
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      # Three-phase sync mirrors deploy.ps1 — different Cache-Control per
+      # asset class. Content-hashed _astro/* is immutable; HTML must
+      # revalidate so fresh deploys are visible immediately; api-spec.json
+      # is short-TTL because the upstream OpenAPI doc moves.
+      - name: Sync _astro/ (immutable, 1y)
+        run: |
+          aws s3 sync dist/_astro/ \
+            "s3://$S3_BUCKET/$KEY_PREFIX/_astro/" \
+            --cache-control 'public, max-age=31536000, immutable' \
+            --delete
+
+      - name: Sync misc static (1h)
+        run: |
+          aws s3 sync dist/ \
+            "s3://$S3_BUCKET/$KEY_PREFIX/" \
+            --exclude '*.html' \
+            --exclude 'api-spec.json' \
+            --exclude '_astro/*' \
+            --cache-control 'public, max-age=3600' \
+            --delete
+
+      - name: Upload HTML (no-cache)
+        run: |
+          aws s3 cp dist/index.html \
+            "s3://$S3_BUCKET/$KEY_PREFIX/index.html" \
+            --cache-control 'no-store, no-cache, must-revalidate, max-age=0' \
+            --content-type 'text/html; charset=utf-8'
+          aws s3 cp dist/manual/index.html \
+            "s3://$S3_BUCKET/$KEY_PREFIX/manual/index.html" \
+            --cache-control 'no-store, no-cache, must-revalidate, max-age=0' \
+            --content-type 'text/html; charset=utf-8'
+
+      - name: Upload api-spec.json (10m)
+        run: |
+          aws s3 cp dist/api-spec.json \
+            "s3://$S3_BUCKET/$KEY_PREFIX/api-spec.json" \
+            --cache-control 'public, max-age=600' \
+            --content-type 'application/json; charset=utf-8'
+
+      # Only `/data-api/*` — anything outside that prefix belongs to other
+      # cache behaviors on this shared distribution.
+      - name: CloudFront invalidation
+        run: |
+          aws cloudfront create-invalidation \
+            --distribution-id "$CLOUDFRONT_DISTRIBUTION_ID" \
+            --paths "/$KEY_PREFIX/*"
