@@ -1577,6 +1577,15 @@ access_token = r.json()[<span class="s">"accessToken"</span>]</pre>
 
     <script>
     (function () {
+      // ─── Form-handler config ─────────────────────────────────
+      // The API-key application form posts directly to Web3Forms (a free
+      // hosted form-to-email relay) — there is no longer a backend route.
+      // Grab a free access key at https://web3forms.com → set the recipient
+      // email on their dashboard to graham@eprintwerx.com, then paste the
+      // access key below. CC recipients are added via the `cc_email` field.
+      var WEB3FORMS_ACCESS_KEY = 'REPLACE_WITH_YOUR_WEB3FORMS_ACCESS_KEY';
+      var NOTIFY_CC_EMAIL = 'info@leadsplease.com';
+
       var form = document.getElementById('ak-form');
       if (!form) return;
       var firstName = document.getElementById('ak-first-name');
@@ -1638,12 +1647,21 @@ access_token = r.json()[<span class="s">"accessToken"</span>]</pre>
         if (missing.length) { showError('<strong>Please fix:</strong> ' + missing.join(', ')); return; }
 
         var t = tierValue();
+        var userEmail = email.value.trim().toLowerCase();
+        // Web3Forms posts every JSON field into the notification email and
+        // expects `access_key` + (optionally) `subject`, `from_name`, `cc_email`.
         var payload = {
+          access_key: WEB3FORMS_ACCESS_KEY,
+          subject: '[Data API] Application from ' + firstName.value.trim() + ' ' + lastName.value.trim() + ' (' + (business.value.trim() || userEmail) + ')',
+          from_name: 'LeadsPlease Data API microsite',
+          cc_email: NOTIFY_CC_EMAIL,
+          // Echo the user's email back so reply-to lands on them.
+          replyto: userEmail,
           tier: t,
           first_name: firstName.value.trim(),
           last_name:  lastName.value.trim(),
           business_name: business.value.trim(),
-          email: email.value.trim().toLowerCase(),
+          email: userEmail,
           phone: phone.value.trim(),
           website: website.value.trim(),
           expected_volume: volume.value,
@@ -1656,23 +1674,18 @@ access_token = r.json()[<span class="s">"accessToken"</span>]</pre>
         btn.disabled = true;
         btn.textContent = '⏳ Submitting…';
 
-        fetch('/api/api-key-application', {
+        fetch('https://api.web3forms.com/submit', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
           body: JSON.stringify(payload),
         })
           .then(function (r) { return r.json().then(function (j) { return { ok: r.ok, status: r.status, body: j }; }); })
           .then(function (resp) {
             btn.disabled = false; refreshTierUI();
-            if (!resp.ok) throw new Error((resp.body && resp.body.error) || ('HTTP ' + resp.status));
-            if (resp.body.checkout_url) {
-              showSuccess('Redirecting to Stripe Checkout…');
-              setTimeout(function () { window.location.href = resp.body.checkout_url; }, 600);
-            } else if (resp.body.api_key) {
-              showSuccess('<strong>Your TEST key:</strong> <code style="font-family:\'JetBrains Mono\',monospace; background:#fff; padding:3px 8px; border-radius:4px;">' + resp.body.api_key + '</code><br>We also emailed it to <strong>' + payload.email + '</strong>. Counts only · 1,000 calls / month cap. Run the <a href="#install" onclick="document.getElementById(\'ak-smoke\')?.scrollIntoView({behavior:\'smooth\'})">smoke test below</a> to verify.');
-            } else {
-              showSuccess(resp.body.message || 'Thanks — application received. We\'ll email you within one business day.');
+            if (!resp.ok || !resp.body || resp.body.success === false) {
+              throw new Error((resp.body && resp.body.message) || ('HTTP ' + resp.status));
             }
+            showSuccess('Thanks &mdash; your application is in. We will email your TEST key to <strong>' + userEmail + '</strong> within one business day.');
           })
           .catch(function (err) {
             btn.disabled = false; refreshTierUI();
