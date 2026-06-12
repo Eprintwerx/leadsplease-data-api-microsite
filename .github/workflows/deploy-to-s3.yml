@@ -10,7 +10,7 @@ jobs:
     environment: test
     env:
       AWS_REGION: us-east-1
-      S3_BUCKET: leadsplease-microsite-data-api
+      S3_BUCKET: leadsplease-test-microsite-data-api
       KEY_PREFIX: data-api
       CLOUDFRONT_DISTRIBUTION_ID: E39WJRUVOH25A4
       # build.mjs reads BASE_PATH and rewrites every root-relative URL in the
