@@ -93,11 +93,9 @@
 
 <style>
   body { background: #fff; }
-  .sg-tabs { position: sticky; top: 0; z-index: 50; background: #fff; }
-  .sg-tabs-inner { max-width: 1280px; margin: 0 auto; padding: 0 24px; display: flex; gap: 4px; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
-  .sg-tabs-inner::-webkit-scrollbar { display: none; }
-  [role="tablist"] { scrollbar-width: none; }
-  [role="tablist"]::-webkit-scrollbar { display: none; }
+  .sg-tabs { position: sticky; top: 0; z-index: 50; background: #fff; min-height: 84px; display: flex; align-items: center; }
+  .sg-tabs-inner { max-width: 1280px; margin: 0 auto; padding: 0 24px; display: flex; flex-wrap: wrap; gap: 4px; width: 100%; }
+  [role="tablist"] { display: flex; flex-wrap: wrap; gap: 4px; }
   .sg-tab { font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 600; color: #666; padding: 10px 12px; cursor: pointer; border: none; background: transparent; border-bottom: 3px solid transparent; transition: color 0.15s, border-color 0.15s; white-space: nowrap; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; }
   .sg-tab:hover { color: #1C1410; }
   .sg-tab.is-active { color: #FF6633; border-bottom-color: #FF6633; }

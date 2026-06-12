@@ -16,11 +16,10 @@
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: 'DM Sans', system-ui, sans-serif; color: #1C1410; background: #fff; }
   .topbar { background: #fff; padding: 12px 48px 0; position: sticky; top: 0; z-index: 100; }
-  .topbar-inner { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; height: 60px; }
+  .topbar-inner { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; min-height: 84px; }
   .topbar-logo { display: flex; align-items: center; text-decoration: none; flex-shrink: 0; }
   .topbar-logo img { height: 44px; width: auto; display: block; }
-  [role="tablist"] { display: flex; gap: 4px; overflow-x: auto; align-items: center; scrollbar-width: none; }
-  [role="tablist"]::-webkit-scrollbar { display: none; }
+  [role="tablist"] { display: flex; flex-wrap: wrap; gap: 4px 4px; align-items: center; }
   .sg-tab { font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 600; color: #666; padding: 10px 12px; border-bottom: 3px solid transparent; white-space: nowrap; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; }
   .sg-tab:hover { color: #1C1410; }
   .sg-tab-badge { background: #FF6633; color: #fff; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 99px; letter-spacing: 0.5px; text-transform: uppercase; }
