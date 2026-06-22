@@ -1479,29 +1479,39 @@ access_token = r.json()[<span class="s">"accessToken"</span>]</pre>
     </style>
 
     <form id="ak-form" class="ak-form" novalidate>
-      <h3 style="font-family: 'Fraunces', serif; font-size: 24px; font-weight: 600; color: #1C1410; margin: 0 0 6px;">Apply for API keys</h3>
-      <p style="font-size: 14px; color: #5d5e60; margin: 0 0 22px;">Choose a plan first &mdash; the form below adapts to what you pick.</p>
+      <h3 style="font-family: 'Fraunces', serif; font-size: 24px; font-weight: 600; color: #1C1410; margin: 0 0 6px;">Create your free LeadsPlease&reg; account</h3>
+      <p style="font-size: 14px; color: #5d5e60; margin: 0 0 22px;">One signup unlocks the <strong>Test</strong> version of every product &mdash; the Data API, the DataWidget&reg;, and the MCP (use LeadsPlease&reg; inside ChatGPT / Claude). No credit card required.</p>
+
+      <!-- GA4 acquisition bridge — captured in-browser so the inbound visit and the eventual sale share one identity -->
+      <input type="hidden" id="ak-ga-client-id" name="ga_client_id">
+      <input type="hidden" id="ak-utm-source" name="utm_source">
+      <input type="hidden" id="ak-utm-medium" name="utm_medium">
+      <input type="hidden" id="ak-utm-campaign" name="utm_campaign">
+      <input type="hidden" id="ak-referrer" name="referrer">
 
       <div class="ak-tier-radio">
-        <input type="radio" id="ak-tier-test" name="tier" value="test" checked>
-        <label for="ak-tier-test">
-          <span class="tier-name">⚡ Free 30-day TEST</span>
-          <span class="tier-price">$0<small>/mo</small></span>
-          <span class="tier-desc">API key issued instantly. <strong>Counts only · 1,000 calls/month cap.</strong> No list downloads, no aggregation, no subscriptions. Records still bill if you order.</span>
+        <input type="radio" id="ak-prod-all" name="product_interest" value="all" checked>
+        <label for="ak-prod-all">
+          <span class="tier-name">&#10022; All three</span>
+          <span class="tier-desc">Data API + DataWidget&reg; + MCP &mdash; Test access to everything in one account.</span>
         </label>
-        <input type="radio" id="ak-tier-standard" name="tier" value="standard">
-        <label for="ak-tier-standard">
-          <span class="tier-name">★ Standard</span>
-          <span class="tier-price">$199<small>/mo</small></span>
-          <span class="tier-desc">Full LIVE access &mdash; lists, aggregation, subscriptions, Intent Data (live now via Subscriptions), 99.9% SLA. Records bill at per-record data rates.</span>
+        <input type="radio" id="ak-prod-api" name="product_interest" value="api">
+        <label for="ak-prod-api">
+          <span class="tier-name">&#9889; Data API</span>
+          <span class="tier-desc">REST / JSON counts, lists and enrichment.</span>
         </label>
-        <input type="radio" id="ak-tier-enterprise" name="tier" value="enterprise">
-        <label for="ak-tier-enterprise">
-          <span class="tier-name">⚙ Enterprise</span>
-          <span class="tier-price">Custom</span>
-          <span class="tier-desc">High-volume, white-label, OEM. Negotiated below-standard per-record rates. Sales team will reach out within 4 hours.</span>
+        <input type="radio" id="ak-prod-widget" name="product_interest" value="widget">
+        <label for="ak-prod-widget">
+          <span class="tier-name">&#9638; DataWidget&reg;</span>
+          <span class="tier-desc">Embeddable mailing-list builder for your site.</span>
+        </label>
+        <input type="radio" id="ak-prod-mcp" name="product_interest" value="mcp">
+        <label for="ak-prod-mcp">
+          <span class="tier-name">&#10034; MCP</span>
+          <span class="tier-desc">Use LeadsPlease&reg; inside ChatGPT / Claude.</span>
         </label>
       </div>
+      <p style="font-size: 12px; color: #8888a4; margin: -8px 0 20px;">Need a paid <strong>Standard</strong> ($199/mo) or <strong>Enterprise</strong> plan? <a href="mailto:sales@leadsplease.com" style="color: var(--accent);">Talk to sales</a> &mdash; or start on Test now and upgrade anytime.</p>
 
       <div class="ak-row">
         <div class="ak-field">
@@ -1514,10 +1524,18 @@ access_token = r.json()[<span class="s">"accessToken"</span>]</pre>
         </div>
       </div>
 
-      <div class="ak-row solo">
+      <div class="ak-row">
         <div class="ak-field">
           <label for="ak-business">Business / company name<span class="req">*</span></label>
           <input type="text" id="ak-business" name="business_name" autocomplete="organization" required>
+        </div>
+        <div class="ak-field">
+          <label for="ak-affiliate-code">Your affiliate code<span class="req">*</span></label>
+          <div style="display:flex;align-items:stretch;border:1.5px solid var(--border);border-radius:8px;overflow:hidden;">
+            <span style="background:var(--surface-warm);padding:10px 12px;font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--ink-muted);border-right:1.5px solid var(--border);white-space:nowrap;">code:</span>
+            <input type="text" id="ak-affiliate-code" name="affiliate_code" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" inputmode="latin" placeholder="acme" style="border:0;flex:1 1 80px;min-width:0;padding:10px 12px;font-family:'JetBrains Mono',monospace;outline:none;" required>
+          </div>
+          <p style="font-size:12px;color:#8888a4;margin-top:6px;">Pre-filled from your company name &mdash; edit if you like. We&rsquo;ll confirm it&rsquo;s unique when we set you up.</p>
         </div>
       </div>
 
@@ -1525,6 +1543,7 @@ access_token = r.json()[<span class="s">"accessToken"</span>]</pre>
         <div class="ak-field">
           <label for="ak-email">Work email<span class="req">*</span></label>
           <input type="email" id="ak-email" name="email" autocomplete="email" required>
+          <p id="ak-email-note" style="display:none;font-size:12px;color:#b8702a;margin-top:6px;">Looks like a personal email &mdash; that&rsquo;s fine, you can continue. We may just do a quick review before approving Live access.</p>
         </div>
         <div class="ak-field">
           <label for="ak-phone">Phone</label>
@@ -1540,35 +1559,35 @@ access_token = r.json()[<span class="s">"accessToken"</span>]</pre>
         <div class="ak-field">
           <label for="ak-volume">Expected monthly volume</label>
           <select id="ak-volume" name="expected_volume">
-            <option value="">— optional —</option>
+            <option value="">&mdash; optional &mdash;</option>
             <option value="lt_1k">Under 1,000 records / month</option>
-            <option value="1k_10k">1,000 – 10,000</option>
-            <option value="10k_50k">10,000 – 50,000</option>
-            <option value="50k_250k">50,000 – 250,000</option>
-            <option value="gt_250k">250,000+ (Enterprise)</option>
+            <option value="1k_10k">1,000 &ndash; 10,000</option>
+            <option value="10k_50k">10,000 &ndash; 50,000</option>
+            <option value="50k_250k">50,000 &ndash; 250,000</option>
+            <option value="gt_250k">250,000+</option>
           </select>
         </div>
       </div>
 
       <div class="ak-row solo">
         <div class="ak-field">
-          <label for="ak-use-case">What will you use the API for?</label>
-          <textarea id="ak-use-case" name="use_case" rows="2" placeholder="e.g. integrating into our postcard-builder app · weekly New Mover feeds for our real-estate platform · enriching our CRM with verified mailing addresses"></textarea>
+          <label for="ak-use-case">What will you use LeadsPlease&reg; for?</label>
+          <textarea id="ak-use-case" name="use_case" rows="2" placeholder="e.g. integrating into our postcard-builder app &middot; weekly New Mover feeds for our real-estate platform &middot; buying lists from Claude via MCP"></textarea>
         </div>
       </div>
 
       <label class="ak-agreement">
         <input type="checkbox" id="ak-accept-terms" name="accept_terms" required>
-        <span>I accept the <a href="https://www.leadsplease.com/terms_of_use" target="_blank" rel="noopener">Terms of Service</a> and <a href="https://www.leadsplease.com/privacy_policy" target="_blank" rel="noopener">Privacy Policy</a>, and confirm I'm authorised to bind my organisation to this agreement.<span class="req">*</span></span>
+        <span>I accept the <a href="https://www.leadsplease.com/terms_of_use" target="_blank" rel="noopener">Terms of Service</a> and <a href="https://www.leadsplease.com/privacy_policy" target="_blank" rel="noopener">Privacy Policy</a>, and confirm I&rsquo;m authorised to bind my organisation to this agreement.<span class="req">*</span></span>
       </label>
       <label class="ak-agreement">
         <input type="checkbox" id="ak-accept-data" name="accept_data" required>
-        <span>I will use LeadsPlease® data in compliance with CAN-SPAM, TCPA, CCPA, and GDPR where applicable, and will not resell or redistribute records outside my own application without a separate reseller agreement.<span class="req">*</span></span>
+        <span>I will use LeadsPlease&reg; data in compliance with CAN-SPAM, TCPA, CCPA, and GDPR where applicable, and will not resell or redistribute records outside my own application without a separate reseller agreement.<span class="req">*</span></span>
       </label>
 
       <div class="ak-submit-row">
-        <button type="submit" class="ak-submit" id="ak-submit-btn">Request my Free TEST key &rarr;</button>
-        <p class="ak-submit-note" id="ak-submit-note">Free TEST key arrives by email within seconds. No credit card required for TEST.</p>
+        <button type="submit" class="ak-submit" id="ak-submit-btn">Create my free Test account &rarr;</button>
+        <p class="ak-submit-note" id="ak-submit-note">Test access for every product, set up in seconds. No credit card required.</p>
       </div>
 
       <div class="ak-msg success" id="ak-msg-success" role="status" aria-live="polite"></div>
@@ -1582,7 +1601,9 @@ access_token = r.json()[<span class="s">"accessToken"</span>]</pre>
       var firstName = document.getElementById('ak-first-name');
       var lastName  = document.getElementById('ak-last-name');
       var business  = document.getElementById('ak-business');
+      var affCode   = document.getElementById('ak-affiliate-code');
       var email     = document.getElementById('ak-email');
+      var emailNote = document.getElementById('ak-email-note');
       var phone     = document.getElementById('ak-phone');
       var website   = document.getElementById('ak-website');
       var volume    = document.getElementById('ak-volume');
@@ -1590,11 +1611,23 @@ access_token = r.json()[<span class="s">"accessToken"</span>]</pre>
       var acceptT   = document.getElementById('ak-accept-terms');
       var acceptD   = document.getElementById('ak-accept-data');
       var btn       = document.getElementById('ak-submit-btn');
-      var note      = document.getElementById('ak-submit-note');
       var msgOk     = document.getElementById('ak-msg-success');
       var msgErr    = document.getElementById('ak-msg-error');
 
-      // Phone auto-formatter — same convention used across the LP family
+      // ---- GA4 acquisition bridge: capture the browser GA client_id + UTM/referrer ----
+      // Real client_id lives in the _ga cookie as GA1.1.<cid1>.<cid2>; mint a GA-format id if absent.
+      (function captureAcq() {
+        var m = document.cookie.match(/_ga=GA\d\.\d\.(\d+\.\d+)/);
+        var minted = Math.floor(Math.random() * 1e10) + '.' + Math.floor(Date.now() / 1000);
+        var q = new URLSearchParams(window.location.search);
+        document.getElementById('ak-ga-client-id').value = m ? m[1] : minted;
+        document.getElementById('ak-utm-source').value   = q.get('utm_source') || '';
+        document.getElementById('ak-utm-medium').value   = q.get('utm_medium') || '';
+        document.getElementById('ak-utm-campaign').value = q.get('utm_campaign') || '';
+        document.getElementById('ak-referrer').value     = document.referrer || '';
+      })();
+
+      // ---- Phone auto-formatter (LP family convention) ----
       function formatPhone(raw) {
         var d = String(raw || '').replace(/\D+/g, '').slice(0, 10);
         if (d.length === 0) return '';
@@ -1605,44 +1638,65 @@ access_token = r.json()[<span class="s">"accessToken"</span>]</pre>
       phone.addEventListener('input', function () { phone.value = formatPhone(phone.value); });
       phone.addEventListener('blur',  function () { phone.value = formatPhone(phone.value); });
 
-      // Tier-aware submit button label
-      function tierValue() {
-        var r = document.querySelector('input[name="tier"]:checked');
-        return r ? r.value : 'test';
+      // ---- Affiliate-code picker: suggest from company, editable, slugified ----
+      function suggestCode(company) {
+        var base = String(company || '').toLowerCase()
+          .replace(/&/g, ' and ')
+          .replace(/\b(inc|llc|ltd|co|corp|company|group|media|holdings|partners|the)\b/g, ' ')
+          .replace(/[^a-z0-9]+/g, '')
+          .slice(0, 16);
+        return base || 'affiliate';
       }
-      function refreshTierUI() {
-        var t = tierValue();
-        if (t === 'test')        { btn.textContent = 'Request my Free TEST key →';      note.innerHTML = 'Free TEST key arrives by email within seconds. <strong>No credit card required for TEST.</strong>'; }
-        else if (t === 'standard') { btn.textContent = 'Continue to Stripe — $199/mo →'; note.innerHTML = 'Stripe Checkout opens after you click. Your LIVE API keys land the moment payment confirms.'; }
-        else                     { btn.textContent = 'Talk to sales →';                  note.innerHTML = 'No payment now — our sales team replies within 4 business hours with a custom quote.'; }
-      }
-      document.querySelectorAll('input[name="tier"]').forEach(function (r) {
-        r.addEventListener('change', refreshTierUI);
+      var codeEdited = false;
+      affCode.addEventListener('input', function () {
+        codeEdited = true;
+        var v = affCode.value.toLowerCase().replace(/[^a-z0-9-]/g, '');
+        if (v !== affCode.value) affCode.value = v;
       });
-      refreshTierUI();
+      business.addEventListener('input', function () {
+        if (!codeEdited) affCode.value = suggestCode(business.value);
+      });
+
+      // ---- Free-domain email soft-flag (never blocks) ----
+      var FREE_DOMAINS = ['gmail.com','googlemail.com','yahoo.com','ymail.com','hotmail.com','outlook.com','live.com','msn.com','aol.com','icloud.com','me.com','mac.com','proton.me','protonmail.com','gmx.com','mail.com','zoho.com'];
+      email.addEventListener('input', function () {
+        var at = email.value.lastIndexOf('@');
+        var dom = at > -1 ? email.value.slice(at + 1).trim().toLowerCase() : '';
+        emailNote.style.display = (dom && FREE_DOMAINS.indexOf(dom) > -1) ? 'block' : 'none';
+      });
 
       function showError(msg)   { msgErr.innerHTML = msg; msgErr.classList.add('is-shown'); msgOk.classList.remove('is-shown'); msgErr.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
       function showSuccess(msg) { msgOk.innerHTML  = msg; msgOk.classList.add('is-shown');  msgErr.classList.remove('is-shown'); msgOk.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+
+      function productInterest() {
+        var r = document.querySelector('input[name="product_interest"]:checked');
+        return r ? r.value : 'all';
+      }
 
       form.addEventListener('submit', function (e) {
         e.preventDefault();
         msgOk.classList.remove('is-shown'); msgErr.classList.remove('is-shown');
 
+        // Validate — NEVER clear typed data on failure; just flag and reassure.
         var missing = [];
         if (!firstName.value.trim()) missing.push('First name');
         if (!lastName.value.trim())  missing.push('Last name');
         if (!business.value.trim())  missing.push('Business name');
+        if (!affCode.value.trim())   missing.push('Affiliate code');
         if (!email.value.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value)) missing.push('Valid email');
         if (!acceptT.checked) missing.push('Terms of Service acceptance');
         if (!acceptD.checked) missing.push('Data-use acceptance');
-        if (missing.length) { showError('<strong>Please fix:</strong> ' + missing.join(', ')); return; }
+        if (missing.length) {
+          showError('<strong>Your info is saved</strong> &mdash; nothing has been cleared. Please fix: ' + missing.join(', ') + '.');
+          return;
+        }
 
-        var t = tierValue();
         var payload = {
-          tier: t,
+          product_interest: productInterest(),
           first_name: firstName.value.trim(),
           last_name:  lastName.value.trim(),
           business_name: business.value.trim(),
+          affiliate_code: affCode.value.trim().toLowerCase(),
           email: email.value.trim().toLowerCase(),
           phone: phone.value.trim(),
           website: website.value.trim(),
@@ -1650,33 +1704,44 @@ access_token = r.json()[<span class="s">"accessToken"</span>]</pre>
           use_case: useCase.value.trim(),
           accept_terms: acceptT.checked,
           accept_data:  acceptD.checked,
-          source: 'apidata.cloud/api-keys',
+          // GA4 acquisition bridge — forwarded so the server (and later Tomasz's register + GA4) keep one identity
+          ga_client_id: document.getElementById('ak-ga-client-id').value,
+          utm_source:   document.getElementById('ak-utm-source').value,
+          utm_medium:   document.getElementById('ak-utm-medium').value,
+          utm_campaign: document.getElementById('ak-utm-campaign').value,
+          referrer:     document.getElementById('ak-referrer').value,
+          source: 'leadsplease.com/data-api',
         };
 
         btn.disabled = true;
-        btn.textContent = '⏳ Submitting…';
+        var prevLabel = btn.textContent;
+        btn.textContent = '⏳ Creating your account…';
 
-        fetch('/api/api-key-application', {
+        // Single submit seam: posts to /api/register on this site's server, which forwards to
+        // Tomasz's real Register endpoint once LP_REGISTER_URL is set (otherwise captures the lead).
+        fetch('/api/register', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload),
         })
           .then(function (r) { return r.json().then(function (j) { return { ok: r.ok, status: r.status, body: j }; }); })
           .then(function (resp) {
-            btn.disabled = false; refreshTierUI();
+            btn.disabled = false; btn.textContent = prevLabel;
             if (!resp.ok) throw new Error((resp.body && resp.body.error) || ('HTTP ' + resp.status));
-            if (resp.body.checkout_url) {
-              showSuccess('Redirecting to Stripe Checkout…');
-              setTimeout(function () { window.location.href = resp.body.checkout_url; }, 600);
-            } else if (resp.body.api_key) {
-              showSuccess('<strong>Your TEST key:</strong> <code style="font-family:\'JetBrains Mono\',monospace; background:#fff; padding:3px 8px; border-radius:4px;">' + resp.body.api_key + '</code><br>We also emailed it to <strong>' + payload.email + '</strong>. Counts only · 1,000 calls / month cap. Run the <a href="#install" onclick="document.getElementById(\'ak-smoke\')?.scrollIntoView({behavior:\'smooth\'})">smoke test below</a> to verify.');
+            var b = resp.body || {};
+            if (b.api_key || b.affiliate_code) {
+              var bits = '<strong>You’re in &mdash; welcome!</strong><br>';
+              if (b.affiliate_code) bits += 'Affiliate code: <code style="font-family:\'JetBrains Mono\',monospace;background:#fff;padding:2px 7px;border-radius:4px;">' + b.affiliate_code + '</code><br>';
+              if (b.api_key)        bits += 'Test API key: <code style="font-family:\'JetBrains Mono\',monospace;background:#fff;padding:2px 7px;border-radius:4px;">' + b.api_key + '</code><br>';
+              bits += 'We also emailed your details to <strong>' + payload.email + '</strong>.';
+              showSuccess(bits);
             } else {
-              showSuccess(resp.body.message || 'Thanks — application received. We\'ll email you within one business day.');
+              showSuccess(b.message || ('Thanks &mdash; your Test access is being set up. We’ll email your affiliate code and key to <strong>' + payload.email + '</strong> shortly.'));
             }
           })
           .catch(function (err) {
-            btn.disabled = false; refreshTierUI();
-            showError(err.message + '. <br>If this keeps failing, email <a href="mailto:tech@leadsplease.com">tech@leadsplease.com</a> with your details and we\'ll provision keys manually within one business day.');
+            btn.disabled = false; btn.textContent = prevLabel;
+            showError('<strong>Your info is saved.</strong> ' + err.message + '. If this keeps failing, email <a href="mailto:tech@leadsplease.com">tech@leadsplease.com</a> and we’ll set you up manually within one business day.');
           });
       });
     })();

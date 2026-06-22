@@ -200,6 +200,114 @@ app.post('/api/api-key-application', async function (req, res) {
   }
 });
 
+// ─── Unified self-registration (THE seam to Tomasz's Register endpoint) ───
+// The new /signup form posts here. When LP_REGISTER_URL is set we forward to the
+// real LeadsPlease Register API (Test) and return the affiliate code + key. Until
+// then we capture the lead by email so NO filled-in data is ever lost — flipping to
+// real is purely setting the two env vars below (zero code change).
+const LP_REGISTER_URL = process.env.LP_REGISTER_URL || '';
+const LP_API_KEY = process.env.LP_API_KEY || '';
+
+app.post('/api/register', async function (req, res) {
+  const d = req.body || {};
+  if (!d.email || !d.first_name || !d.last_name || !d.business_name) {
+    return res.status(400).json({ error: 'missing_required_fields' });
+  }
+
+  // ── REAL mode: forward the filled-in data to Tomasz's Register endpoint ──
+  if (LP_REGISTER_URL) {
+    try {
+      const r = await fetch(LP_REGISTER_URL, {
+        method: 'POST',
+        headers: Object.assign(
+          { 'Content-Type': 'application/json' },
+          LP_API_KEY ? { Authorization: 'Bearer ' + LP_API_KEY } : {}
+        ),
+        body: JSON.stringify({
+          firstName: d.first_name,
+          lastName: d.last_name,
+          company: d.business_name,
+          email: d.email,
+          phone: d.phone,
+          affiliateCode: d.affiliate_code,
+          capability: d.product_interest === 'all' ? 'both' : d.product_interest,
+          website: d.website,
+          useCase: d.use_case,
+          gaClientId: d.ga_client_id,
+          utmSource: d.utm_source,
+          utmMedium: d.utm_medium,
+          utmCampaign: d.utm_campaign,
+          referrer: d.referrer,
+          source: d.source,
+        }),
+      });
+      const body = await r.json().catch(function () { return {}; });
+      if (!r.ok) return res.status(502).json({ error: (body && body.error) || ('register_failed_' + r.status) });
+      return res.json({
+        ok: true,
+        affiliate_code: body.affiliateCode || body.code || d.affiliate_code,
+        api_key: body.apiKey || body.testApiKey || null,
+        message: body.message,
+      });
+    } catch (err) {
+      console.error('[register] forward error:', err.message);
+      return res.status(502).json({ error: 'register_unreachable', detail: err.message });
+    }
+  }
+
+  // ── INTERIM mode: no Register URL yet → capture the lead so nothing is lost ──
+  const utm = [d.utm_source, d.utm_medium, d.utm_campaign].filter(Boolean).join(' / ') || '(none)';
+  const textBody = [
+    'New self-registration from the Data API microsite (forward to Tomasz Register when live):',
+    '',
+    'Product interest: ' + (d.product_interest || '(all)'),
+    'First name:       ' + d.first_name,
+    'Last name:        ' + d.last_name,
+    'Business:         ' + d.business_name,
+    'Affiliate code:   ' + (d.affiliate_code || '(none)'),
+    'Email:            ' + d.email,
+    'Phone:            ' + (d.phone || '(none)'),
+    'Website:          ' + (d.website || '(none)'),
+    'Expected volume:  ' + (d.expected_volume || '(not set)'),
+    'Use case:         ' + (d.use_case || '(none)'),
+    'Accept terms:     ' + (d.accept_terms ? 'yes' : 'no'),
+    'Accept data:      ' + (d.accept_data ? 'yes' : 'no'),
+    'GA client_id:     ' + (d.ga_client_id || '(none)'),
+    'UTM:              ' + utm,
+    'Referrer:         ' + (d.referrer || '(none)'),
+    'Source:           ' + (d.source || '(unknown)'),
+    'Submitted at:     ' + new Date().toISOString(),
+  ].join('\n');
+
+  if (!RESEND_API_KEY) {
+    console.log('[register] (no RESEND_API_KEY) ' + JSON.stringify(d));
+    return res.json({ ok: true, message: 'Thanks — your Test access is being set up. We will email your affiliate code and key to ' + d.email + ' shortly.' });
+  }
+  try {
+    const r = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: { 'Authorization': 'Bearer ' + RESEND_API_KEY, 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        from: FROM_EMAIL,
+        to: [NOTIFY_EMAIL],
+        cc: NOTIFY_CC ? [NOTIFY_CC] : undefined,
+        reply_to: d.email,
+        subject: '[Data API] Self-registration: ' + d.first_name + ' ' + d.last_name + ' (' + (d.business_name || d.email) + ')',
+        text: textBody,
+      }),
+    });
+    if (!r.ok) {
+      const e = await r.text();
+      console.error('[register] Resend error', r.status, e);
+      return res.status(502).json({ error: 'email_send_failed' });
+    }
+    return res.json({ ok: true, message: 'Thanks — your Test access is being set up. We will email your affiliate code and key to ' + d.email + ' shortly.' });
+  } catch (err) {
+    console.error('[register] exception:', err.message);
+    return res.status(500).json({ error: 'server_error', detail: err.message });
+  }
+});
+
 // Static files
 app.use(express.static(path.join(__dirname), {
   setHeaders: setCacheHeaders,
