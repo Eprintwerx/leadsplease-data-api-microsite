@@ -1472,10 +1472,13 @@ access_token = r.json()[<span class="s">"accessToken"</span>]</pre>
       }
     </style>
 
-    <!-- Canonical embeddable signup widget — ONE source for every microsite.
-         Update embed.js in the leadsplease-signup-widget repo → every site updates. -->
-    <div id="lp-signup"></div>
-    <script src="https://leadsplease-signup-widget-production.up.railway.app/embed.js" data-host="https://leadsplease-signup-widget-production.up.railway.app" data-source="test.leadsplease.com/data-api" defer></script>
+    <!-- Signup lives on the real Affiliate Console (affiliates.leadsplease.com).
+         One account → Test access to Data API + DataWidget + MCP; emails the key. -->
+    <div style="max-width:640px;margin:0 auto;background:#fff;border:1px solid #e8e5e0;border-radius:16px;padding:32px 34px;text-align:center;box-shadow:0 12px 48px rgba(26,26,46,.06);">
+      <h3 style="font-family:'Fraunces',Georgia,serif;font-size:24px;font-weight:600;color:#1C1410;margin:0 0 8px;">Create your free LeadsPlease&reg; account</h3>
+      <p style="font-size:14.5px;color:#5d5e60;margin:0 0 22px;line-height:1.7;">One signup unlocks the <strong>Test</strong> version of every product &mdash; the Data API, the DataWidget&reg; and the MCP. We email your affiliate code and key in under a minute. No credit card required.</p>
+      <a href="https://affiliates.leadsplease.com/signup" style="display:inline-block;background:#ff6633;color:#fff;font-size:15px;font-weight:700;padding:14px 32px;border-radius:10px;text-decoration:none;">Create my free account &rarr;</a>
+    </div>
 
     <div class="in-section" id="ak-smoke">
       <h3>30-second smoke test (TEST environment)</h3>
