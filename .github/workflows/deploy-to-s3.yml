@@ -2,12 +2,12 @@ name: Deploy to S3 + CloudFront
 
 on:
   push:
-    branches: [test]
+    branches: [live]
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    environment: test
+    environment: live
     env:
       AWS_REGION: us-east-1
       S3_BUCKET: ${{ vars.S3_BUCKET }}
