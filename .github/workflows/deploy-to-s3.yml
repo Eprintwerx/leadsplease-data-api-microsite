@@ -10,9 +10,9 @@ jobs:
     environment: test
     env:
       AWS_REGION: us-east-1
-      S3_BUCKET: leadsplease-test-microsite-data-api
+      S3_BUCKET: ${{ vars.S3_BUCKET }}
       KEY_PREFIX: data-api
-      CLOUDFRONT_DISTRIBUTION_ID: E39WJRUVOH25A4
+      CLOUDFRONT_DISTRIBUTION_ID: ${{ vars.CLOUDFRONT_DISTRIBUTION_ID }}
       # build.mjs reads BASE_PATH and rewrites every root-relative URL in the
       # bundled HTML / sitemap / robots.txt to include this prefix. The S3
       # keys also live under this path. Keep these two in sync.
