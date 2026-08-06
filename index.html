@@ -61,10 +61,9 @@
 
 <!-- DNS prefetch -->
 <link rel="dns-prefetch" href="https://api.leadsplease.com">
-<link rel="dns-prefetch" href="https://api-test.leadsplease.com">
 <link rel="dns-prefetch" href="https://www.leadsplease.com">
 <link rel="dns-prefetch" href="https://www.googletagmanager.com">
-<link rel="preconnect" href="https://api-test.leadsplease.com" crossorigin>
+<link rel="preconnect" href="https://api.leadsplease.com" crossorigin>
 
 <!-- Astro CSS bundle from leadsplease.com so the topbar + footer renders pixel-identical -->
 <link rel="stylesheet" href="/_astro/index@_@astro.GXeN1xiA.css" />
@@ -338,7 +337,7 @@
   "publisher": { "@type": "Organization", "name": "LeadsPlease®", "url": "https://www.leadsplease.com" },
   "potentialAction": {
     "@type": "SearchAction",
-    "target": { "@type": "EntryPoint", "urlTemplate": "https://api-test.leadsplease.com/api/v1/sic-codes/search?description={search_term_string}" },
+    "target": { "@type": "EntryPoint", "urlTemplate": "https://api.leadsplease.com/api/v1/sic-codes/search?description={search_term_string}" },
     "query-input": "required name=search_term_string"
   }
 }
