@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-
 <title>LeadsPlease® Data APIs — Consumer, Business, NHO, New Mover · validated emails</title>
 <meta name="description" content="LeadsPlease® Data APIs — REST endpoints over Consumer (210M+), Business (18M+), New Homeowner & New Mover databases. CASS+DPV addresses, real-time validated emails (pay only for deliverables), phones." />
 <meta name="keywords" content="direct mail api, mailing list api, direct mail api comparison, lob alternative, postalytics alternative, postgrid alternative, buy mailing list, business mailing list, mailing list broker api, USPS mailing list api, consumer data api, b2b data api, list count api, intent data api, purchase intent api, SIC code api, NAICS api, demographic api, new mover api, new homeowner api, polygon search api, audience targeting api, prospect database api, mailing list aggregation api, openapi swagger mailing list, list broker api, leadsplease api, REST mailing list, JSON mailing list" />
@@ -61,10 +60,9 @@
 
 <!-- DNS prefetch -->
 <link rel="dns-prefetch" href="https://api.leadsplease.com">
-<link rel="dns-prefetch" href="https://api-test.leadsplease.com">
 <link rel="dns-prefetch" href="https://www.leadsplease.com">
 <link rel="dns-prefetch" href="https://www.googletagmanager.com">
-<link rel="preconnect" href="https://api-test.leadsplease.com" crossorigin>
+<link rel="preconnect" href="https://api.leadsplease.com" crossorigin>
 
 <!-- Astro CSS bundle from leadsplease.com so the topbar + footer renders pixel-identical -->
 <link rel="stylesheet" href="/_astro/index@_@astro.GXeN1xiA.css" />
@@ -338,7 +336,7 @@
   "publisher": { "@type": "Organization", "name": "LeadsPlease®", "url": "https://www.leadsplease.com" },
   "potentialAction": {
     "@type": "SearchAction",
-    "target": { "@type": "EntryPoint", "urlTemplate": "https://api-test.leadsplease.com/api/v1/sic-codes/search?description={search_term_string}" },
+    "target": { "@type": "EntryPoint", "urlTemplate": "https://api.leadsplease.com/api/v1/sic-codes/search?description={search_term_string}" },
     "query-input": "required name=search_term_string"
   }
 }
