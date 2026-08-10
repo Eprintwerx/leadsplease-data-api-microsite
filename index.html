@@ -31,11 +31,11 @@
 <meta property="og:site_name" content="LeadsPlease®">
 <meta property="og:locale" content="en_US">
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://apidata.cloud/">
+<meta property="og:url" content="https://www.leadsplease.com/data-api">
 <meta property="og:title" content="LeadsPlease® Data APIs — Consumer · Business · New Homeowner · New Mover">
 <meta property="og:description" content="REST APIs over four U.S. audience databases. CASS+DPV addresses + real-time validated emails (pay only for deliverable) + phones. Consumer/Business refresh every 30 days; NHO/NM weekly.">
-<meta property="og:image" content="https://apidata.cloud/og-image.svg">
-<meta property="og:image:secure_url" content="https://apidata.cloud/og-image.svg">
+<meta property="og:image" content="https://www.leadsplease.com/data-api/og-image.svg">
+<meta property="og:image:secure_url" content="https://www.leadsplease.com/data-api/og-image.svg">
 <meta property="og:image:type" content="image/svg+xml">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -47,7 +47,7 @@
 <meta name="twitter:creator" content="@leadsplease">
 <meta name="twitter:title" content="LeadsPlease® Data APIs — 4 audience databases · real-time validated emails">
 <meta name="twitter:description" content="REST APIs for Consumer, Business, New Homeowner, New Mover. CASS+DPV addresses, real-time validated emails (pay only for deliverable), phones. Free TEST tier, no order minimum.">
-<meta name="twitter:image" content="https://apidata.cloud/og-image.svg">
+<meta name="twitter:image" content="https://www.leadsplease.com/data-api/og-image.svg">
 
 <!-- Favicons + PWA manifest -->
 <link rel="icon" type="image/png" href="https://www.leadsplease.com/affiliates/lp/images/look_feel/logo-lp-1777739221978-2993.png">
@@ -55,8 +55,8 @@
 <link rel="manifest" href="/manifest.json">
 
 <!-- Hreflang -->
-<link rel="alternate" hreflang="en-US" href="https://apidata.cloud/">
-<link rel="alternate" hreflang="x-default" href="https://apidata.cloud/">
+<link rel="alternate" hreflang="en-US" href="https://www.leadsplease.com/data-api">
+<link rel="alternate" hreflang="x-default" href="https://www.leadsplease.com/data-api">
 
 <!-- DNS prefetch -->
 <link rel="dns-prefetch" href="https://api.leadsplease.com">
@@ -289,7 +289,7 @@
     "@type": "Offer",
     "price": "0",
     "priceCurrency": "USD",
-    "url": "https://apidata.cloud/#install"
+    "url": "https://www.leadsplease.com/data-api#install"
   },
   "publisher": { "@type": "Organization", "name": "LeadsPlease®", "url": "https://www.leadsplease.com" }
 }
@@ -316,7 +316,7 @@
     {"@type":"Question","name":"What is LeadsPlease® Intent Data and why does it matter?","acceptedAnswer":{"@type":"Answer","text":"Intent Data is the LeadsPlease scored, demographically-enriched intent product — 6,929 B2C signals across 25 categories and 206 sub-categories, plus 34,872 B2B topics, scored 1 to 100 percentile against the LeadsPlease national household graph. Combine intent percentile filters with any other consumer demographic on the same Consumer Criteria object. Layered on demographic and geographic targeting, intent lifts direct-mail response rates from a typical 0.5 to 1.5 percent to 5 to 12 percent. Live now via Subscriptions (define audience once, get hot leads pushed near-real-time as their intent fires), the Data API, the MCP Server, the embedded DataWidget, and flat-file CSV or Parquet drop. Marketing use only — not a consumer report under FCRA."}},
     {"@type":"Question","name":"How do I authenticate to the LeadsPlease® Data API?","acceptedAnswer":{"@type":"Answer","text":"POST your username and password to /auth — you receive a JWT access token valid for 20 minutes. Include it as Authorization: Bearer <token> on every authenticated endpoint (Criteria, Count, List, Aggregation, Subscriptions). Tokens auto-rotate on expiry; just call /auth again."}},
     {"@type":"Question","name":"What list types are supported?","acceptedAnswer":{"@type":"Answer","text":"Four: consumer (210M+ U.S. households, 30+ demographics), business (18M+ verified businesses with SIC, NAICS, employee count, sales volume, executive titles), newhomeowner (people who closed on a home in the last 90 days), and newmover (people who relocated in the last 30 days). All four support manual ZIP/city/county/state, radial (lat/lng + miles), and polygon geo selection."}},
-    {"@type":"Question","name":"Is there an OpenAPI / Swagger spec?","acceptedAnswer":{"@type":"Answer","text":"Yes — the live OpenAPI 3.0 spec is rendered as an interactive Swagger UI on the API Reference tab at https://apidata.cloud/#reference. Full request and response schemas, every parameter, and an inline test runner."}},
+    {"@type":"Question","name":"Is there an OpenAPI / Swagger spec?","acceptedAnswer":{"@type":"Answer","text":"Yes — the live OpenAPI 3.0 spec is rendered as an interactive Swagger UI on the API Reference tab at https://www.leadsplease.com/data-api#reference. Full request and response schemas, every parameter, and an inline test runner."}},
     {"@type":"Question","name":"What's the rate limit?","acceptedAnswer":{"@type":"Answer","text":"10 Count requests per minute, per API key. List creation, list status checks, aggregation, and subscription endpoints have no fixed minute-cap but are subject to fair-use review at high volumes — contact us for higher limits."}},
     {"@type":"Question","name":"Can I get periodic deliveries of new leads?","acceptedAnswer":{"@type":"Answer","text":"Yes. The Subscriptions API lets you save a search criteria once, then receive a fresh CSV every time new New Homeowner or New Mover records are loaded that match. Each delivery is incremental — only records not previously sent. Currently supported delivery channel: EMAIL."}},
     {"@type":"Question","name":"How do I order a list, and how does fulfillment work?","acceptedAnswer":{"@type":"Answer","text":"Three steps: (1) POST a Criteria object → returns a criteria ID. (2) POST that ID to the Create List endpoint → returns a status URL. (3) Poll the status URL — when status flips from Pending to Completed, the response includes a CSV download URL signed for direct fetch. End-to-end typically completes within 30–90 seconds depending on list size."}},
@@ -332,7 +332,7 @@
   "@type": "WebSite",
   "name": "LeadsPlease® Data API",
   "alternateName": "LeadsPlease® Mailing List API",
-  "url": "https://apidata.cloud/",
+  "url": "https://www.leadsplease.com/data-api",
   "publisher": { "@type": "Organization", "name": "LeadsPlease®", "url": "https://www.leadsplease.com" },
   "potentialAction": {
     "@type": "SearchAction",
@@ -393,13 +393,13 @@
   "@context": "https://schema.org",
   "@type": "Product",
   "name": "LeadsPlease® Data API — Standard tier",
-  "image": "https://apidata.cloud/og-image.svg",
+  "image": "https://www.leadsplease.com/data-api/og-image.svg",
   "description": "Full LIVE production access to the LeadsPlease® Data API. 50K Count calls/month, unlimited list downloads, List Aggregation API, Subscriptions (near-real-time push), Intent Data, 99.9% SLA. Records bill at LP per-record data rates with no order minimum.",
   "brand": { "@type": "Brand", "name": "LeadsPlease®" },
   "category": "B2B Data API",
   "offers": {
     "@type": "Offer",
-    "url": "https://apidata.cloud/#install",
+    "url": "https://www.leadsplease.com/data-api#install",
     "priceCurrency": "USD",
     "price": "199",
     "priceValidUntil": "2027-12-31",
@@ -422,11 +422,11 @@
   "supply": [{ "@type": "HowToSupply", "name": "LeadsPlease® API key (free TEST tier available)" }],
   "tool":   [{ "@type": "HowToTool", "name": "Any HTTP client (curl / fetch / requests / axios)" }],
   "step": [
-    { "@type": "HowToStep", "position": 1, "name": "Authenticate", "text": "POST your username and password to /auth — receive a 20-minute JWT.", "url": "https://apidata.cloud/#try" },
-    { "@type": "HowToStep", "position": 2, "name": "Define criteria", "text": "POST a Criteria object to /search-criteria with list type, geos, and demographics. Receive a criteriaId.", "url": "https://apidata.cloud/#try" },
-    { "@type": "HowToStep", "position": 3, "name": "Get count", "text": "POST the criteriaId to /counts to find out how many records match. Rate-limited 10/min.", "url": "https://apidata.cloud/#try" },
-    { "@type": "HowToStep", "position": 4, "name": "Create list", "text": "POST the criteriaId to /lists to start async CSV generation. Receive a status URL.", "url": "https://apidata.cloud/#try" },
-    { "@type": "HowToStep", "position": 5, "name": "Poll status & download", "text": "GET the status URL until status is Completed. The response then includes a signed downloadUrl for the CSV.", "url": "https://apidata.cloud/#try" }
+    { "@type": "HowToStep", "position": 1, "name": "Authenticate", "text": "POST your username and password to /auth — receive a 20-minute JWT.", "url": "https://www.leadsplease.com/data-api#try" },
+    { "@type": "HowToStep", "position": 2, "name": "Define criteria", "text": "POST a Criteria object to /search-criteria with list type, geos, and demographics. Receive a criteriaId.", "url": "https://www.leadsplease.com/data-api#try" },
+    { "@type": "HowToStep", "position": 3, "name": "Get count", "text": "POST the criteriaId to /counts to find out how many records match. Rate-limited 10/min.", "url": "https://www.leadsplease.com/data-api#try" },
+    { "@type": "HowToStep", "position": 4, "name": "Create list", "text": "POST the criteriaId to /lists to start async CSV generation. Receive a status URL.", "url": "https://www.leadsplease.com/data-api#try" },
+    { "@type": "HowToStep", "position": 5, "name": "Poll status & download", "text": "GET the status URL until status is Completed. The response then includes a signed downloadUrl for the CSV.", "url": "https://www.leadsplease.com/data-api#try" }
   ]
 }
 </script>
