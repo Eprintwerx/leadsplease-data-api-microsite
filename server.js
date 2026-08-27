@@ -19,8 +19,27 @@ app.use(compression());
 // Body parser for the API-key application JSON
 app.use(express.json({ limit: '50kb' }));
 
+// Staging-host guard — this app answers on its *.up.railway.app hostname as
+// well as its canonical domain, and Google indexed the Railway one
+// (Trello SEO #587). We order crawlers off the staging host only; the
+// canonical domain is untouched.
+//
+// Deliberately NOT a robots.txt `Disallow`, and deliberately NOT a 301:
+//   · `Disallow` would stop Google re-crawling, so the already-indexed
+//     staging URL would linger as a bare listing. A noindex has to stay
+//     crawlable for the URL to actually drop out of the index.
+//   · A 301 would break the POST seams below (/api/register and
+//     /api/api-key-application), which answer on this hostname.
+function isStagingHost(req) {
+  var host = String(req.headers.host || '').toLowerCase().split(':')[0];
+  return /\.up\.railway\.app$/.test(host);
+}
+
 // Security + SEO headers on every response
 app.use(function (req, res, next) {
+  if (isStagingHost(req)) {
+    res.setHeader('X-Robots-Tag', 'noindex, nofollow');
+  }
   res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
   res.setHeader('X-Content-Type-Options', 'nosniff');
   res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
@@ -306,6 +325,18 @@ app.post('/api/register', async function (req, res) {
     console.error('[register] exception:', err.message);
     return res.status(500).json({ error: 'server_error', detail: err.message });
   }
+});
+
+// robots.txt — the canonical domain gets the real file (with its Sitemap
+// line). The Railway staging host gets a copy that advertises no sitemap.
+// Crawling stays allowed on purpose so the X-Robots-Tag noindex above is
+// seen and the staging URL actually drops out of the index.
+app.get('/robots.txt', function (req, res) {
+  res.type('text/plain');
+  if (isStagingHost(req)) {
+    return res.send('User-agent: *\nAllow: /\n');
+  }
+  res.sendFile(path.join(__dirname, 'robots.txt'));
 });
 
 // Static files
