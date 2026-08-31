@@ -21,7 +21,12 @@ app.use(function railwayNoIndex(req, res, next) {
   if (host.endsWith('.railway.app')) {
     res.setHeader('X-Robots-Tag', 'noindex, nofollow');
     if (req.path === '/robots.txt') {
-      return res.type('text/plain').send('User-agent: *\nDisallow: /\n');
+      // Crawl stays OPEN on the Railway host (#587): this URL is already in
+      // Google's index, and a Disallow stops Googlebot re-crawling, so it
+      // would never see the noindex and the stale listing would linger. The
+      // X-Robots-Tag above is the protection; re-tighten to Disallow only
+      // once the listing is confirmed gone.
+      return res.type('text/plain').send('User-agent: *\nAllow: /\n');
     }
   }
   next();
