@@ -7,7 +7,7 @@ Public-facing landing page for the LeadsPlease REST/JSON Data API. The actual AP
 1. **Use the LeadsPlease Data API** — overview, stats, 4-step pipeline, endpoint quick reference
 2. **Try It** — copy-paste cURL/Node/Python snippets for all five core calls (auth → criteria → count → list → status), plus link to live Swagger UI
 3. **Use Cases** — six recurring patterns (direct mail platforms, real-estate farming, Medicare birthday targeting, B2B SIC prospecting, ESP audience handoff, mass-tort prospect pools) + 6-question FAQ
-4. **Get Started** — Free / Builder ($199/mo) / Scale (custom) tiers, smoke-test bash, spec links, compliance summary
+4. **Get Started** — Free 30-day TEST signup, prepaid credit packs ($100 = 100 credits) for LIVE, Enterprise (custom), smoke-test bash, spec links, compliance summary
 
 ## Local development
 

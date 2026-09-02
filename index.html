@@ -311,7 +311,7 @@
   "@context": "https://schema.org",
   "@type": "FAQPage",
   "mainEntity": [
-    {"@type":"Question","name":"How does LeadsPlease® Data API pricing work?","acceptedAnswer":{"@type":"Answer","text":"Two tiers, two-part pricing. Tiers: Standard $199/mo (full production access, all features, 99.9% SLA) or Enterprise (custom) for white-label, OEM, and high-volume with negotiated below-standard per-record rates. Both tiers cover API access, support, and rate limits only — records bill separately at the standard LeadsPlease® per-record data rates from the LP affiliate XML, the same per-unit prices the public LeadsPlease.com checkout uses. Key difference: the website enforces a $125–$300 minimum per order; the API does not. A 1-record lookup costs 1.2 cents. Volume discounts auto-apply at 2,500 / 5,000 / 10,000 / 25,000 / 50,000-record breakpoints. 30-day free TEST evaluation available on request."}},
+    {"@type":"Question","name":"How does LeadsPlease® Data API pricing work?","acceptedAnswer":{"@type":"Answer","text":"Prepaid credits — no subscription, no monthly fee, no order minimum. Buy a credit pack ($100 = 100 credits; 1 credit = $1 of data) and records draw down your balance at the standard LeadsPlease® per-record data rates — the same per-unit prices the public LeadsPlease.com checkout uses. Larger packs earn bonus credits: $500 → 525, $1,000 → 1,100, $2,500 → 2,875, $5,000 → 6,000 (+5% / +10% / +15% / +20%). Credits are valid 12 months from purchase. The website enforces a $125–$300 minimum per order; the API does not — 1 consumer record costs 0.12495 credits (12.5 cents), 100 records cost 12.495 credits, 1,000 records cost 124.95 credits, and at 2,500 records the volume rate drops to 0.1187 credits per record. Volume discounts auto-apply at 2,500 / 5,000 / 10,000 / 25,000 / 50,000-record breakpoints. Enterprise (custom commit, negotiated rates) available for white-label, OEM, and high volume. 30-day free TEST evaluation available on request."}},
     {"@type":"Question","name":"How do Subscriptions work?","acceptedAnswer":{"@type":"Answer","text":"Define your criteria once via POST /search-criteria, then POST /subscriptions wrapping that criteriaId with a name and deliveryChannels (EMAIL today, webhook + S3 on roadmap). A daily background job checks for new matching records loaded since the last delivery; when there are any, a fresh CSV is generated and pushed to your channel. Each delivery is incremental — only records not previously sent. Ideal for time-sensitive segments like New Homeowner (30-day peak-spend window), New Mover (30-day relocation window), T65 / Medicare AEP (birthday eligibility), and daily Intent Data refresh."}},
     {"@type":"Question","name":"What is LeadsPlease® Intent Data and why does it matter?","acceptedAnswer":{"@type":"Answer","text":"Intent Data is the LeadsPlease scored, demographically-enriched intent product — 6,929 B2C signals across 25 categories and 206 sub-categories, plus 34,872 B2B topics, scored 1 to 100 percentile against the LeadsPlease national household graph. Combine intent percentile filters with any other consumer demographic on the same Consumer Criteria object. Layered on demographic and geographic targeting, intent lifts direct-mail response rates from a typical 0.5 to 1.5 percent to 5 to 12 percent. Live now via Subscriptions (define audience once, get hot leads pushed near-real-time as their intent fires), the Data API, the MCP Server, the embedded DataWidget, and flat-file CSV or Parquet drop. Marketing use only — not a consumer report under FCRA."}},
     {"@type":"Question","name":"How do I authenticate to the LeadsPlease® Data API?","acceptedAnswer":{"@type":"Answer","text":"POST your username and password to /auth — you receive a JWT access token valid for 20 minutes. Include it as Authorization: Bearer <token> on every authenticated endpoint (Criteria, Count, List, Aggregation, Subscriptions). Tokens auto-rotate on expiry; just call /auth again."}},
@@ -379,7 +379,11 @@
     "@type": "OfferCatalog",
     "name": "Data API Tiers",
     "itemListElement": [
-      { "@type": "Offer", "name": "Standard", "price": "199", "priceCurrency": "USD", "priceSpecification": { "@type": "UnitPriceSpecification", "price": "199", "priceCurrency": "USD", "billingDuration": "P1M" }, "availability": "https://schema.org/InStock", "description": "Full LIVE access, all features, 99.9% SLA. Records billed at LP per-record data rates with no order minimum." },
+      { "@type": "Offer", "name": "Credit Pack — $100", "price": "100", "priceCurrency": "USD", "availability": "https://schema.org/InStock", "description": "100 credits (1 credit = $1 of data). Full LIVE access, all features, 99.9% SLA. Records draw down at LP per-record data rates with no order minimum. Credits valid 12 months." },
+      { "@type": "Offer", "name": "Credit Pack — $500", "price": "500", "priceCurrency": "USD", "availability": "https://schema.org/InStock", "description": "525 credits (+5% bonus). Credits valid 12 months." },
+      { "@type": "Offer", "name": "Credit Pack — $1,000", "price": "1000", "priceCurrency": "USD", "availability": "https://schema.org/InStock", "description": "1,100 credits (+10% bonus). Credits valid 12 months." },
+      { "@type": "Offer", "name": "Credit Pack — $2,500", "price": "2500", "priceCurrency": "USD", "availability": "https://schema.org/InStock", "description": "2,875 credits (+15% bonus). Credits valid 12 months." },
+      { "@type": "Offer", "name": "Credit Pack — $5,000", "price": "5000", "priceCurrency": "USD", "availability": "https://schema.org/InStock", "description": "6,000 credits (+20% bonus). Credits valid 12 months." },
       { "@type": "Offer", "name": "Enterprise", "priceCurrency": "USD", "availability": "https://schema.org/InStock", "description": "Custom-priced. White-label, OEM, dedicated infra, below-standard per-record rates." }
     ]
   },
@@ -387,24 +391,24 @@
 }
 </script>
 
-<!-- Product schema for the Standard tier — surfaces in Google price-comparison + AI shopping -->
+<!-- Product schema for the credit packs — surfaces in Google price-comparison + AI shopping -->
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "Product",
-  "name": "LeadsPlease® Data API — Standard tier",
+  "name": "LeadsPlease® Data API — Credit Packs",
   "image": "https://www.leadsplease.com/data-api/og-image.svg",
-  "description": "Full LIVE production access to the LeadsPlease® Data API. 50K Count calls/month, unlimited list downloads, List Aggregation API, Subscriptions (near-real-time push), Intent Data, 99.9% SLA. Records bill at LP per-record data rates with no order minimum.",
+  "description": "Prepaid credits for the LeadsPlease® Data API — no subscription, no minimum. $100 = 100 credits (1 credit = $1 of data); bonus credits at $500/$1,000/$2,500/$5,000 packs (+5% to +20%). Every funded account gets full LIVE access: 50K Count calls/month, unlimited list downloads, List Aggregation API, Subscriptions (near-real-time push), Intent Data, 99.9% SLA. Records draw down at LP per-record data rates.",
   "brand": { "@type": "Brand", "name": "LeadsPlease®" },
   "category": "B2B Data API",
   "offers": {
     "@type": "Offer",
     "url": "https://www.leadsplease.com/data-api#install",
     "priceCurrency": "USD",
-    "price": "199",
+    "price": "100",
     "priceValidUntil": "2027-12-31",
     "availability": "https://schema.org/InStock",
-    "priceSpecification": { "@type": "UnitPriceSpecification", "price": "199", "priceCurrency": "USD", "billingDuration": "P1M", "unitText": "MONTH" }
+    "priceSpecification": { "@type": "UnitPriceSpecification", "price": "100", "priceCurrency": "USD", "unitText": "credit pack (100 credits)" }
   },
   "aggregateRating": { "@type": "AggregateRating", "ratingValue": "4.9", "reviewCount": "47" }
 }
@@ -1118,7 +1122,7 @@ access_token = r.json()[<span class="s">"accessToken"</span>]</pre>
       <details class="faq-item"><summary>What's the rate limit?</summary><div class="a">10 Count requests per minute, per API key. List creation, list status checks, aggregation, and subscription endpoints have no fixed minute-cap but are subject to fair-use review at high volumes &mdash; contact us for higher limits or dedicated infrastructure.</div></details>
       <details class="faq-item"><summary>Do you have an OpenAPI / Swagger spec?</summary><div class="a">Yes &mdash; the live OpenAPI 3.0 spec is rendered as an interactive Swagger UI right here on the <a href="#reference">API Reference</a> tab. Full request/response schemas, every parameter, and an inline "Try it out" runner.</div></details>
       <details class="faq-item"><summary>How fresh is the data?</summary><div class="a">Consumer + business: monthly refresh, USPS CASS-certified for deliverability. New Homeowner + New Mover feeds refresh weekly. Intent Data overlay refreshes daily. The Subscriptions API guarantees you only ever receive records loaded since your last delivery.</div></details>
-      <details class="faq-item" open><summary>How does pricing work? <span style="font-size: 10px; background: #FF6633; color: #fff; padding: 2px 8px; border-radius: 99px; font-weight: 800; letter-spacing: 1px; margin-left: 8px; vertical-align: middle;">$ TWO-PART</span></summary><div class="a"><strong>Two tiers, two-part pricing.</strong> Tiers: <strong>Standard $199/mo</strong> (production access, all features, 99.9% SLA) or <strong>Enterprise (custom)</strong> for white-label, OEM, and high-volume with negotiated below-standard per-record rates. Both tiers cover API access, support, and rate limits only &mdash; <strong>records bill separately at the standard LeadsPlease® per-record data rates</strong> from the LP affiliate XML, the same per-unit prices the public LeadsPlease.com checkout uses. The key difference: <strong>the website enforces a $125&ndash;$300 minimum per order; the API does not.</strong> A 1-record lookup costs 1.2 cents; a 100-record drop costs $12.50; a 10K-record campaign drops to $500 at the volume tier. Volume discounts kick in at 2,500 / 5,000 / 10,000 / 25,000 / 50,000-record breakpoints. 30-day free TEST evaluation available on request.</div></details>
+      <details class="faq-item" open><summary>How does pricing work? <span style="font-size: 10px; background: #FF6633; color: #fff; padding: 2px 8px; border-radius: 99px; font-weight: 800; letter-spacing: 1px; margin-left: 8px; vertical-align: middle;">$ PREPAID CREDITS</span></summary><div class="a"><strong>Prepaid credits &mdash; no subscription, no monthly fee, no order minimum.</strong> Buy a credit pack (<strong>$100 = 100 credits</strong>; 1 credit = $1 of data) and records <strong>draw down your balance at the standard LeadsPlease® per-record data rates</strong> &mdash; the same per-unit prices the public LeadsPlease.com checkout uses. Larger packs earn bonus credits: <strong>$500 &rarr; 525 &middot; $1,000 &rarr; 1,100 &middot; $2,500 &rarr; 2,875 &middot; $5,000 &rarr; 6,000</strong> (+5% / +10% / +15% / +20%). Credits are valid 12 months from purchase. The key difference vs the website: <strong>it enforces a $125&ndash;$300 minimum per order; the API does not.</strong> 1 consumer record costs <strong>0.12495 credits</strong> (12.5¢); 100 records cost 12.495 credits; 1,000 records cost 124.95 credits; at 2,500 records the volume rate drops to 0.1187 credits/record; a 10K-record campaign is 500 credits at the 0.05 volume rate. Volume discounts kick in at 2,500 / 5,000 / 10,000 / 25,000 / 50,000-record breakpoints. <strong>Enterprise</strong> (custom commit, negotiated rates) covers white-label, OEM, and high volume. 30-day free TEST evaluation available on request.</div></details>
       <details class="faq-item" open><summary>How do Subscriptions work? <span style="font-size: 10px; background: #176B82; color: #fff; padding: 2px 8px; border-radius: 99px; font-weight: 800; letter-spacing: 1px; margin-left: 8px; vertical-align: middle;">⚡ AUTO-PILOT</span></summary><div class="a"><strong>Define your criteria once, set your delivery channel, get fresh matching records pushed to you the moment they load.</strong> The flow is three calls: (1) <code style="font-family:'JetBrains Mono',monospace;">POST /search-criteria</code> with geo + demographics + Intent overlays — returns a criteriaId. (2) <code style="font-family:'JetBrains Mono',monospace;">POST /subscriptions</code> wrapping that criteriaId with a name, deliveryChannels, and metadata — returns a subscriptionId. (3) Done. A daily background job checks whether new data has been loaded that matches your criteria; when there is, a fresh CSV is generated and delivered. <strong>Each delivery is incremental</strong> — only records not previously sent. No double-mailing, no manual workflow, no "remind me to pull a new list next month." Currently delivers via EMAIL; webhook + S3 push channels on the roadmap. Ideal for <strong>New Homeowner (peak-spend 30-day window), New Mover (relocation 30-day window), T65 / Medicare AEP (fixed birthday eligibility), and the daily Intent Data refresh</strong> &mdash; the leads where freshness measurably moves response rates.</div></details>
       <details class="faq-item"><summary>What's Intent Data, and why does it matter? <span style="font-size: 10px; background: #FF6633; color: #fff; padding: 2px 8px; border-radius: 99px; font-weight: 800; letter-spacing: 1px; margin-left: 8px; vertical-align: middle;">⚡ NEW</span></summary><div class="a"><strong>Intent Data is an enhanced demographic field in the LeadsPlease® National Consumer Database.</strong> 6,929 B2C signals across 25 categories and 206 sub-categories, plus 34,872 B2B topics. Multiple intent categories (auto-in-market, kitchen-remodel, insurance-shopping, mortgage-refinance, switching-cell-carrier, real-estate selling-a-home, and more) are each <strong>scored on a 1&ndash;100% percentile basis</strong>. Pick the top decile (P90+) for the highest-intent prospects, or widen to top quartile (P75+) for a larger audience. Then <strong>combine it with any other demographic in the database</strong> &mdash; income, age, homeowner status, presence of children, charity-donor flags, vehicle owned &mdash; on the same Consumer Criteria object. Layered on demographic + geographic targeting, intent lifts direct-mail response rates from a typical 0.5&ndash;1.5% to <strong>5&ndash;12%</strong>, a 5&ndash;10&times; improvement. <strong>⚖️ Marketing use only. Not a consumer report under FCRA.</strong> <a href="https://www.leadsplease.com/intent-data" target="_blank" rel="noopener" style="color:#C44E15; font-weight:700;">See the full LeadsPlease® Intent Data microsite &rarr;</a></div></details>
       <details class="faq-item"><summary>What output formats are supported?</summary><div class="a">CSV today &mdash; UTF-8, comma-delimited, RFC 4180 quoted. JSON-line and Parquet on the roadmap (request via <a href="mailto:tech@leadsplease.com">tech@leadsplease.com</a> if that would unblock you). Direct mail + email + phone columns are toggled per-criteria via <code style="font-family:'JetBrains Mono',monospace;">contactDataPoints</code>.</div></details>
@@ -1134,14 +1138,14 @@ access_token = r.json()[<span class="s">"accessToken"</span>]</pre>
 <section id="prices" class="sg-panel" role="tabpanel">
   <div class="in-wrap">
     <h2>Prices</h2>
-    <p class="lede">Two tiers, two-part pricing: a <strong>monthly access fee</strong> for the API itself plus a <strong>per-record data fee</strong> at the standard LeadsPlease® per-record data rates. <span style="color: #C44E15; font-weight: 700;">No minimum per order.</span></p>
+    <p class="lede">Prepaid credits: <strong>$100 = 100 credits</strong>, and records <strong>draw down your balance</strong> at the standard LeadsPlease® per-record data rates. <span style="color: #C44E15; font-weight: 700;">No subscription. No monthly fee. No minimum per order.</span></p>
 
-    <!-- ─── Two-part pricing model callout ─── -->
+    <!-- ─── Prepaid-credits pricing model callout ─── -->
     <div style="background: linear-gradient(135deg, #fff8f5 0%, #FFE9DB 100%); border: 1.5px solid #FF6633; border-radius: 14px; padding: 24px 28px; margin-bottom: 32px;">
       <div style="font-family: 'DM Sans', sans-serif; font-size: 11px; font-weight: 800; letter-spacing: 1.5px; color: #C44E15; text-transform: uppercase; margin-bottom: 10px;">⚡ How API pricing works</div>
-      <h3 style="font-family: 'Fraunces', serif; font-size: 24px; font-weight: 600; color: #1C1410; margin: 0 0 12px; line-height: 1.2;">Monthly access fee <span style="color: #FF6633;">+</span> per-record data fee. <span style="color: #C44E15; font-weight: 700;">No minimum per order.</span></h3>
-      <p style="font-size: 15px; line-height: 1.6; color: #4d4e50; margin: 0 0 8px;">The monthly tier covers <strong>API access, support, SLAs, and rate limits</strong>. Records are billed separately at the standard <strong>LeadsPlease® per-record data rates</strong> from the LP affiliate XML &mdash; the exact same per-unit prices the public LeadsPlease.com checkout uses. The difference: <strong>the website enforces a $125&ndash;$300 minimum per order</strong>; the API does not.</p>
-      <p style="font-size: 15px; line-height: 1.6; color: #4d4e50; margin: 0;">A 50-record order costs $6.25 (50 &times; $0.12495). A 1-record lookup costs <strong>1.2 cents</strong>. Volume discounts kick in at 2,500 / 5,000 / 10,000 / 25,000-record breakpoints &mdash; the per-record data rates shown in the matrix below.</p>
+      <h3 style="font-family: 'Fraunces', serif; font-size: 24px; font-weight: 600; color: #1C1410; margin: 0 0 12px; line-height: 1.2;">Load credits <span style="color: #FF6633;">&rarr;</span> pull records. <span style="color: #C44E15; font-weight: 700;">No subscription. No minimum per order.</span></h3>
+      <p style="font-size: 15px; line-height: 1.6; color: #4d4e50; margin: 0 0 8px;">Buy a credit pack &mdash; <strong>1 credit = $1 of data</strong> &mdash; and every order draws down your balance at the standard <strong>LeadsPlease® per-record data rates</strong>, the exact same per-unit prices the public LeadsPlease.com checkout uses. Every funded account gets <strong>full LIVE access, support, SLAs, and production rate limits</strong> &mdash; there is no access fee. The difference vs the website: <strong>it enforces a $125&ndash;$300 minimum per order</strong>; the API does not.</p>
+      <p style="font-size: 15px; line-height: 1.6; color: #4d4e50; margin: 0;">A 1-record lookup costs <strong>0.12495 credits (12.5 cents)</strong>; a 100-record order costs 12.495 credits; 1,000 records cost 124.95 credits. Volume discounts kick in at 2,500 / 5,000 / 10,000 / 25,000-record breakpoints &mdash; the per-record data rates shown in the matrix below. Credits are valid <strong>12 months</strong> from purchase, oldest spent first; optional auto&#8209;top&#8209;up keeps a balance you never think about.</p>
     </div>
 
     <!-- Per-record data rates table (sourced from lp.xml) — collapsed by default -->
@@ -1353,51 +1357,77 @@ access_token = r.json()[<span class="s">"accessToken"</span>]</pre>
     <!-- Worked examples — always visible (these give the gut-feel for pricing without forcing the user to expand the full matrix) -->
     <div style="background: #fff; border: 1px solid #e8e5e0; border-radius: 14px; padding: 24px 28px; margin-bottom: 32px;">
       <h4 style="font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 800; color: #1C1410; margin: 0 0 14px;">Worked examples &mdash; consumer mail-only</h4>
-      <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px;">
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 14px;">
         <div style="background: #fff8f5; border: 1px solid #FFE0D0; border-radius: 10px; padding: 14px;">
-          <div style="font-size: 11px; font-weight: 800; color: #C44E15; letter-spacing: 1px; text-transform: uppercase;">1-record lookup</div>
-          <div style="font-family: 'Fraunces', serif; font-size: 28px; font-weight: 700; color: #1C1410; line-height: 1; margin: 6px 0;">1.2¢</div>
-          <div style="font-size: 12px; color: #5d5e60;">1 &times; $0.12495 &middot; <strong>website would force a $124.95 minimum</strong>; API charges actual.</div>
+          <div style="font-size: 11px; font-weight: 800; color: #C44E15; letter-spacing: 1px; text-transform: uppercase;">1 record</div>
+          <div style="font-family: 'Fraunces', serif; font-size: 26px; font-weight: 700; color: #1C1410; line-height: 1; margin: 6px 0;">0.125 cr</div>
+          <div style="font-size: 12px; color: #5d5e60;">1 &times; 0.12495 credits (12.5¢) &middot; <strong>website would force a $124.95 minimum</strong>; API charges actual.</div>
         </div>
         <div style="background: #fff8f5; border: 1px solid #FFE0D0; border-radius: 10px; padding: 14px;">
-          <div style="font-size: 11px; font-weight: 800; color: #C44E15; letter-spacing: 1px; text-transform: uppercase;">100-record drop</div>
-          <div style="font-family: 'Fraunces', serif; font-size: 28px; font-weight: 700; color: #1C1410; line-height: 1; margin: 6px 0;">$12.50</div>
-          <div style="font-size: 12px; color: #5d5e60;">100 &times; $0.12495 (consumer mail). Same data on website costs $124.95 &mdash; the API saves $112.</div>
+          <div style="font-size: 11px; font-weight: 800; color: #C44E15; letter-spacing: 1px; text-transform: uppercase;">100 records</div>
+          <div style="font-family: 'Fraunces', serif; font-size: 26px; font-weight: 700; color: #1C1410; line-height: 1; margin: 6px 0;">12.495 cr</div>
+          <div style="font-size: 12px; color: #5d5e60;">100 &times; 0.12495 ($12.50). Same data on the website costs $124.95 &mdash; the API saves $112.</div>
         </div>
         <div style="background: #fff8f5; border: 1px solid #FFE0D0; border-radius: 10px; padding: 14px;">
-          <div style="font-size: 11px; font-weight: 800; color: #C44E15; letter-spacing: 1px; text-transform: uppercase;">10K-record campaign</div>
-          <div style="font-family: 'Fraunces', serif; font-size: 28px; font-weight: 700; color: #1C1410; line-height: 1; margin: 6px 0;">$500</div>
-          <div style="font-size: 12px; color: #5d5e60;">10,000 &times; $0.05 (volume tier). Same per-record data rate as the website; API saves the per-order overhead.</div>
+          <div style="font-size: 11px; font-weight: 800; color: #C44E15; letter-spacing: 1px; text-transform: uppercase;">1,000 records</div>
+          <div style="font-family: 'Fraunces', serif; font-size: 26px; font-weight: 700; color: #1C1410; line-height: 1; margin: 6px 0;">124.95 cr</div>
+          <div style="font-size: 12px; color: #5d5e60;">1,000 &times; 0.12495 ($124.95) &mdash; still the base rate; the first volume break is next.</div>
+        </div>
+        <div style="background: #fff8f5; border: 1px solid #FFE0D0; border-radius: 10px; padding: 14px;">
+          <div style="font-size: 11px; font-weight: 800; color: #C44E15; letter-spacing: 1px; text-transform: uppercase;">2,500 records</div>
+          <div style="font-family: 'Fraunces', serif; font-size: 26px; font-weight: 700; color: #1C1410; line-height: 1; margin: 6px 0;">296.75 cr</div>
+          <div style="font-size: 12px; color: #5d5e60;">Volume rate kicks in: 2,500 &times; 0.1187 ($296.75) &mdash; every record now 5% cheaper.</div>
+        </div>
+        <div style="background: #fff8f5; border: 1px solid #FFE0D0; border-radius: 10px; padding: 14px;">
+          <div style="font-size: 11px; font-weight: 800; color: #C44E15; letter-spacing: 1px; text-transform: uppercase;">10K campaign</div>
+          <div style="font-family: 'Fraunces', serif; font-size: 26px; font-weight: 700; color: #1C1410; line-height: 1; margin: 6px 0;">500 cr</div>
+          <div style="font-size: 12px; color: #5d5e60;">10,000 &times; 0.05 ($500). Same per-record data rate as the website; the API saves the per-order overhead.</div>
         </div>
       </div>
     </div>
 
-    <h3 style="font-family: 'DM Sans', sans-serif; font-size: 11px; font-weight: 800; letter-spacing: 1.6px; color: #C44E15; text-transform: uppercase; margin: 0 0 14px;">⚡ Monthly access tiers</h3>
+    <h3 style="font-family: 'DM Sans', sans-serif; font-size: 11px; font-weight: 800; letter-spacing: 1.6px; color: #C44E15; text-transform: uppercase; margin: 0 0 14px;">💳 Credit packs</h3>
 
     <div class="in-pricing">
       <div class="in-tier featured">
-        <h3>Standard</h3>
-        <div class="price">$199<small>/mo</small></div>
-        <p class="desc">Everything most customers need. TEST + LIVE access from day one. Records bill at the per-record data rates above.</p>
+        <h3>Credit Packs</h3>
+        <div class="price">$100<small> = 100 credits</small></div>
+        <p class="desc">1 credit = $1 of data. No subscription, no monthly fee &mdash; records draw down your balance at the per-record data rates above. Bigger packs earn bonus credits.</p>
+        <table style="width:100%; border-collapse:collapse; margin:0 0 18px; font-size:14px;">
+          <thead><tr style="border-bottom:1.5px solid #e8e5e0;">
+            <th style="text-align:left; padding:6px 4px; font-size:11px; letter-spacing:1px; color:#C44E15; text-transform:uppercase;">Pack</th>
+            <th style="text-align:right; padding:6px 4px; font-size:11px; letter-spacing:1px; color:#C44E15; text-transform:uppercase;">Credits</th>
+            <th style="text-align:right; padding:6px 4px; font-size:11px; letter-spacing:1px; color:#C44E15; text-transform:uppercase;">Bonus</th>
+          </tr></thead>
+          <tbody>
+            <tr style="border-bottom:1px solid #f0ede8;"><td style="padding:7px 4px; font-weight:700; color:#1C1410;">$100</td><td style="padding:7px 4px; text-align:right;">100</td><td style="padding:7px 4px; text-align:right; color:#5d5e60;">&mdash;</td></tr>
+            <tr style="border-bottom:1px solid #f0ede8;"><td style="padding:7px 4px; font-weight:700; color:#1C1410;">$500</td><td style="padding:7px 4px; text-align:right;">525</td><td style="padding:7px 4px; text-align:right; color:#137333; font-weight:700;">+5%</td></tr>
+            <tr style="border-bottom:1px solid #f0ede8;"><td style="padding:7px 4px; font-weight:700; color:#1C1410;">$1,000</td><td style="padding:7px 4px; text-align:right;">1,100</td><td style="padding:7px 4px; text-align:right; color:#137333; font-weight:700;">+10%</td></tr>
+            <tr style="border-bottom:1px solid #f0ede8;"><td style="padding:7px 4px; font-weight:700; color:#1C1410;">$2,500</td><td style="padding:7px 4px; text-align:right;">2,875</td><td style="padding:7px 4px; text-align:right; color:#137333; font-weight:700;">+15%</td></tr>
+            <tr><td style="padding:7px 4px; font-weight:700; color:#1C1410;">$5,000+</td><td style="padding:7px 4px; text-align:right;">6,000+</td><td style="padding:7px 4px; text-align:right; color:#137333; font-weight:700;">+20%</td></tr>
+          </tbody>
+        </table>
+        <p style="font-size:12px; color:#5d5e60; margin:-8px 0 14px;">Credits valid 12 months from purchase &middot; oldest spent first &middot; optional auto&#8209;top&#8209;up.</p>
+        <p style="font-size:12.5px; font-weight:800; letter-spacing:0.8px; color:#C44E15; text-transform:uppercase; margin:0 0 6px;">Every funded account includes</p>
         <ul>
           <li>Full LIVE + TEST environment access</li>
           <li>50,000 Count calls / month (10/min rate-cap)</li>
           <li>Unlimited List downloads</li>
           <li>★ List Aggregation API <span style="color:#5d5e60; font-weight: 500;">(industry-first, unique to LP)</span></li>
           <li>⚡ Subscriptions API <span style="color:#5d5e60; font-weight: 500;">(New Homeowner / Mover / T65 / Intent)</span></li>
-          <li>⚡ Intent Data overlay <span style="color:#5d5e60; font-weight: 500;"><span style="color:#137333;">Live now &middot; included on this tier</span></span></li>
+          <li>⚡ Intent Data overlay <span style="color:#5d5e60; font-weight: 500;"><span style="color:#137333;">Live now &middot; included</span></span></li>
           <li>Priority email support &middot; 1 business day</li>
           <li>99.9% uptime SLA</li>
-          <li><strong>Records billed at LP per-record data rates above &middot; no order minimum</strong></li>
+          <li><strong>Records draw down at LP per-record data rates above &middot; no order minimum</strong></li>
         </ul>
-        <a class="cta primary" href="mailto:tech@leadsplease.com?subject=API+access+request+%E2%80%94+Standard+tier">Start Standard &rarr;</a>
+        <a class="cta primary" href="mailto:tech@leadsplease.com?subject=API+credits+request">Buy credits &rarr;</a>
       </div>
       <div class="in-tier">
         <h3>Enterprise</h3>
         <div class="price">Custom</div>
-        <p class="desc">High-volume, white-label, OEM. Negotiated below-standard per-record rates.</p>
+        <p class="desc">High-volume, white-label, OEM. Custom credit commitments with negotiated below-standard per-record rates.</p>
         <ul>
-          <li>Everything in Standard</li>
+          <li>Everything a funded account gets</li>
           <li>Dedicated infrastructure</li>
           <li>White-label / OEM licensing</li>
           <li>Custom data points + filters</li>
@@ -1410,7 +1440,7 @@ access_token = r.json()[<span class="s">"accessToken"</span>]</pre>
       </div>
     </div>
 
-    <p style="font-size: 13px; color: #5d5e60; margin: -16px auto 32px; max-width: 880px; text-align: center;">Want to evaluate before committing? On the <a href="#install">Get Started</a> tab choose <strong>Free 30-day TEST</strong> &mdash; you'll get an API key restricted to <strong>Count calls only</strong> (no list downloads, no aggregation, no subscriptions), capped at <strong>1,000 calls/month</strong>. All production traffic is on the Standard tier.</p>
+    <p style="font-size: 13px; color: #5d5e60; margin: -16px auto 32px; max-width: 880px; text-align: center;">Want to evaluate before committing? On the <a href="#install">Get Started</a> tab choose <strong>Free 30-day TEST</strong> &mdash; you'll get an API key restricted to <strong>Count calls only</strong> (no list downloads, no aggregation, no subscriptions), capped at <strong>1,000 calls/month</strong>. All production traffic runs on credits.</p>
   </div>
 </section>
 
@@ -1420,7 +1450,7 @@ access_token = r.json()[<span class="s">"accessToken"</span>]</pre>
 <section id="install" class="sg-panel" role="tabpanel">
   <div class="in-wrap">
     <h2>Get started</h2>
-    <p class="lede">You're 60 seconds away from your API keys. Pick a plan, fill out the form, and we'll provision your key &mdash; <strong>Free 30-day TEST</strong> arrives instantly by email; <strong>Standard</strong> kicks off a Stripe Checkout for the $199/mo subscription and your LIVE keys land the moment payment confirms.</p>
+    <p class="lede">You're 60 seconds away from your API key. Create your <strong>free 30-day TEST account</strong> below &mdash; the key arrives instantly by email and lets you run live counts on the full consumer &amp; business databases, no credit card required. When you're ready to pull records, load a <strong>credit pack</strong> ($100 = 100 credits, bonus credits on larger packs, no monthly fee, no order minimum) and the same key goes LIVE. Details on the <a href="#prices">Prices</a> tab.</p>
 
     <style>
       .ak-form { max-width: 760px; margin: 0 auto 32px; background: #fff; border: 1px solid #e8e5e0; border-radius: 16px; padding: 32px 36px; }
@@ -1509,7 +1539,7 @@ curl -s -X POST $BASE/counts \
       <h3>Spec, status, support</h3>
       <p style="margin-bottom:6px;">📘 <strong>Swagger UI</strong> &mdash; embedded on the <a href="#reference">API Reference</a> tab (live spec, every endpoint, inline test runner)</p>
       <p style="margin-bottom:6px;">📄 <strong>Full API manual</strong> &mdash; <a href="/manual">developer reference (v1.3.4)</a></p>
-      <p style="margin-bottom:0;">✉️ <strong>Tech support</strong> &mdash; <a href="mailto:tech@leadsplease.com">tech@leadsplease.com</a> &mdash; phone <strong>(866) 306-8674</strong> &mdash; replies within one business day on free tier, four hours on Builder, one hour on Scale.</p>
+      <p style="margin-bottom:0;">✉️ <strong>Tech support</strong> &mdash; <a href="mailto:tech@leadsplease.com">tech@leadsplease.com</a> &mdash; phone <strong>(866) 306-8674</strong> &mdash; replies within one business day; priority support for funded and Enterprise accounts.</p>
     </div>
 
     <div class="in-section">
@@ -1618,10 +1648,10 @@ curl -s -X POST $BASE/counts \
                    desc: 'Embedded Swagger UI rendered from the live OpenAPI 3.0 spec — every endpoint, request schema, response shape, and "Try it out" runner. 30 paths, JWT bearer auth.' },
     'use-cases': { title: 'Data API Use Cases — Direct Mail · Real Estate · Insurance · B2B SaaS | LeadsPlease®',
                    desc: 'Recurring patterns developers use the LeadsPlease® Data API for: List Aggregation for agent-driven invitation lists, postcard tools, real-estate farming, Medicare birthday targeting, SIC-code B2B prospecting, ESP audience handoff, mass tort prospect pools.' },
-    'prices':    { title: 'Prices — Two-part pricing, no order minimum | LeadsPlease® Data API',
-                   desc: 'Monthly access fee + per-record data fee. Standard $199/mo or Enterprise (custom). Records bill at LP per-record data rates from the affiliate XML — same per-unit prices as the website but with no $125–$300 order minimum.' },
+    'prices':    { title: 'Prices — Prepaid credits, no order minimum | LeadsPlease® Data API',
+                   desc: 'Prepaid credits: $100 = 100 credits, bonus credits on $500/$1,000/$2,500/$5,000 packs (+5% to +20%). Records draw down at LP per-record data rates — same per-unit prices as the website but with no subscription and no $125–$300 order minimum.' },
     'install':   { title: 'Get Started — Apply for API keys | LeadsPlease® Data API',
-                   desc: 'Apply for API keys in 60 seconds. Free 30-day TEST (counts only, 1K cap) or Standard $199/mo via Stripe. LIVE keys arrive the moment payment confirms.' },
+                   desc: 'Apply for API keys in 60 seconds. Free 30-day TEST (counts only, 1K cap) or buy a credit pack via Stripe. LIVE keys arrive the moment payment confirms.' },
   };
   function applyTabMeta(id) {
     var m = TAB_META[id]; if (!m) return;
