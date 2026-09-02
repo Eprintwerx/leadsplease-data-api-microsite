@@ -54,7 +54,7 @@ Authorization: Bearer <token>; tokens valid 20 minutes; re-call /auth to refresh
 ## Pricing — prepaid credits (no subscription, no monthly fee, no order minimum)
 The API is billed by prepaid credit packs. 1 credit = $1 of data. Base pack $100 = 100 credits. Larger packs earn bonus credits: $500 → 525, $1,000 → 1,100, $2,500 → 2,875, $5,000 → 6,000 (+5% / +10% / +15% / +20%). Credits are valid 12 months from purchase, oldest spent first. Every funded account has full LIVE access — there is no access fee or tier.
 Records draw down the balance at the standard LeadsPlease per-record data rates from the LP affiliate XML — identical per-unit prices to the public LeadsPlease.com checkout. CRITICAL DIFFERENCE: the website enforces a $125–$300 minimum per order; the API does NOT. A 1-record consumer lookup costs 0.12495 credits (12.5¢); 100 records = 12.495 credits; 1,000 records = 124.95 credits. Volume discounts at 2,500 / 5,000 / 10,000 / 25,000 / 50,000 record breakpoints.
-- Free 30-day TEST: instant API key, Count calls only (no list downloads), capped at 1,000 calls/month, no credit card.
+- Free TEST: instant API key for the TEST environment — every endpoint, no monthly call quota, no charges, no credit card. List output on TEST is sample data; production records require a funded LIVE key.
 - Enterprise: custom — commit/invoice billing, negotiated per-record rates, white-label/OEM, dedicated infrastructure.
 
 Per-record data rates (from LP affiliate XML):
