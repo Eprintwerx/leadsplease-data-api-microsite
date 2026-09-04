@@ -17,8 +17,14 @@ jobs:
       # bundled HTML / sitemap / robots.txt to include this prefix. The S3
       # keys also live under this path. Keep these two in sync.
       BASE_PATH: /data-api
-      # PUBLIC_ORIGIN, MANUAL_DOC_ID, OPENAPI_SPEC_URL all have safe defaults
-      # in build.mjs — override here only if a future deploy needs different ones.
+      # build.mjs's defaults for these two are TEST values, so a live deploy that
+      # relies on them ships a sitemap/robots.txt advertising test.leadsplease.com
+      # and a Swagger spec whose servers[] points at api-test. Derive them from the
+      # branch instead of hardcoding: the expression is byte-identical on `test`
+      # and `live`, so a test -> live merge can never carry the wrong environment.
+      PUBLIC_ORIGIN: ${{ github.ref_name == 'live' && 'https://www.leadsplease.com' || 'https://test.leadsplease.com' }}
+      OPENAPI_SPEC_URL: ${{ github.ref_name == 'live' && 'https://api.leadsplease.com/v3/api-docs' || 'https://api-test.leadsplease.com/v3/api-docs' }}
+      # MANUAL_DOC_ID is environment-independent; its build.mjs default is fine.
 
     steps:
       - uses: actions/checkout@v4
