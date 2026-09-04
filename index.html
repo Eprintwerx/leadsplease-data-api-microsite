@@ -453,6 +453,10 @@
 <!-- Google Tag Manager (mirrors leadsplease.com) -->
 <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-TXZ6RL');</script>
   <script src="https://leadsplease-navbar.s3.us-east-1.amazonaws.com/leadsplease-navbar.js" defer></script>
+<!-- reCAPTCHA v3 — same site key and action as the www contact forms, for the
+     hero pricing-capture form below. Loads async; the form submits regardless
+     if it is blocked or slow (see the handler at the end of the page). -->
+<script src="https://www.google.com/recaptcha/api.js?render=6LfD9z0gAAAAAAnyXVullHtcUxpYxp8mvAWS0PsD" async defer></script>
 </head>
 <body data-astro-cid-lxlojnfr>
 <leadsplease-navbar base="https://www.leadsplease.com"></leadsplease-navbar>
@@ -477,6 +481,54 @@
       <a class="ov-cta-secondary" href="#reference">Open Swagger UI &rarr;</a>
       <a class="ov-cta-secondary" href="#try">See a live example</a>
     </div>
+
+    <!-- ══════════════════════════════════════════════════════════════════
+         Above-the-fold pricing capture — Trello #596.
+         Until now the only way off this page was a link to the affiliate
+         console, buried in the Get Started tab. Credit-pack pricing sits in
+         tab 12 of 16, so "we'll email you the rates" trades a buried asset
+         for one field. Submissions go to the same /contact_ajax pipeline as
+         the www contact forms and open Intercom on success.
+         ══════════════════════════════════════════════════════════════════ -->
+    <style>
+      .ov-quote { max-width: 640px; margin: 0 0 28px; padding: 20px 22px;
+        background: #fff; border: 1.5px solid var(--border);
+        border-left: 4px solid var(--accent); border-radius: var(--radius); }
+      .ov-quote-title { font-family: 'Fraunces', Georgia, serif; font-size: 19px;
+        font-weight: 600; color: var(--ink); line-height: 1.3; margin: 0 0 4px; }
+      .ov-quote-sub { font-size: 13.5px; line-height: 1.55; color: #5d5e60; margin: 0 0 14px; }
+      .ov-quote-row { display: flex; flex-wrap: wrap; gap: 10px; }
+      .ov-quote-row input { flex: 1 1 240px; min-width: 0; font: inherit; font-size: 15px;
+        padding: 11px 14px; color: var(--ink); background: #fff;
+        border: 1.5px solid var(--border); border-radius: 9px; }
+      .ov-quote-row input:focus { border-color: var(--accent);
+        outline: 2px solid var(--accent); outline-offset: 1px; }
+      .ov-quote-row button { flex: 0 0 auto; font: inherit; font-size: 15px; font-weight: 700;
+        padding: 11px 22px; color: #fff; background: var(--accent);
+        border: none; border-radius: 9px; cursor: pointer; transition: background .2s; }
+      .ov-quote-row button:hover { background: #e55a2b; }
+      .ov-quote-row button:disabled { opacity: .6; cursor: default; }
+      .ov-quote-msg { display: none; font-size: 13.5px; font-weight: 600; margin: 12px 0 0; }
+      .ov-quote-msg.is-shown { display: block; }
+      .ov-quote-ok { color: #0F6B4F; }
+      .ov-quote-err { color: #B3261E; }
+      .ov-quote-fine { font-size: 12px; line-height: 1.5; color: #8a8b8d; margin: 12px 0 0; }
+      .ov-quote-sr { position: absolute; width: 1px; height: 1px; overflow: hidden;
+        clip: rect(0 0 0 0); white-space: nowrap; }
+      @media (max-width: 560px) { .ov-quote-row button { width: 100%; } }
+    </style>
+    <form id="apiPricingForm" class="ov-quote" novalidate>
+      <p class="ov-quote-title">Want the pricing in writing?</p>
+      <p class="ov-quote-sub">We&rsquo;ll email you the full credit-pack and per-record data rates. One field, no account, no sales call.</p>
+      <div class="ov-quote-row">
+        <label class="ov-quote-sr" for="apiPricingEmail">Work email</label>
+        <input id="apiPricingEmail" type="email" name="email" autocomplete="email" placeholder="you@company.com" required>
+        <button type="submit">Send me the pricing</button>
+      </div>
+      <p class="ov-quote-msg ov-quote-ok" role="status"></p>
+      <p class="ov-quote-msg ov-quote-err" role="alert"></p>
+      <p class="ov-quote-fine">Prefer to talk it through? Send this and the chat window opens right here.</p>
+    </form>
 
     <!-- ★★★ Real-time email validation — unique LeadsPlease workflow ──── -->
     <div class="email-validation-callout" style="margin: 36px 0 0; padding: 28px 32px; background: linear-gradient(135deg, #FFF6F1 0%, #FFE4D4 100%); border: 1.5px solid #FFB892; border-radius: 16px; box-shadow: 0 6px 24px rgba(255,102,51,0.10);">
@@ -1705,5 +1757,119 @@ curl -s -X POST $BASE/counts \
 })();
 </script>
 
+<!-- ══════════════════════════════════════════════════════════════════════
+     Intercom — Trello #596. The www pages have carried this for a long time;
+     this page was built as a separate microsite and never inherited it, so it
+     was the only LeadsPlease page with no live chat. Same app ID as www, so a
+     visitor keeps one conversation across both. Settings are declared before
+     the loader, per Intercom's own install order.
+     ══════════════════════════════════════════════════════════════════════ -->
+<script>(function(){const INTERCOM_APP_ID = "r4e3856u";
+  window.intercomSettings = { api_base: "https://api-iam.intercom.io", app_id: INTERCOM_APP_ID };
+})();</script>
+<script>(function(){const INTERCOM_APP_ID = "r4e3856u";
+  (function(){var w=window;var ic=w.Intercom;if(typeof ic==="function"){ic('reattach_activator');ic('update',w.intercomSettings);}else{var d=document;var i=function(){i.c(arguments);};i.q=[];i.c=function(args){i.q.push(args);};w.Intercom=i;var l=function(){var s=d.createElement('script');s.type='text/javascript';s.async=true;s.src='https://widget.intercom.io/widget/'+INTERCOM_APP_ID;var x=d.getElementsByTagName('script')[0];x.parentNode.insertBefore(s,x);};if(document.readyState==='complete'){l();}else if(w.attachEvent){w.attachEvent('onload',l);}else{w.addEventListener('load',l,false);}}})();
+})();</script>
+
+<!-- ══════════════════════════════════════════════════════════════════════
+     Hero pricing-capture handler — Trello #596. Mirrors the www contact form:
+     same endpoint, same payload shape, same generate_lead event, and the same
+     "submit even if reCAPTCHA is unavailable" fallback, because a blocked or
+     slow reCAPTCHA otherwise loses the enquiry silently.
+
+     The endpoint is built with new URL() rather than written as a "/path"
+     literal ON PURPOSE: build.mjs rewrites every "/..." string to
+     "/data-api/..." when it applies BASE_PATH, including inside scripts, which
+     would point this at a 404. Do not "simplify" it back.
+     ══════════════════════════════════════════════════════════════════════ -->
+<script>
+(function () {
+  var form = document.getElementById('apiPricingForm');
+  if (!form) return;
+
+  var RECAPTCHA_KEY = '6LfD9z0gAAAAAAnyXVullHtcUxpYxp8mvAWS0PsD';
+  var ENDPOINT = new URL('contact_ajax', window.location.origin).toString();
+  var input  = document.getElementById('apiPricingEmail');
+  var button = form.querySelector('button[type="submit"]');
+  var okEl   = form.querySelector('.ov-quote-ok');
+  var errEl  = form.querySelector('.ov-quote-err');
+
+  function show(el, text) {
+    okEl.classList.remove('is-shown');
+    errEl.classList.remove('is-shown');
+    el.textContent = text;
+    el.classList.add('is-shown');
+  }
+
+  function idle() {
+    button.disabled = false;
+    button.textContent = 'Send me the pricing';
+  }
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var email = (input.value || '').trim();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) {
+      show(errEl, 'Please enter a valid email address.');
+      input.focus();
+      return;
+    }
+    button.disabled = true;
+    button.textContent = 'Sending…';
+
+    if (typeof grecaptcha !== 'undefined' && grecaptcha.ready) {
+      try {
+        grecaptcha.ready(function () {
+          grecaptcha.execute(RECAPTCHA_KEY, { action: 'social' })
+            .then(function (token) { send(email, token); })
+            .catch(function () { send(email, ''); });
+        });
+      } catch (err) {
+        send(email, '');
+      }
+    } else {
+      send(email, '');
+    }
+  });
+
+  function send(email, token) {
+    fetch(ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name: '',
+        email: email,
+        phone: '',
+        companyName: '',
+        enquiry: 'Data API pricing request — sent from the Data API page.',
+        token: token,
+        visitorId: typeof Intercom !== 'undefined' ? Intercom('getVisitorId') : null
+      })
+    })
+      .then(function (res) { return res.json(); })
+      .then(function (response) {
+        if (!response || !response.success) { throw new Error('rejected'); }
+        form.reset();
+        idle();
+        show(okEl, 'Sent — the pricing is on its way to ' + email + '.');
+        /* form_id stays 'contact_form' so existing GTM triggers still match;
+           form_location is what identifies this page in GA4. */
+        if (typeof dataLayer !== 'undefined') {
+          dataLayer.push({
+            event: 'generate_lead',
+            form_id: 'contact_form',
+            form_location: 'data_api_hero',
+            page_path: window.location.pathname
+          });
+        }
+        if (typeof Intercom !== 'undefined') { Intercom('showMessages'); }
+      })
+      .catch(function () {
+        idle();
+        show(errEl, 'That didn’t send. Please try again in about 30 seconds, or email tech@leadsplease.com.');
+      });
+  }
+})();
+</script>
 </body>
 </html>
