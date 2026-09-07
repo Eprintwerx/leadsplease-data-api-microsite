@@ -10,6 +10,28 @@ const compression = require('compression');
 const path = require('path');
 
 const app = express();
+
+// SEO guard — a *.railway.app host must never be indexed: Google was picking
+// up the Railway-generated URL, competing with (and diluting) the canonical
+// leadsplease.com / product-domain rankings. Custom domains are unaffected
+// (checked per-request via the Host header). Remove only if this site is
+// promoted to its canonical domain AND the Railway domain is deleted.
+app.use(function railwayNoIndex(req, res, next) {
+  const host = String(req.headers.host || '').toLowerCase().split(':')[0];
+  if (host.endsWith('.railway.app')) {
+    res.setHeader('X-Robots-Tag', 'noindex, nofollow');
+    if (req.path === '/robots.txt') {
+      // Crawl stays OPEN on the Railway host (#587): this URL is already in
+      // Google's index, and a Disallow stops Googlebot re-crawling, so it
+      // would never see the noindex and the stale listing would linger. The
+      // X-Robots-Tag above is the protection; re-tighten to Disallow only
+      // once the listing is confirmed gone.
+      return res.type('text/plain').send('User-agent: *\nAllow: /\n');
+    }
+  }
+  next();
+});
+
 const PORT = process.env.PORT || 8767;
 
 // Gzip / brotli on every response — DataForSEO's on-page audit flagged
