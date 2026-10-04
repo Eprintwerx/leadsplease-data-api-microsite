@@ -10,6 +10,7 @@ const compression = require('compression');
 const path = require('path');
 
 const app = express();
+app.use(require('./noindex-guard').noindexGuard);
 const PORT = process.env.PORT || 8767;
 
 // Gzip / brotli on every response — DataForSEO's on-page audit flagged
