@@ -1837,18 +1837,26 @@ curl -s -X POST $BASE/counts \
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        name: '',
+        /* name must not be empty. With name: '' /contact_ajax still emailed the
+           enquiry but did not report success, so every visitor saw "That didn't
+           send", resubmitted, and generate_lead never fired (Trello #596, found
+           6 Nov 2026: 17 delivered enquiries, 0 recorded). Plain ASCII in the
+           enquiry because the notification email garbles an em dash. */
+        name: 'Data API pricing request',
         email: email,
         phone: '',
         companyName: '',
-        enquiry: 'Data API pricing request — sent from the Data API page.',
+        enquiry: 'Data API pricing request - sent from the Data API page.',
         token: token,
         visitorId: typeof Intercom !== 'undefined' ? Intercom('getVisitorId') : null
       })
     })
       .then(function (res) { return res.json(); })
       .then(function (response) {
-        if (!response || !response.success) { throw new Error('rejected'); }
+        if (!response || !response.success) {
+          if (window.console) { console.warn('apiPricingForm: contact_ajax did not report success', response); }
+          throw new Error('rejected');
+        }
         form.reset();
         idle();
         show(okEl, 'Sent — the pricing is on its way to ' + email + '.');
