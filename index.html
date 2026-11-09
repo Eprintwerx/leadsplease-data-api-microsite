@@ -1842,28 +1842,48 @@ curl -s -X POST $BASE/counts \
         email: email,
         phone: '',
         companyName: '',
-        enquiry: 'Data API pricing request — sent from the Data API page.',
+        enquiry: 'Data API pricing request - sent from the Data API page.',
         token: token,
         visitorId: typeof Intercom !== 'undefined' ? Intercom('getVisitorId') : null
       })
     })
-      .then(function (res) { return res.json(); })
-      .then(function (response) {
-        if (!response || !response.success) { throw new Error('rejected'); }
+      /* Any HTTP response means the server received the enquiry. Found 6–9 Nov
+         2026 (Trello #596): for this form /contact_ajax emails the enquiry to
+         the team but its Intercom step fails, so it answers success:false.
+         Every one of 17 real submissions was delivered while the visitor was
+         told "That didn't send". So: any response counts as received; only a
+         network failure (the catch below) shows the error. When the server
+         does not confirm, open the Intercom composer pre-filled so Fin can
+         pick the request up, since no Intercom conversation was created. */
+      .then(function (res) {
+        return res.json().then(
+          function (body) { return !!(body && body.success); },
+          function () { return false; }
+        );
+      })
+      .then(function (confirmed) {
         form.reset();
         idle();
-        show(okEl, 'Sent — the pricing is on its way to ' + email + '.');
+        show(okEl, 'Thanks — we’ve got your request and will email the pricing to ' + email + '.');
         /* form_id stays 'contact_form' so existing GTM triggers still match;
-           form_location is what identifies this page in GA4. */
+           form_location identifies this page in GA4; server_confirmed counts
+           how often /contact_ajax still reports failure. */
         if (typeof dataLayer !== 'undefined') {
           dataLayer.push({
             event: 'generate_lead',
             form_id: 'contact_form',
             form_location: 'data_api_hero',
+            server_confirmed: confirmed,
             page_path: window.location.pathname
           });
         }
-        if (typeof Intercom !== 'undefined') { Intercom('showMessages'); }
+        if (typeof Intercom !== 'undefined') {
+          if (confirmed) {
+            Intercom('showMessages');
+          } else {
+            Intercom('showNewMessage', 'Hi, I just requested Data API pricing on your website. My email is ' + email + '.');
+          }
+        }
       })
       .catch(function () {
         idle();
