@@ -1,10 +1,18 @@
-# LeadsPlease Direct Mail API
+# LeadsPlease Data API
 
-> The official LeadsPlease REST/JSON Direct Mail API — the audience-data layer for direct-mail products, CRMs, and print platforms. Programmatic access to 210M+ USPS-verified U.S. consumers, 18M+ verified businesses, plus weekly-loaded New Homeowner and New Mover feeds and daily-refreshed Intent Data. Bearer-token (JWT) auth. OpenAPI 3.0. Polygon, radial, and ZIP/city/county/state geo selection. 30+ demographic filters. Async list generation with signed CSV downloads. Lists Aggregation API (industry first) for merging multiple lists. Subscriptions API for periodic deliveries of newly loaded records.
+> The official LeadsPlease Data API (also used as a mailing list API and direct mail data API) — a REST/JSON audience-data layer for direct-mail products, CRMs, SaaS platforms, and print platforms. Programmatic access to 210M+ USPS-verified U.S. consumers, 18M+ verified businesses, plus weekly-loaded New Homeowner and New Mover feeds and daily-refreshed Intent Data. Bearer-token (JWT) auth. OpenAPI 3.0. Polygon, radial, and ZIP/city/county/state geo selection. 30+ demographic filters. Async list generation with signed CSV downloads. Lists Aggregation API (industry first) for merging multiple lists. Subscriptions API for periodic deliveries of newly loaded records.
 
-## How LeadsPlease compares to other Direct Mail APIs
+## New Mover and New Homeowner data API
 
-The LeadsPlease Direct Mail API ships the AUDIENCE LAYER. Print-and-mail APIs (Lob, Postalytics, PostGrid, PostcardMania, Lettrlabs) ship the PRINT LAYER — they take a CSV you supply and turn it into postcards or letters at USPS. The cleanest direct-mail stack: LeadsPlease for the audience CSV, then hand it off to Lob/Postalytics/PostGrid for print fulfilment. We do not print mail. They do not generate audiences. The two surfaces are complementary, not competing.
+For software that reacts when people move or buy a home: New Mover and New Homeowner records, refreshed weekly, filtered by ZIP, radius or polygon plus 30+ demographics. The Subscriptions API delivers newly loaded records automatically, never the same record twice. Records from $0.398 each, paid from prepaid credits with no monthly fee.
+
+## Licensing, reselling and white-label
+
+Embedding LeadsPlease data in your own product, reselling it to your customers, or offering it under your own brand is available under an Enterprise licence: negotiated per-record rates, commit or invoice billing, white-label/OEM rights, dedicated infrastructure. Standard credit-pack access is covered by the standard licence agreement: https://affiliates.leadsplease.com/terms#s7. To agree a licence, book a call with Graham Brown, who looks after the Data API: https://calendly.com/grahambrown. To resell mailing lists without an integration, see Sales Garden (sell under your own brand, earn 20% per order): https://www.leadsplease.com/sales-garden
+
+## Mailing list API for Lob, PostGrid and Postalytics
+
+The LeadsPlease Data API ships the AUDIENCE LAYER. Print-and-mail APIs (Lob, Postalytics, PostGrid, PostcardMania, Lettrlabs) ship the PRINT LAYER — they take a CSV you supply and turn it into postcards or letters at USPS. The cleanest direct-mail stack: LeadsPlease for the audience CSV, then hand it off to Lob/Postalytics/PostGrid for print fulfilment. We do not print mail. They do not generate audiences. The two surfaces are complementary, not competing.
 
 ## Base URLs
 - TEST: https://api-test.leadsplease.com/api/v1
@@ -65,7 +73,9 @@ Per-record data rates (from LP affiliate XML):
 - Intent Data: $12 per lead, debited as 12 credits per delivered Intent lead. This is the Intent lead rate, rather than the standard consumer volume rate. 5,000 Intent leads use 60,000 credits. Live categories: Intent to Move and Intent to Medicare. An Intent Data licence is required.
 - Phone, hashed-email and email-only pricing depend on the selected product.
 
-## Support
+## Support and sales
+- Talk through a project, pricing or licensing with Graham Brown: https://calendly.com/grahambrown
+- Free TEST API key: https://affiliates.leadsplease.com/signup
 - tech@leadsplease.com (replies within 1 business day; priority support for funded and Enterprise accounts)
 - (866) 306-8674
 - Status page: https://status.leadsplease.com
